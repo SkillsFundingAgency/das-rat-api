@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build">
+  <Sdk Name="Microsoft.Build.Sql" Version="0.1.14-preview" />
+  <PropertyGroup>
+    <Name>SFA.DAS.RequestApprenticeTraining.Database</Name>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <ModelCollation>1033, CI</ModelCollation>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{d53ac38e-7770-45fd-8688-5ee5a22a19a7}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateCreateScript>True</GenerateCreateScript>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+  </PropertyGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+    <PreDeploy Include="Scripts\Script.PreDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+    <Folder Include="Programmability" />
+    <Folder Include="Programmability\Functions" />
+    <Folder Include="Programmability\StoredProcedures" />
+    <Folder Include="Tables" />
+    <Folder Include="Views" />
+    <Folder Include="Scripts\PostDeploymentScripts" />
+    <Folder Include="Scripts\PostDeploymentScripts\LookupData" />
+    <Folder Include="Scripts\PreDeploymentScripts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\RequestType.sql" />
+    <Build Include="Tables\EmployerRequest.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PostDeploymentScripts\LookupData\RequestType.sql" />
+    <None Include="Scripts\PostDeploymentScripts\LookupData\SynchronizeLookupData.sql" />
+  </ItemGroup>
+</Project>
