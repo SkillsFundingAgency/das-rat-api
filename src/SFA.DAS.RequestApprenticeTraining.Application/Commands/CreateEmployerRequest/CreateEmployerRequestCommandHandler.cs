@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,9 +24,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
         {
             _logger.LogDebug($"Creating EmployerRequest record");
 
-            var employerRequest = new Domain.Entities.EmployerRequest()
+            var employerRequest = new EmployerRequest()
             {
-                RequestTypeId = request.RequestTypeId
+                RequestType = request.RequestType
             };
 
             _employerRequestEntityContext.Add(employerRequest);

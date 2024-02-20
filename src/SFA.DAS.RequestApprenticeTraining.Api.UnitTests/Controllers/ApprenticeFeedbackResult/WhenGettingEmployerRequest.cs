@@ -25,7 +25,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             mediator.Setup(m => m.Send(It.Is<GetEmployerRequestQuery>(t => t.EmployerRequestId == employerRequestId), It.IsAny<CancellationToken>())).ReturnsAsync(employerRequestResult);
             var result = await controller.GetEmployerRequest(employerRequestId);
 
-            result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(employerRequestResult);
+            result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(employerRequestResult.EmployerRequest);
         }
 
         [Test, MoqAutoData]

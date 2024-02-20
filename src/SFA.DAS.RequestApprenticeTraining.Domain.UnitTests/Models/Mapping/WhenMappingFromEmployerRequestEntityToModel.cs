@@ -13,7 +13,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.UnitTests.Models
             var result = (Domain.Models.EmployerRequest)source;
 
             result.Id.Should().Be(source.Id);
-            result.RequestTypeId.Should().Be(source.RequestTypeId);
+            result.RequestType.Should().Be(source.RequestType);
         }
     }
 }

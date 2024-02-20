@@ -4,7 +4,7 @@
     {
         public enum RequestType
         {
-            Shortlist = 0
+            Shortlist = 1
         }
     }
 }

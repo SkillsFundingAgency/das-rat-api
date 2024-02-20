@@ -20,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             var employerRequestId = Guid.NewGuid();
 
             context.Add(new RequestType { Id = 1, Description = "Shortlist" });
-            context.Add(new EmployerRequest { Id = employerRequestId, RequestTypeId = 1 });
+            context.Add(new EmployerRequest { Id = employerRequestId, RequestType = Domain.Models.Enums.RequestType.Shortlist });
             context.SaveChanges();
 
             var query = new GetEmployerRequestQuery() { EmployerRequestId = employerRequestId };
@@ -32,7 +32,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             // Assert
             var expectedResult = new GetEmployerRequestQueryResult 
             { 
-                EmployerRequest = new Domain.Models.EmployerRequest { Id = employerRequestId, RequestTypeId = 1 } 
+                EmployerRequest = new Domain.Models.EmployerRequest { Id = employerRequestId, RequestType = Domain.Models.Enums.RequestType.Shortlist } 
             };
 
             result.Should().BeEquivalentTo(expectedResult);

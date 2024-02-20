@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

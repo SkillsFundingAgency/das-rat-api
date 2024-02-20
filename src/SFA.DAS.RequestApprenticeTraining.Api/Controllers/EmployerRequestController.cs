@@ -42,7 +42,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             try
             {
                 var result = await _mediator.Send(new GetEmployerRequestQuery { EmployerRequestId = employerRequestId });
-                return Ok(result);
+                return Ok(result.EmployerRequest);
             }
             catch (Exception e)
             {

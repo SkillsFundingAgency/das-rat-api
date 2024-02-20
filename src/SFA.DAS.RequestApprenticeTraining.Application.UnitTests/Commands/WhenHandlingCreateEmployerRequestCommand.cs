@@ -38,7 +38,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
             result.EmployerRequestId.Should().NotBeEmpty();
 
             var employerRequest = await context.EmployerRequests.FirstOrDefaultAsync(s => s.Id == result.EmployerRequestId);
-            employerRequest.RequestTypeId.Should().Be(command.RequestTypeId);
+            employerRequest.RequestType.Should().Be(command.RequestType);
         }
     }
 }

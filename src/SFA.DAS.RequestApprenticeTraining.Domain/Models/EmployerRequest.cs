@@ -5,7 +5,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
     public class EmployerRequest
     {
         public Guid Id { get; set; }
-        public int RequestTypeId { get; set; }
+        public Enums.RequestType RequestType { get; set; }
 
         public static implicit operator EmployerRequest(Entities.EmployerRequest source)
         {
@@ -17,7 +17,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
             return new EmployerRequest
             {
                 Id = source.Id,
-                RequestTypeId = source.RequestTypeId
+                RequestType = source.RequestType
             };
         }
     }
