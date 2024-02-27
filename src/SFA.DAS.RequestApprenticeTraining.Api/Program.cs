@@ -12,7 +12,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api
     {
         public static void Main(string[] args)
         {
-            var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+            var logger = LogManager.Setup().LoadConfigurationFromXml("nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Info("Starting up host");
