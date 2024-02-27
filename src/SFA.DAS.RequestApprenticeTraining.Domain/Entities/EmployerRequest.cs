@@ -7,5 +7,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
     {
         public Guid Id { get; set; }
         public Enums.RequestType RequestType { get; set; }
+        public long AccountId { get; set; }
     }
 }

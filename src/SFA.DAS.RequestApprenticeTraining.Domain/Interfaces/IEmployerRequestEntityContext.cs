@@ -16,6 +16,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             => await Entities
                 .FirstOrDefaultAsync(er => er.Id == employerRequestId);
 
+        public async Task<List<EmployerRequest>> GetForAccountId(long accountId)
+            => await Entities
+                .Where(er => er.AccountId == accountId)
+                .ToListAsync();
+
         public async Task<EmployerRequest> GetFirstOrDefault()
             => await Entities
                 .FirstOrDefaultAsync();
