@@ -52,7 +52,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("/account/{accountId}")]
+        [HttpGet("account/{accountId}")]
         public async Task<IActionResult> GetEmployerRequests(long accountId)
         {
             try
