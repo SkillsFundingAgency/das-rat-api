@@ -13,7 +13,7 @@ trigger:
 
 variables:
 - name: SolutionBaseName
-  value: SFA.DAS.RequestApprenticeTraining.Api
+  value: SFA.DAS.RequestApprenticeTraining
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
