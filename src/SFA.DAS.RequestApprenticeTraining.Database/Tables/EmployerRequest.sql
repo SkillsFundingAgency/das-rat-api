@@ -5,3 +5,4 @@
     [AccountId] BIGINT NOT NULL , 
     CONSTRAINT [FK_EmployerRequest_RequestType] FOREIGN KEY ([RequestTypeId]) REFERENCES [RequestType]([Id])
 )
+GO
