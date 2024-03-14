@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F0113337-E298-4D11-AA06-23B69C2337E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ABFC9EAF-042D-448D-9CD3-073DD6D0A18A}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.RequestApprenticeTraining.Database", "SFA.DAS.RequestApprenticeTraining.Database\SFA.DAS.RequestApprenticeTraining.Database.sqlproj", "{D53AC38E-7770-45FD-8688-5EE5A22A19A7}"
 EndProject

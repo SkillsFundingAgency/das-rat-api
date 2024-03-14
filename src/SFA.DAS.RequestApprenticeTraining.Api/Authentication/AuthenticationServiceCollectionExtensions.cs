@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Authentication
 {
-    public static class ServiceCollectionExtensions
+    public static class AuthenticationServiceCollectionExtensions
     {
         public static IServiceCollection AddApiAuthentication(this IServiceCollection services, ApplicationSettings applicationSettings, bool isDevelopment)
         {
