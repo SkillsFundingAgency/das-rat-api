@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public class SecurityHeadersMiddleware
     {
         private readonly RequestDelegate next;

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Authorization
 {
+    [ExcludeFromCodeCoverage]
     public class LocalAuthorizationHandler : AuthorizationHandler<NoneRequirement>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,

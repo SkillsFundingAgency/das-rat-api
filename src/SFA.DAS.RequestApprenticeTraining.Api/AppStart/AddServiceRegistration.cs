@@ -6,9 +6,11 @@ using SFA.DAS.RequestApprenticeTraining.Application.Behaviours;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public static class AddServiceRegistration
     {
         public static void AddServices(this IServiceCollection services)

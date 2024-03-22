@@ -14,10 +14,12 @@ using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using System;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public static class NServiceBusRegistration
     {
         public static async Task<UpdateableServiceProvider> StartNServiceBus(this UpdateableServiceProvider serviceProvider, IConfiguration configuration)

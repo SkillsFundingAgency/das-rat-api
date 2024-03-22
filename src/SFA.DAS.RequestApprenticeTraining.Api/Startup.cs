@@ -14,10 +14,12 @@ using SFA.DAS.RequestApprenticeTraining.Api.Authentication;
 using SFA.DAS.RequestApprenticeTraining.Api.Authorization;
 using SFA.DAS.RequestApprenticeTraining.Api.TaskQueue;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         private readonly IWebHostEnvironment Environment;

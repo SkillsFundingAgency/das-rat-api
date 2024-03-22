@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Authentication
 {
+    [ExcludeFromCodeCoverage]
     public static class AuthenticationServiceCollectionExtensions
     {
         public static IServiceCollection AddApiAuthentication(this IServiceCollection services, ApplicationSettings applicationSettings, bool isDevelopment)

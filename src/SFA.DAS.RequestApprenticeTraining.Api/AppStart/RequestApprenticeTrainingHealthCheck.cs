@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public class RequestApprenticeTrainingHealthCheck : IHealthCheck
     {
         private const string HealthCheckResultsDescription = "Request Apprentice Training API Health Check";

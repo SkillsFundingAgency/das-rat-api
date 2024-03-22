@@ -20,8 +20,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (CreateEmployerRequestCommand request,
             [Greedy] EmployerRequestController controller)
         {
+            // Act
             var result = await controller.Post(request);
 
+            // Assert
             result.Should().BeOfType<OkObjectResult>();
         }
 
@@ -31,10 +33,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             [Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
-            mediator.Setup(m => m.Send(It.IsAny<CreateEmployerRequestCommand>(), It.IsAny<CancellationToken>())).Throws(new Exception());
+            // Arrange
+            mediator
+                .Setup(m => m.Send(It.IsAny<CreateEmployerRequestCommand>(), It.IsAny<CancellationToken>()))
+                .Throws(new Exception());
 
+            // Act
             var result = await controller.Post(request);
 
+
+            // Assert
             result.Should().BeOfType<BadRequestResult>();
         }
     }

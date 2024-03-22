@@ -1,8 +1,10 @@
 ﻿using NServiceBus;
 using SFA.DAS.Notifications.Messages.Commands;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public static class RoutingSettingsExtensions
     {
         private const string NotificationsMessageHandler = "SFA.DAS.Notifications.MessageHandlers";

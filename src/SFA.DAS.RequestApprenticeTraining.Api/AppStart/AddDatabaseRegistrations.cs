@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public static class AddDatabaseRegistrations
     {
         public static void AddDatabaseRegistration(this IServiceCollection services, IConfiguration configuration)

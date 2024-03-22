@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Authentication
 {
+    [ExcludeFromCodeCoverage]
     public class AzureAdScopeClaimTransformation : IClaimsTransformation
     {
         public const string ScopeClaimType = "http://schemas.microsoft.com/identity/claims/scope";
