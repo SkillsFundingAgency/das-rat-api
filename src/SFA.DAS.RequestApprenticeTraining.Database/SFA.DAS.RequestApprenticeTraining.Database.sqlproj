@@ -91,4 +91,7 @@
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SFA.DAS.RequestApprenticeTraining.Database.refactorlog" />
+  </ItemGroup>
 </Project>
