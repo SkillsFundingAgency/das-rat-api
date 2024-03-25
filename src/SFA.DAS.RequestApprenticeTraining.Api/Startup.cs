@@ -50,11 +50,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SFA.DAS.RequestApprenticeTraining.Api", Version = "v1" });
-            });
-
+            
             var applicationSettingsSection = Configuration.GetSection(nameof(ApplicationSettings));
             var applicationSettings = applicationSettingsSection.Get<ApplicationSettings>();
 
@@ -65,6 +61,39 @@ namespace SFA.DAS.RequestApprenticeTraining.Api
             services
                 .AddApiAuthentication(applicationSettings, isDevelopment)
                 .AddApiAuthorization(isDevelopment);
+
+            services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "SFA.DAS.RequestApprenticeTraining.Api", Version = "v1" });
+
+                if (!isDevelopment)
+                {
+                    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Description = "Please enter token",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT",
+                        Scheme = "bearer"
+                    });
+
+                    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type=ReferenceType.SecurityScheme,
+                                    Id="Bearer"
+                                }
+                            },
+                            new string[]{}
+                        }
+                    });
+                }
+            });
 
             services.AddDatabaseRegistration(Configuration);
 
