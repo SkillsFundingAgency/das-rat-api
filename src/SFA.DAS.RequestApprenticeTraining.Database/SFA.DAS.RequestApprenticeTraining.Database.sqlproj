@@ -79,10 +79,10 @@
     <None Include="Scripts\PostDeploymentScripts\LookupData\SynchronizeLookupData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Script.PostDeployment.sql" />
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Script.PreDeployment.sql" />
+    <PreDeploy Include="Scripts\Script.PreDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
