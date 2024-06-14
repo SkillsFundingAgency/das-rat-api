@@ -13,7 +13,7 @@ CREATE TABLE #Status(
 	[Description] [nvarchar](25) NOT NULL
 ) 
 
-INSERT #Status VALUES (1, N'Active')
+INSERT #Status VALUES (0, N'Active')
 
 MERGE [Status] [Target] USING #Status [Source]
 ON ([Source].Id = [Target].Id)

@@ -82,7 +82,6 @@
     <Build Include="Tables\Region.sql" />
     <Build Include="Tables\EmployerRequestRegion.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\Region.sql" />
-    <Build Include="Programmability\StoredProcedures\CreateEmployerRequestRegion.sql" />
     <Build Include="Programmability\StoredProcedures\FindClosestRegion.sql" />
   </ItemGroup>
   <ItemGroup>

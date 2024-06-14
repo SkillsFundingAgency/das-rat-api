@@ -13,7 +13,9 @@ CREATE TABLE #RequestType(
 	[Description] [nvarchar](25) NOT NULL
 ) 
 
-INSERT #RequestType VALUES (1, N'Shortlist')
+INSERT #RequestType VALUES (0, N'Shortlist')
+INSERT #RequestType VALUES (1, N'CourseDetail')
+INSERT #RequestType VALUES (2, N'Providers')
 
 MERGE [RequestType] [Target] USING #RequestType [Source]
 ON ([Source].Id = [Target].Id)
