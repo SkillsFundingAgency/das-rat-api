@@ -1,17 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[FindClosestRegion]
     @Latitude FLOAT,
-    @Longitude FLOAT,
-    @RegionId INT OUTPUT,
-    @SubregionName VARCHAR(250) OUTPUT,
-    @RegionName VARCHAR(25) OUTPUT
+    @Longitude FLOAT
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT TOP 1 
-        @RegionId = Id,
-        @SubregionName = SubregionName,
-        @RegionName = RegionName
+        Id,
+        SubregionName,
+        RegionName,
+        Latitude,
+        Longitude
     FROM 
         [Region]
     ORDER BY 
