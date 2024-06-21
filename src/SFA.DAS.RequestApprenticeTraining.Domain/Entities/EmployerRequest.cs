@@ -1,5 +1,7 @@
 ﻿using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
 namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
@@ -19,5 +21,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public Guid RequestedBy { get; set; }
         public Status Status { get; set; }
         public Guid ModifiedBy { get; set; }
+
+        public List<EmployerRequestRegion> EmployerRequestRegions { get; set; }
+
+        public List<Region> GetRegions()
+        {
+            return EmployerRequestRegions.Select(err => err.Region).ToList();
+        }
     }
 }
