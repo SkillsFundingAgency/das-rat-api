@@ -6,12 +6,12 @@ using System.Diagnostics.CodeAnalysis;
 namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
 {
     [ExcludeFromCodeCoverage]
-    public class CourseConfiguration : IEntityTypeConfiguration<Course>
+    public class StandardConfiguration : IEntityTypeConfiguration<Standard>
     {
-        public void Configure(EntityTypeBuilder<Course> builder)
+        public void Configure(EntityTypeBuilder<Standard> builder)
         {
-            builder.ToTable(nameof(Course))
-                .HasKey(nameof(Course.Reference));
+            builder.ToTable(nameof(Standard))
+                .HasKey(nameof(Standard.StandardReference));
         }
     }
 }

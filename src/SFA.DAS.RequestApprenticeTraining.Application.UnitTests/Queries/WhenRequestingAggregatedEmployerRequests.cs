@@ -22,13 +22,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             var employerRequest1Id = Guid.NewGuid();
             var employerRequest2Id = Guid.NewGuid();
 
-            var course1Reference = "ST0001";
-            var course1Title = "Course 1";
+            var standard1Reference = "ST0001";
+            var standard1Title = "Standard 1";
 
             context.Add(new RequestType { Id = 1, Description = "Shortlist" });
-            context.Add(new Course { Reference = course1Reference, Title= course1Title, Level = 1, Sector = "Sector 1"});
-            context.Add(new EmployerRequest { Id = employerRequest1Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 1, StandardReference=course1Reference, NumberOfApprentices = 2 });
-            context.Add(new EmployerRequest { Id = employerRequest2Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 2 ,StandardReference = course1Reference, NumberOfApprentices = 1});
+            context.Add(new Standard { StandardReference = standard1Reference, StandardTitle= standard1Title, StandardLevel = 1, StandardSector = "Sector 1"});
+            context.Add(new EmployerRequest { Id = employerRequest1Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 1, StandardReference= standard1Reference, NumberOfApprentices = 2 });
+            context.Add(new EmployerRequest { Id = employerRequest2Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 2 ,StandardReference = standard1Reference, NumberOfApprentices = 1});
 
             context.SaveChanges();
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             { 
                 AggregatedEmployerRequests = new List<Domain.Models.AggregatedEmployerRequest>
                 {
-                    new Domain.Models.AggregatedEmployerRequest { CourseReference = course1Reference, CourseTitle = course1Title, Level = 1, Sector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2 }
+                    new Domain.Models.AggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2 }
                 }
             };
 

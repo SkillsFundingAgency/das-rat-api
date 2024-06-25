@@ -19,6 +19,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public Guid RequestedBy { get; set; }
         public Status Status { get; set; }
         public Guid ModifiedBy { get; set; }
-        public virtual Course Course { get; set; }
+        public virtual Standard Standard { get; set; }
     }
 }

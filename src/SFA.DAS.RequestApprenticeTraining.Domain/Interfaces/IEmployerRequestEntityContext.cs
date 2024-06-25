@@ -28,23 +28,20 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<AggregatedEmployerRequest>> GetAggregatedEmployerRequests()
         {
             var result = await Entities
-                .GroupBy(er => new { er.StandardReference, er.Course.Title, er.Course.Level, er.Course.Sector })
+                .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new AggregatedEmployerRequest
                 {
-                    CourseReference = g.Key.StandardReference,
+                    StandardReference = g.Key.StandardReference,
                     NumberOfApprentices = g.Sum(x => x.NumberOfApprentices),
                     NumberOfEmployers = g.Count(),
-                    CourseTitle = g.Key.Title,
-                    Level = g.Key.Level,
-                    Sector = g.Key.Sector
+                    StandardTitle = g.Key.StandardTitle,
+                    StandardLevel = g.Key.StandardLevel,
+                    StandardSector = g.Key.StandardSector
                 })
-                .OrderBy(x => x.CourseReference)
+                .OrderBy(x => x.StandardReference)
                 .ToListAsync();
 
             return result;
         }
-
-
-
     }
 }
