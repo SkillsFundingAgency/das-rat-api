@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using System;
@@ -63,6 +64,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve employer requests for AccountId: {accountId}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("aggregatedrequests")]
+        public async Task<IActionResult> GetAggregatedEmployerRequests()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAggregatedEmployerRequestsQuery());
+                return Ok(result.AggregatedEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests");
                 return BadRequest();
             }
         }
