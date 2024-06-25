@@ -83,8 +83,8 @@
     <Build Include="Tables\EmployerRequestRegion.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\Region.sql" />
     <Build Include="Programmability\StoredProcedures\FindClosestRegion.sql" />
-    <Build Include="Tables\Course.sql" />
-    <None Include="Scripts\PostDeploymentScripts\LookupData\Course.sql" />
+    <Build Include="Tables\Standard.sql" />
+    <None Include="Scripts\PostDeploymentScripts\LookupData\Standard.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

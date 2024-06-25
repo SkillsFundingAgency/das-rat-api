@@ -5,5 +5,5 @@
 :r .\RequestType.sql
 :r .\Status.sql
 :r .\Region.sql
-:r .\Course.sql
+:r .\Standard.sql
 

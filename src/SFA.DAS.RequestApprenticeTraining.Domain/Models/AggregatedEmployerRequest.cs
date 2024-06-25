@@ -4,10 +4,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
 {
     public class AggregatedEmployerRequest
     {
-        public string CourseReference { get; set; }
-        public string CourseTitle { get; set; }
-        public int Level { get; set; }
-        public string Sector { get; set; }
+        public string StandardReference { get; set; }
+        public string StandardTitle { get; set; }
+        public int StandardLevel { get; set; }
+        public string StandardSector { get; set; }
         public int NumberOfApprentices { get; set; }
         public int NumberOfEmployers { get; set; }
 
@@ -20,10 +20,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
 
             return new AggregatedEmployerRequest
             {
-                CourseReference = source.CourseReference,
-                CourseTitle = source.CourseTitle,
-                Level = source.Level,
-                Sector = source.Sector,
+                StandardReference = source.StandardReference,
+                StandardTitle = source.StandardTitle,
+                StandardLevel = source.StandardLevel,
+                StandardSector = source.StandardSector,
                 NumberOfApprentices = source.NumberOfApprentices,   
                 NumberOfEmployers = source.NumberOfEmployers
                 

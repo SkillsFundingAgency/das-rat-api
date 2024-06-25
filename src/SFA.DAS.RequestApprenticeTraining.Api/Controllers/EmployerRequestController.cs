@@ -68,7 +68,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("aggregatedrequests")]
+        [HttpGet("aggregated-employer-requests")]
         public async Task<IActionResult> GetAggregatedEmployerRequests()
         {
             try
