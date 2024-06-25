@@ -71,6 +71,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
             modelBuilder.ApplyConfiguration(new EmployerRequestConfiguration());
             modelBuilder.ApplyConfiguration(new EmployerRequestRegionConfiguration());
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
+            modelBuilder.ApplyConfiguration(new CourseConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
