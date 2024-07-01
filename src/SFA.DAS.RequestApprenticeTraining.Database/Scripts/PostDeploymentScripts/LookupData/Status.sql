@@ -1,5 +1,5 @@
 ﻿/*
-	Insert or Update each of the [RequestType] look up default values.
+	Insert or Update each of the [Status] look up default values.
 
 	NOTES:
 
@@ -8,16 +8,14 @@
 */
 BEGIN TRANSACTION
 
-CREATE TABLE #RequestType(
+CREATE TABLE #Status(
 	[Id] [int] NOT NULL,
 	[Description] [nvarchar](25) NOT NULL
 ) 
 
-INSERT #RequestType VALUES (0, N'Shortlist')
-INSERT #RequestType VALUES (1, N'CourseDetail')
-INSERT #RequestType VALUES (2, N'Providers')
+INSERT #Status VALUES (0, N'Active')
 
-MERGE [RequestType] [Target] USING #RequestType [Source]
+MERGE [Status] [Target] USING #Status [Source]
 ON ([Source].Id = [Target].Id)
 WHEN MATCHED
     THEN UPDATE SET 

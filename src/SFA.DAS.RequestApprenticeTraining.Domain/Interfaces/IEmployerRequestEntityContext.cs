@@ -16,8 +16,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             => await Entities
                 .FirstOrDefaultAsync(er => er.Id == employerRequestId);
 
+        public async Task<EmployerRequest> GetWithRegionsForEmployerRequestId(Guid employerRequestId)
+            => await Entities
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
+                .FirstOrDefaultAsync(er => er.Id == employerRequestId);
+
         public async Task<List<EmployerRequest>> GetForAccountId(long accountId)
             => await Entities
+                .Where(er => er.AccountId == accountId)
+                .ToListAsync();
+
+        public async Task<List<EmployerRequest>> GetWithRegionsForAccountId(long accountId)
+            => await Entities
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
                 .Where(er => er.AccountId == accountId)
                 .ToListAsync();
 

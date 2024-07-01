@@ -2,11 +2,9 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
 using AutoFixture.NUnit3;
-using Azure.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Moq;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
@@ -79,9 +77,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests
             {
                 var applicationSettings = context.Resolve(typeof(IOptions<ApplicationSettings>)) as IOptions<ApplicationSettings>;
                 var dbContextOptions = context.Resolve(typeof(DbContextOptions<RequestApprenticeTrainingDataContext>)) as DbContextOptions<RequestApprenticeTrainingDataContext>;
-                var dateTimeHelper = context.Resolve(typeof(IDateTimeProvider)) as IDateTimeProvider;
 
-                return GetRequestApprenticeTrainingDataContext(applicationSettings, dbContextOptions, dateTimeHelper);
+                return GetRequestApprenticeTrainingDataContext(applicationSettings, dbContextOptions);
             }
 
             return new NoSpecimen();
@@ -89,13 +86,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests
 
         public static RequestApprenticeTrainingDataContext GetRequestApprenticeTrainingDataContext(
             IOptions<ApplicationSettings> applicationSettings,
-            DbContextOptions<RequestApprenticeTrainingDataContext> dbContextOptions,
-            IDateTimeProvider dateTimeHelper)
+            DbContextOptions<RequestApprenticeTrainingDataContext> dbContextOptions)
         {
             var dbContext = new RequestApprenticeTrainingDataContext(
                 applicationSettings,
-                dbContextOptions,
-                dateTimeHelper);
+                dbContextOptions);
 
             dbContext.Database.EnsureCreated();
 

@@ -77,6 +77,12 @@
     <Build Include="Tables\RequestType.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\RequestType.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\SynchronizeLookupData.sql" />
+    <Build Include="Tables\Status.sql" />
+    <None Include="Scripts\PostDeploymentScripts\LookupData\Status.sql" />
+    <Build Include="Tables\Region.sql" />
+    <Build Include="Tables\EmployerRequestRegion.sql" />
+    <None Include="Scripts\PostDeploymentScripts\LookupData\Region.sql" />
+    <Build Include="Programmability\StoredProcedures\FindClosestRegion.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
