@@ -12,6 +12,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
         {
             builder.ToTable(nameof(EmployerRequestRegion))
                 .HasKey(nameof(EmployerRequestRegion.EmployerRequestId), nameof(EmployerRequestRegion.RegionId));
+
+            builder
+                .HasOne(er => er.EmployerRequest)
+                .WithMany(er => er.EmployerRequestRegions)
+                .HasForeignKey(er => er.EmployerRequestId);
+
+            builder
+                .HasOne(er => er.Region)
+                .WithMany(r => r.EmployerRequestRegions)
+                .HasForeignKey(er => er.RegionId);
         }
     }
 }

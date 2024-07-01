@@ -5,6 +5,7 @@ using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,7 +33,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             // Assert
             var expectedResult = new GetEmployerRequestQueryResult 
             { 
-                EmployerRequest = new Domain.Models.EmployerRequest { Id = employerRequestId, RequestType = Domain.Models.Enums.RequestType.Shortlist } 
+                EmployerRequest = new Domain.Models.EmployerRequest { 
+                    Id = employerRequestId, 
+                    RequestType = Domain.Models.Enums.RequestType.Shortlist, 
+                    Regions = new List<Domain.Models.Region>() } 
             };
 
             result.Should().BeEquivalentTo(expectedResult);
