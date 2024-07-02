@@ -159,5 +159,22 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("select-employer-requests")]
+        public async Task<IActionResult> GetSelectEmployerRequests([FromQuery]string standardReference, [FromQuery]string ukprn)
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetSelectEmployerRequestsQuery() { StandardReference = standardReference, Ukprn = ukprn });
+
+                return Ok(result.SelectEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve select employer requests");
+                return BadRequest();
+            }
+        }
     }
 }
