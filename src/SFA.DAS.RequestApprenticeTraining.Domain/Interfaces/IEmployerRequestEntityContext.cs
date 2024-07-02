@@ -44,5 +44,29 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
 
             return result;
         }
+
+        public async Task<List<SelectEmployerRequest>> GetForStandard(string standardReference)
+        {
+            var result = await Entities
+                .Where(er => er.StandardReference == standardReference && er.Status == Models.Enums.Status.Active)
+                .Select(er => new SelectEmployerRequest
+                {
+                    EmployerRequestId = er.Id,
+                    StandardReference = er.StandardReference,
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    DateOfRequest = DateTime.Now,
+                    DayRelease = er.DayRelease,
+                    BlockRelease = er.BlockRelease,
+                    AtApprenticesWorkplace = er.AtApprenticesWorkplace,
+                    SingleLocation = er.SingleLocation,
+                    NumberOfApprentices= er.NumberOfApprentices,
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList()
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
     }
 }

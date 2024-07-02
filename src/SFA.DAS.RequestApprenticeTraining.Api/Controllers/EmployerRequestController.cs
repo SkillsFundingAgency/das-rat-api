@@ -5,7 +5,9 @@ using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerReque
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
@@ -79,6 +81,23 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("select-employer-requests")]
+        public async Task<IActionResult> GetSelectEmployerRequests([FromQuery]string standardReference, [FromQuery]string ukprn)
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetSelectEmployerRequestsQuery() { StandardReference = standardReference, Ukprn = ukprn });
+
+                return Ok(result.SelectEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve select employer requests");
                 return BadRequest();
             }
         }

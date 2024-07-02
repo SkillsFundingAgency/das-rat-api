@@ -7,5 +7,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public Guid EmployerRequestId { get; set; }
         public int RegionId { get; set; }
         public Guid ModifiedBy { get; set; }
+        public virtual Region Region { get; set; }
     }
 }
