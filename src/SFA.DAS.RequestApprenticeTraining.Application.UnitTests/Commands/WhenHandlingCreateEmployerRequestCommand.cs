@@ -1,15 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
-using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.CreateEmployerRequest
 {
