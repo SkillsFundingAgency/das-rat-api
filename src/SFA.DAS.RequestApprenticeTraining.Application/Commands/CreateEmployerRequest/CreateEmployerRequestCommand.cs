@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Azure.Amqp.Framing;
 using System;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
