@@ -17,7 +17,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateEmployerRequestCommand).Assembly));
 
-            services.AddValidatorsFromAssembly(typeof(Application.Queries.GetEmployerRequest.GetEmployerRequestQueryValidator).Assembly);
+            services.AddValidatorsFromAssemblyContaining<CreateEmployerRequestCommand>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             
             services.AddScoped<IDateTimeProvider, UtcDateTimeProvider>();
