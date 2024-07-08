@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetClosestRegion;
@@ -44,9 +45,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
                 var result = await _mediator.Send(new GetClosestRegionQuery { Latitude = latitude, Longitude = longitude});
                 return Ok(result.Region);
             }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, $"Validation error attempting to retrieve closest region for latitude: {latitude} and longitude {longitude}");
+                return BadRequest(new { errors = ex.Errors });
+            }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve closest region");
+                _logger.LogError(e, $"Error attempting to retrieve closest region for latitude: {latitude} and longitude {longitude}");
                 return BadRequest();
             }
         }

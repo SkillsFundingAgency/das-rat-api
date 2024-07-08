@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
@@ -31,6 +32,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
                 var result = await _mediator.Send(request);
                 return Ok(result);
             }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error saving employer request to database.");
+                return BadRequest(new { errors = ex.Errors });
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error saving employer request to database.");
@@ -46,6 +52,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
                 var result = await _mediator.Send(new GetEmployerRequestQuery { EmployerRequestId = employerRequestId });
                 return Ok(result.EmployerRequest);
             }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, $"Validation error attempting to retrieve employer request for Id: {employerRequestId}");
+                return BadRequest(new { errors = ex.Errors });
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve employer request for Id: {employerRequestId}");
@@ -60,6 +71,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             {
                 var result = await _mediator.Send(new GetEmployerRequestsQuery { AccountId = accountId });
                 return Ok(result.EmployerRequests);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, $"Validation error attempting to retrieve employer requests for AccountId: {accountId}");
+                return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
