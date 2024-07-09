@@ -11,7 +11,7 @@
     [AtApprenticesWorkplace] BIT NOT NULL,
     [DayRelease] BIT NOT NULL,
     [BlockRelease] BIT NOT NULL,
-    [RequestedAt] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [RequestedAt] DATETIME2 NOT NULL CONSTRAINT [DF_EmployerRequest_RequestedAt] DEFAULT GETUTCDATE(),
     [RequestedBy] UNIQUEIDENTIFIER NOT NULL,
     [StatusId] INT NOT NULL,
     [ModifiedBy] UNIQUEIDENTIFIER NOT NULL,

@@ -83,6 +83,9 @@
     <Build Include="Tables\EmployerRequestRegion.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\Region.sql" />
     <Build Include="Programmability\StoredProcedures\FindClosestRegion.sql" />
+    <Build Include="Tables\EmployerRequestHistory.sql" />
+    <Build Include="Tables\EmployerRequestRegionHistory.sql" />
+    <Build Include="Tables\RegionHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
@@ -99,5 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.RequestApprenticeTraining.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PreDeploymentScripts\DisableSystemVersioningTables.sql" />
+    <None Include="Scripts\PostDeploymentScripts\EnableSystemVersioningTables.sql" />
   </ItemGroup>
 </Project>

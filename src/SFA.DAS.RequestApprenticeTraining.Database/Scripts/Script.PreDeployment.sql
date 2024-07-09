@@ -9,3 +9,5 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+
+:r .\PreDeploymentScripts\DisableSystemVersioningTables.sql
