@@ -1,11 +1,13 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -28,6 +30,25 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         }
 
         [Test, MoqAutoData]
+        public async Task And_ValidationFails_Then_ReturnBadRequestWithErrors
+            (CreateEmployerRequestCommand request,
+            [Frozen] Mock<IMediator> mediator,
+            ValidationException validationException,
+            [Greedy] EmployerRequestController controller)
+        {
+            // Arrange
+            mediator
+                .Setup(m => m.Send(It.IsAny<CreateEmployerRequestCommand>(), It.IsAny<CancellationToken>()))
+                .Throws(validationException);
+            
+            // Act
+            var result = await controller.Post(request);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
+        }
+
+        [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             (CreateEmployerRequestCommand request,
             [Frozen] Mock<IMediator> mediator,
@@ -40,7 +61,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
             // Act
             var result = await controller.Post(request);
-
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
