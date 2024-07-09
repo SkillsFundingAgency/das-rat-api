@@ -38,14 +38,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
                     .NotEmpty().WithMessage("Multiple Locations must not be empty.");
             });
 
-            RuleFor(x => x.AtApprenticesWorkplace)
-                .NotNull().WithMessage("AtApprenticesWorkplace must not be null.");
-
-            RuleFor(x => x.DayRelease)
-                .NotNull().WithMessage("DayRelease must not be null.");
-
-            RuleFor(x => x.BlockRelease)
-                .NotNull().WithMessage("BlockRelease must not be null.");
+            RuleFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease })
+                .Must(x => x.AtApprenticesWorkplace || x.DayRelease || x.BlockRelease )
+                .WithMessage("At least one of AtApprenticesWorkplace, DayRelease, or BlockRelease must be true.");
 
             RuleFor(x => x.RequestedBy)
                 .NotEmpty().WithMessage("RequestedBy must not be empty.");
