@@ -12,22 +12,19 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        public async Task<EmployerRequest> GetForEmployerRequestId(Guid employerRequestId)
-            => await Entities
-                .FirstOrDefaultAsync(er => er.Id == employerRequestId);
-
-        public async Task<EmployerRequest> GetWithRegionsForEmployerRequestId(Guid employerRequestId)
+        public async Task<EmployerRequest> Get(Guid employerRequestId)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
-                .FirstOrDefaultAsync(er => er.Id == employerRequestId);
+                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.Status == Models.Enums.Status.Active);
 
-        public async Task<List<EmployerRequest>> GetForAccountId(long accountId)
+        public async Task<EmployerRequest> Get(long accountId, string standardReference)
             => await Entities
-                .Where(er => er.AccountId == accountId)
-                .ToListAsync();
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
+                .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.Status == Models.Enums.Status.Active);
 
-        public async Task<List<EmployerRequest>> GetWithRegionsForAccountId(long accountId)
+        public async Task<List<EmployerRequest>> Get(long accountId)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
