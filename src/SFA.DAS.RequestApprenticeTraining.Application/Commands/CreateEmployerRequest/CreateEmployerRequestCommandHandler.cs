@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
@@ -30,7 +31,28 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
 
         public async Task<CreateEmployerRequestCommandResponse> Handle(CreateEmployerRequestCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Creating EmployerRequest record");
+            _logger.LogDebug($"Creating employer request");
+
+            var regions = new List<Region>();
+            if (string.IsNullOrEmpty(request.SameLocation) || request.SameLocation == "Yes")
+            {
+                var closestRegion = await _regionEntityContext.FindClosestRegion(request.SingleLocationLatitude, request.SingleLocationLongitude);
+                if (closestRegion != null)
+                {
+                    regions.Add(closestRegion);
+                    _logger.LogDebug($"Using matched single location to closest region: {closestRegion.SubregionName}");
+                }
+            }
+            else
+            {
+                foreach (string location in request.MultipleLocations)
+                {
+                    var region = await _regionEntityContext.Get(int.Parse(location));
+                    regions.Add(region);
+                }
+                
+                _logger.LogDebug($"Using mutliple selected regions");
+            }
 
             var employerRequest = new EmployerRequest()
             {
@@ -39,10 +61,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
                 AccountId = request.AccountId,
                 StandardReference = request.StandardReference,
                 NumberOfApprentices = request.NumberOfApprentices,
+                SameLocation = request.SameLocation,
                 SingleLocation = request.SingleLocation,
                 AtApprenticesWorkplace = request.AtApprenticesWorkplace,
                 DayRelease = request.DayRelease,
                 BlockRelease = request.BlockRelease,
+                RequestedAt = DateTime.UtcNow,
                 RequestedBy = request.RequestedBy,
                 Status = Status.Active,
                 ModifiedBy = request.ModifiedBy
@@ -51,17 +75,20 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
             _employerRequestEntityContext.Add(employerRequest);
             await _employerRequestEntityContext.SaveChangesAsync();
 
-            var closestRegion = await _regionEntityContext.FindClosestRegion(request.SingleLocationLatitude, request.SingleLocationLongitude);
-
-            _employerRequestRegionEntityContext.Add(new EmployerRequestRegion
+            foreach(var region in regions)
             {
-                EmployerRequestId = employerRequest.Id,
-                RegionId = closestRegion.Id,
-                ModifiedBy = request.ModifiedBy
-            });
+                _employerRequestRegionEntityContext.Add(new EmployerRequestRegion
+                {
+                    EmployerRequestId = employerRequest.Id,
+                    RegionId = region.Id,
+                    ModifiedBy = request.ModifiedBy
+                });
+            }
+
             await _employerRequestRegionEntityContext.SaveChangesAsync();
 
-            _logger.LogDebug($"Successfully created employer request record with Id: {employerRequest.Id} and ClosestRegion {closestRegion.Id}");
+            _logger.LogDebug($"Created employer request record with Id: {employerRequest.Id}");
+
             return new CreateEmployerRequestCommandResponse() { EmployerRequestId = employerRequest.Id };
         }
     }

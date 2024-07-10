@@ -10,6 +10,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
+        public async Task<Region> Get(int id)
+            => await Entities.FirstOrDefaultAsync(r => r.Id == id);
+
         public async Task<List<Region>> GetAll()
             => await Entities.ToListAsync();
         
