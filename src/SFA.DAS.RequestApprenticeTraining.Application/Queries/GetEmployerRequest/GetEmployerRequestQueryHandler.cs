@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,15 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
 
         public async Task<GetEmployerRequestQueryResult> Handle(GetEmployerRequestQuery request, CancellationToken cancellationToken)
         {
-            var employerRequest = await _employerRequestEntityContext.GetWithRegionsForEmployerRequestId(request.EmployerRequestId);
+            EmployerRequest employerRequest = null;
+            if (request.EmployerRequestId.HasValue)
+            {
+                employerRequest = await _employerRequestEntityContext.Get(request.EmployerRequestId.Value);
+            }
+            else if(request.AccountId.HasValue && !string.IsNullOrEmpty(request.StandardReference))
+            {
+                employerRequest = await _employerRequestEntityContext.Get(request.AccountId.Value, request.StandardReference);
+            }
 
             return new GetEmployerRequestQueryResult
             {
