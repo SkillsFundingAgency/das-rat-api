@@ -11,3 +11,5 @@ Post-Deployment Script Template
 */
 
 :r .\PostDeploymentScripts\LookupData\SynchronizeLookupData.sql
+
+:r .\PostDeploymentScripts\EnableSystemVersioningTables.sql

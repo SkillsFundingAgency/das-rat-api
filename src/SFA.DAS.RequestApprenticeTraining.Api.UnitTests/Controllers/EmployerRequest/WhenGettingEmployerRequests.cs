@@ -1,5 +1,6 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -27,12 +28,31 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             mediator
                 .Setup(m => m.Send(It.Is<GetEmployerRequestsQuery>(t => t.AccountId == accountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(employerRequestResult);
-            
+
             // Act
             var result = await controller.GetEmployerRequests(accountId);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(employerRequestResult.EmployerRequests);
+        }
+
+        [Test, MoqAutoData]
+        public async Task And_ValidationFails_Then_ReturnBadRequestWithErrors
+            (long accountId,
+            [Frozen] Mock<IMediator> mediator,
+            ValidationException validationException,
+            [Greedy] EmployerRequestController controller)
+        {
+            // Arrange
+            mediator
+                .Setup(m => m.Send(It.IsAny<GetEmployerRequestsQuery>(), It.IsAny<CancellationToken>()))
+                .Throws(validationException);
+
+            // Act
+            var result = await controller.GetEmployerRequests(accountId);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
         }
 
         [Test, MoqAutoData]

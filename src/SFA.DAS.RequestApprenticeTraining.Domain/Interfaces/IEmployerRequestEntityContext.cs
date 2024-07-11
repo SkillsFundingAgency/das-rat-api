@@ -12,12 +12,22 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        public async Task<EmployerRequest> GetForEmployerRequestId(Guid employerRequestId)
+        public async Task<EmployerRequest> Get(Guid employerRequestId)
             => await Entities
-                .FirstOrDefaultAsync(er => er.Id == employerRequestId);
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
+                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.Status == Models.Enums.Status.Active);
 
-        public async Task<List<EmployerRequest>> GetForAccountId(long accountId)
+        public async Task<EmployerRequest> Get(long accountId, string standardReference)
             => await Entities
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
+                .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.Status == Models.Enums.Status.Active);
+
+        public async Task<List<EmployerRequest>> Get(long accountId)
+            => await Entities
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
                 .Where(er => er.AccountId == accountId)
                 .ToListAsync();
 
