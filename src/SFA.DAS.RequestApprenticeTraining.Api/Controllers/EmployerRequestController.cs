@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
@@ -59,6 +60,26 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve employer request for Id: {employerRequestId}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("account/{accountId}/standard/{standardReference}")]
+        public async Task<IActionResult> GetEmployerRequest(long accountId, string standardReference)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetEmployerRequestQuery { AccountId = accountId, StandardReference = standardReference });
+                return Ok(result.EmployerRequest);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, $"Validation error attempting to retrieve employer request for AccountId: {accountId} and StandardReference: {standardReference.SanitizeLogData()}");
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve employer request for AccountId: {accountId} and StandardReference: {standardReference.SanitizeLogData}");
                 return BadRequest();
             }
         }
