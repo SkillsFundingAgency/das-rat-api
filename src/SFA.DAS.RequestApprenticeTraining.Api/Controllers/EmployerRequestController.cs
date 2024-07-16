@@ -45,7 +45,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("{employerRequestId}")]
+        [HttpGet("{employerRequestId:guid}")]
         public async Task<IActionResult> GetEmployerRequest(Guid employerRequestId)
         {
             try
@@ -105,7 +105,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("aggregated-employer-requests")]
+        [HttpGet("aggregated")]
         public async Task<IActionResult> GetAggregatedEmployerRequests()
         {
             try
