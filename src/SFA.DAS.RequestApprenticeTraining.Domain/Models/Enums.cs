@@ -9,7 +9,7 @@
             Providers = 2
         }
 
-        public enum Status
+        public enum RequestStatus
         {
             Active = 0
         }
