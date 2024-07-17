@@ -31,7 +31,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
                 .ReturnsAsync(aggregatedEmployerRequestResult);
             
             // Act
-            var result = await controller.GetAggregatedEmployerRequests();
+            var result = await controller.GetAggregatedEmployerRequests(12345);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(aggregatedEmployerRequestResult.AggregatedEmployerRequests);
@@ -49,7 +49,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetAggregatedEmployerRequests();
+            var result = await controller.GetAggregatedEmployerRequests(12345);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

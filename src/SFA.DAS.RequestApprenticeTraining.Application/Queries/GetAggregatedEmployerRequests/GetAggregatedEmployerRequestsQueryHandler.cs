@@ -18,12 +18,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmp
 
         public async Task<GetAggregatedEmployerRequestsQueryResult> Handle(GetAggregatedEmployerRequestsQuery request, CancellationToken cancellationToken)
         {
-            var aggregatedRequests = await _employerRequestEntityContext.GetAggregatedEmployerRequests();
+            var aggregatedRequests = await _employerRequestEntityContext.GetAggregatedEmployerRequests(request.Ukprn);
 
             return new GetAggregatedEmployerRequestsQueryResult
             {
                 AggregatedEmployerRequests = 
-                    aggregatedRequests.Select(entity => (Domain.Models.AggregatedEmployerRequest)entity).ToList()
+                    aggregatedRequests.Select(entity => entity).ToList()
             };
         }
     }

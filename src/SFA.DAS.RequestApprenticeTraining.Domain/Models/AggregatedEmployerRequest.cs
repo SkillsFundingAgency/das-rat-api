@@ -10,24 +10,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public string StandardSector { get; set; }
         public int NumberOfApprentices { get; set; }
         public int NumberOfEmployers { get; set; }
-
-        public static implicit operator AggregatedEmployerRequest(Entities.AggregatedEmployerRequest source)
-        {
-            if (source == null)
-            {
-                return null;
-            }
-
-            return new AggregatedEmployerRequest
-            {
-                StandardReference = source.StandardReference,
-                StandardTitle = source.StandardTitle,
-                StandardLevel = source.StandardLevel,
-                StandardSector = source.StandardSector,
-                NumberOfApprentices = source.NumberOfApprentices,   
-                NumberOfEmployers = source.NumberOfEmployers
-                
-            };
-        }
+        public bool IsNew { get; set; }
     }
 }

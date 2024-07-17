@@ -15,6 +15,16 @@ SET (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [dbo].[EmployerRequestRegionHistory])
 );
 
+ALTER TABLE [dbo].[ProviderResponse]
+SET (
+    SYSTEM_VERSIONING = ON (HISTORY_TABLE = [dbo].[ProviderResponseHistory])
+);
+
+ALTER TABLE [dbo].[ProviderResponseEmployerRequest]
+SET (
+    SYSTEM_VERSIONING = ON (HISTORY_TABLE = [dbo].[ProviderResponseEmployerRequestHistory])
+);
+
 ALTER TABLE [dbo].[Region]
 SET (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [dbo].[RegionHistory])

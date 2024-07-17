@@ -86,6 +86,12 @@
     <Build Include="Tables\EmployerRequestRegionHistory.sql" />
     <Build Include="Tables\RegionHistory.sql" />
     <Build Include="Tables\RequestStatus.sql" />
+    <Build Include="Tables\Standard.sql" />
+    <None Include="Scripts\PostDeploymentScripts\LookupData\Standard.sql" />
+    <Build Include="Tables\ProviderResponseEmployerRequest.sql" />
+    <Build Include="Tables\ProviderResponse.sql" />
+    <Build Include="Tables\ProviderResponseEmployerRequestHistory.sql" />
+    <Build Include="Tables\ProviderResponseHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
