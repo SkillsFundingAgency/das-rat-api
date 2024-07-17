@@ -105,17 +105,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("aggregated")]
-        public async Task<IActionResult> GetAggregatedEmployerRequests()
+        [HttpGet("provider/{ukprn}/aggregated")]
+        public async Task<IActionResult> GetAggregatedEmployerRequests(long ukprn)
         {
             try
             {
-                var result = await _mediator.Send(new GetAggregatedEmployerRequestsQuery());
+                var result = await _mediator.Send(new GetAggregatedEmployerRequestsQuery { Ukprn = ukprn });
                 return Ok(result.AggregatedEmployerRequests);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests");
+                _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests for Provider: {ukprn}");
                 return BadRequest();
             }
         }

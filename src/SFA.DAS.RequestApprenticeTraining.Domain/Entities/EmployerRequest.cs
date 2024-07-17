@@ -25,6 +25,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
 
         public Standard Standard { get; set; }
         public List<EmployerRequestRegion> EmployerRequestRegions { get; set; }
+        public List<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
 
         public List<Region> GetRegions()
         {
