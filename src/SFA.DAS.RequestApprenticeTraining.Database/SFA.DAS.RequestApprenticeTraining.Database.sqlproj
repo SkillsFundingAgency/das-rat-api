@@ -77,8 +77,7 @@
     <Build Include="Tables\RequestType.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\RequestType.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\SynchronizeLookupData.sql" />
-    <Build Include="Tables\Status.sql" />
-    <None Include="Scripts\PostDeploymentScripts\LookupData\Status.sql" />
+    <None Include="Scripts\PostDeploymentScripts\LookupData\RequestStatus.sql" />
     <Build Include="Tables\Region.sql" />
     <Build Include="Tables\EmployerRequestRegion.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\Region.sql" />
@@ -86,6 +85,7 @@
     <Build Include="Tables\EmployerRequestHistory.sql" />
     <Build Include="Tables\EmployerRequestRegionHistory.sql" />
     <Build Include="Tables\RegionHistory.sql" />
+    <Build Include="Tables\RequestStatus.sql" />
     <Build Include="Tables\Standard.sql" />
     <None Include="Scripts\PostDeploymentScripts\LookupData\Standard.sql" />
   </ItemGroup>

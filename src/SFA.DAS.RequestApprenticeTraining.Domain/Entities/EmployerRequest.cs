@@ -20,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public bool BlockRelease { get; set; }
         public DateTime RequestedAt { get; set; }
         public Guid RequestedBy { get; set; }
-        public Enums.Status Status { get; set; }
+        public Enums.RequestStatus RequestStatus { get; set; }
         public Guid ModifiedBy { get; set; }
 
         public Standard Standard { get; set; }

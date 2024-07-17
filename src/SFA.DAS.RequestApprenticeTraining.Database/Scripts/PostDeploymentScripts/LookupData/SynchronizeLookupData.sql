@@ -3,7 +3,7 @@
 */
 
 :r .\RequestType.sql
-:r .\Status.sql
+:r .\RequestStatus.sql
 :r .\Region.sql
 :r .\Standard.sql
 
