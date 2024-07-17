@@ -16,13 +16,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
-                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.Status == Models.Enums.Status.Active);
+                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.RequestStatus == Models.Enums.RequestStatus.Active);
 
         public async Task<EmployerRequest> Get(long accountId, string standardReference)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
-                .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.Status == Models.Enums.Status.Active);
+                .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active);
 
         public async Task<List<EmployerRequest>> Get(long accountId)
             => await Entities

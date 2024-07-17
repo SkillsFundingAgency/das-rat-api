@@ -68,7 +68,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
                 BlockRelease = request.BlockRelease,
                 RequestedAt = DateTime.UtcNow,
                 RequestedBy = request.RequestedBy,
-                Status = Status.Active,
+                RequestStatus = RequestStatus.Active,
                 ModifiedBy = request.ModifiedBy
             };
 
