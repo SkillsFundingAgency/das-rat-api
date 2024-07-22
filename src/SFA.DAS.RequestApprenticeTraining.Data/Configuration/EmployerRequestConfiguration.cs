@@ -1,20 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SFA.DAS.RequestApprenticeTraining.Domain.Models;
-using System;
+using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
 {
-    public class EmployerRequestConfiguration : IEntityTypeConfiguration<Domain.Entities.EmployerRequest>
+    [ExcludeFromCodeCoverage]
+    public class EmployerRequestConfiguration : IEntityTypeConfiguration<EmployerRequest>
     {
-        public void Configure(EntityTypeBuilder<Domain.Entities.EmployerRequest> builder)
+        public void Configure(EntityTypeBuilder<EmployerRequest> builder)
         {
-            builder.ToTable("EmployerRequest")
-            .HasKey(x => x.Id);
+            builder.ToTable(nameof(EmployerRequest))
+                .HasKey(x => x.Id);
 
             builder.Property(e => e.RequestType)
                .HasConversion<int>()
                .HasColumnName("RequestTypeId");
+
+            builder.Property(e => e.RequestStatus)
+               .HasConversion<int>()
+               .HasColumnName("RequestStatusId");
         }
     }
 }

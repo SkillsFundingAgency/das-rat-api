@@ -16,11 +16,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
         public static void AddServices(this IServiceCollection services)
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateEmployerRequestCommand).Assembly));
-            services.AddScoped<IEmployerRequestEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
-            services.AddScoped<IDateTimeProvider, UtcDateTimeProvider>();
-            services.AddValidatorsFromAssembly(typeof(Application.Queries.GetEmployerRequest.GetEmployerRequestQueryValidator).Assembly);
+
+            services.AddValidatorsFromAssemblyContaining<CreateEmployerRequestCommand>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            
+            services.AddScoped<IDateTimeProvider, UtcDateTimeProvider>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
+            services.AddScoped<IEmployerRequestEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
+            services.AddScoped<IEmployerRequestRegionEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
+            services.AddScoped<IRegionEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
         }
     }
 }

@@ -40,8 +40,20 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             { 
                 EmployerRequests = new List<Domain.Models.EmployerRequest>
                 {
-                    new Domain.Models.EmployerRequest { Id = employerRequest1Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 1 },
-                    new Domain.Models.EmployerRequest { Id = employerRequest2Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 1 }
+                    new Domain.Models.EmployerRequest 
+                    { 
+                        Id = employerRequest1Id, 
+                        RequestType = Domain.Models.Enums.RequestType.Shortlist, 
+                        AccountId = 1,
+                        Regions = new List<Domain.Models.Region>()
+                    },
+                    new Domain.Models.EmployerRequest 
+                    { 
+                        Id = employerRequest2Id, 
+                        RequestType = Domain.Models.Enums.RequestType.Shortlist, 
+                        AccountId = 1,
+                        Regions = new List<Domain.Models.Region>()
+                    }
                 }
             };
 
