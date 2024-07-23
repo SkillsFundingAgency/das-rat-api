@@ -38,7 +38,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<Models.AggregatedEmployerRequest>> GetAggregatedEmployerRequests(long ukprn)
         {
             var result = await Entities
-                .Where(er => er.Status == Models.Enums.Status.Active)
+                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active)
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
                 {
