@@ -66,10 +66,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetForStandard(string standardReference)
+        public async Task<List<SelectEmployerRequest>> GetForStandard(long ukprn, string standardReference)
         {
             var result = await Entities
-                .Where(er => er.StandardReference == standardReference && er.Status == Models.Enums.Status.Active)
+                .Where(er => er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active)
                 .Select(er => new SelectEmployerRequest
                 {
                     EmployerRequestId = er.Id,
@@ -82,7 +82,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     AtApprenticesWorkplace = er.AtApprenticesWorkplace,
                     SingleLocation = er.SingleLocation,
                     NumberOfApprentices= er.NumberOfApprentices,
-                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList()
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
+                    IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn)
                 })
                 .ToListAsync();
 

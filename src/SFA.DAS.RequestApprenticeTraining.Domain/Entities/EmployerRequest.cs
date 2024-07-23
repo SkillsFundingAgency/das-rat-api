@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
 namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
 {
@@ -30,6 +31,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         {
             return EmployerRequestRegions.Select(err => err.Region).ToList();
         }
-        public virtual Standard Standard { get; set; }
+        public Standard Standard { get; set; }
+        
     }
 }

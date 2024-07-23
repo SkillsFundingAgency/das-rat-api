@@ -28,7 +28,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
                 .ReturnsAsync(selectEmployerRequestResult);
 
             // Act
-            var result = await controller.GetSelectEmployerRequests("ST0004", "1234560");
+            var result = await controller.GetSelectEmployerRequests(1234560, "ST0004");
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(selectEmployerRequestResult.SelectEmployerRequests);
@@ -46,7 +46,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetSelectEmployerRequests("ST0004", "1234560");
+            var result = await controller.GetSelectEmployerRequests(1234560, "ST0004");
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
