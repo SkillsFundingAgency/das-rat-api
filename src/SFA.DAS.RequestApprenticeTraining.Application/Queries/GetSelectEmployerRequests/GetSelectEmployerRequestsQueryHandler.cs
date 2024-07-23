@@ -17,7 +17,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmploye
 
         public async Task<GetSelectEmployerRequestsQueryResult> Handle(GetSelectEmployerRequestsQuery request, CancellationToken cancellationToken)
         {
-            var selectRequests = await _employerRequestEntityContext.GetForStandard(request.StandardReference);
+            var selectRequests = await _employerRequestEntityContext.GetForStandard(request.Ukprn, request.StandardReference);
 
             return new GetSelectEmployerRequestsQueryResult
             {

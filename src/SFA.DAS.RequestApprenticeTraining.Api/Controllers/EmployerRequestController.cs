@@ -122,13 +122,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("select-employer-requests")]
-        public async Task<IActionResult> GetSelectEmployerRequests([FromQuery]string standardReference, [FromQuery]string ukprn)
+        [HttpGet("provider/{ukprn}/selectrequests/{standardReference}")]
+        public async Task<IActionResult> GetSelectEmployerRequests(long ukprn, string standardReference)
         {
             try
             {
                 var result = await _mediator.Send(
-                    new GetSelectEmployerRequestsQuery() { StandardReference = standardReference, Ukprn = ukprn });
+                    new GetSelectEmployerRequestsQuery(ukprn, standardReference));
 
                 return Ok(result.SelectEmployerRequests);
             }
