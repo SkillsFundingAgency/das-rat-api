@@ -18,7 +18,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
         IEmployerRequestEntityContext,
         IEmployerRequestRegionEntityContext,
         IRegionEntityContext,
-        IRequestTypeEntityContext
+        IRequestTypeEntityContext,
+        IProviderResponseEntityContext,
+        IProviderResponseEmployerRequestEntityContext,
+        IProviderResponseEmployerRequestStatusEntityContext
     {
         private const string AzureResource = "https://database.windows.net/";
         private readonly ApplicationSettings _configuration;
@@ -28,11 +31,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
         public virtual DbSet<EmployerRequestRegion> EmployerRequestRegions { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<RequestType> RequestTypes { get; set; }
+        public virtual DbSet<ProviderResponse> ProviderResponses { get; set; }
+        public virtual DbSet<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
+
+        public virtual DbSet<ProviderResponseEmployerRequestStatus> ProviderResponseEmployerRequestsStatus { get; set; }
 
         DbSet<EmployerRequest> IEntityContext<EmployerRequest>.Entities => EmployerRequests;
         DbSet<EmployerRequestRegion> IEntityContext<EmployerRequestRegion>.Entities => EmployerRequestRegions;
         DbSet<RequestType> IEntityContext<RequestType>.Entities => RequestTypes;
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
+        DbSet<ProviderResponse> IEntityContext<ProviderResponse>.Entities => ProviderResponses;
+        DbSet<ProviderResponseEmployerRequest> IEntityContext<ProviderResponseEmployerRequest>.Entities => ProviderResponseEmployerRequests;
+        DbSet<ProviderResponseEmployerRequestStatus> IEntityContext<ProviderResponseEmployerRequestStatus>.Entities => ProviderResponseEmployerRequestsStatus;
 
         public RequestApprenticeTrainingDataContext(IOptions<ApplicationSettings> config,
             DbContextOptions<RequestApprenticeTrainingDataContext> options)
@@ -73,6 +83,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
             modelBuilder.ApplyConfiguration(new ProviderResponseEmployerRequestConfiguration());
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
             modelBuilder.ApplyConfiguration(new StandardConfiguration());
+            modelBuilder.ApplyConfiguration(new ProviderResponseConfiguration());
+            modelBuilder.ApplyConfiguration(new ProviderResponseEmployerRequestStatusConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
