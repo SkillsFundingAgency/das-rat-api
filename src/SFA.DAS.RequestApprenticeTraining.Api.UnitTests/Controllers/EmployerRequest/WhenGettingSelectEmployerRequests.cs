@@ -18,6 +18,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
             (long accountId,
+            string standardReference,
             [Frozen] Mock<IMediator> mediator,
             GetSelectEmployerRequestsQueryResult selectEmployerRequestResult,
             [Greedy] EmployerRequestController controller)
@@ -28,7 +29,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
                 .ReturnsAsync(selectEmployerRequestResult);
 
             // Act
-            var result = await controller.GetSelectEmployerRequests(1234560, "ST0004");
+            var result = await controller.GetSelectEmployerRequests(accountId, standardReference);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(selectEmployerRequestResult.SelectEmployerRequests);
@@ -37,6 +38,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             (long accountId,
+            string standardReference,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
@@ -46,7 +48,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetSelectEmployerRequests(1234560, "ST0004");
+            var result = await controller.GetSelectEmployerRequests(accountId, standardReference);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
