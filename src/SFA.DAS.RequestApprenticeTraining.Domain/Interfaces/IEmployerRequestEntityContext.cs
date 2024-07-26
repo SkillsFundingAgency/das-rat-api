@@ -48,7 +48,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     g.Key.StandardTitle,
                     g.Key.StandardLevel,
                     g.Key.StandardSector,
-                    IsNew = g.Any(er => !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn))
+                    IsNew = g.Any(er => !er.ProviderResponseEmployerRequestsStatus.Any(pre => pre.Ukprn == ukprn))
                 })
                 .OrderBy(x => x.StandardReference)
                 .Select(x => new Models.AggregatedEmployerRequest
@@ -83,7 +83,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     SingleLocation = er.SingleLocation,
                     NumberOfApprentices= er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
-                    IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn)
+                    IsNew = !er.ProviderResponseEmployerRequestsStatus.Any(pre => pre.Ukprn == ukprn)
                 })
                 .ToListAsync();
 
