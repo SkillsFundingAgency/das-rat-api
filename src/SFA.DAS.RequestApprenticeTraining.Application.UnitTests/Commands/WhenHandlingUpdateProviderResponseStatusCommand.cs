@@ -36,6 +36,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
             var command = new CreateProviderResponseEmployerRequestsCommand
             {
                 Ukprn = 456789456,
+                ProviderResponseStatus = 1,
                 EmployerRequestIds = new List<Guid> { new Guid() }
             };
             
@@ -54,6 +55,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
             var command = new CreateProviderResponseEmployerRequestsCommand
             {
                 Ukprn = 89745613,
+                ProviderResponseStatus = 1,
                 EmployerRequestIds = new List<Guid> { new Guid(), new Guid(), new Guid() }
             };
 
