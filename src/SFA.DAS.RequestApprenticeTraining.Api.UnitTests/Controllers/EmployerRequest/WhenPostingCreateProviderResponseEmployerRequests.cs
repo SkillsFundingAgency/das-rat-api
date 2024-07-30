@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRequest
 {
-    public class WhenPostingCreateproviderResponseEmpoyerRequests
+    public class WhenPostingCreateProviderResponseEmployerRequests
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk

@@ -48,7 +48,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     g.Key.StandardTitle,
                     g.Key.StandardLevel,
                     g.Key.StandardSector,
-                    IsNew = g.Any(er => !er.ProviderResponseEmployerRequestsStatus.Any(pre => pre.Ukprn == ukprn))
+                    IsNew = g.Any(er => !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn))
                 })
                 .Select(x => new Models.AggregatedEmployerRequest
                 {
