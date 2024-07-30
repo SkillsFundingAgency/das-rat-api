@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.RespondToEmployerRequests;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.UpdateProviderResponseStatus;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
@@ -141,8 +140,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpPost("provider/response")]
-        public async Task<IActionResult> CreateResponseToEmployerRequests(RespondToEmployerRequestsCommand request)
+        [HttpPost("provider/responses")]
+        public async Task<IActionResult> CreateProviderResponses(CreateProviderResponseEmployerRequestsCommand request)
         {
             try
             {
@@ -151,32 +150,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, "Validation error saving provider response to employer requests to database.");
+                _logger.LogError(ex, "Validation error saving provider response to database.");
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error saving provider response to employer requests to database.");
-                return BadRequest();
-            }
-        }
-
-        [HttpPost("provider/responsestatus")]
-        public async Task<IActionResult> ProviderResponseStatus(UpdateProviderResponseStatusCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-                return Ok(result);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogError(ex, "Validation error saving provider response status to database.");
-                return BadRequest(new { errors = ex.Errors });
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error saving provider response status to database.");
+                _logger.LogError(e, "Error saving provider response to database.");
                 return BadRequest();
             }
         }

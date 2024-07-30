@@ -16,7 +16,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
             builder
                 .HasOne(er => er.EmployerRequest)
                 .WithMany(er => er.ProviderResponseEmployerRequests)
-                .HasForeignKey(er => er.EmployerRequestId);
+                .HasForeignKey(er => er.EmployerRequestId)
+                .HasForeignKey(er => er.ProviderResponseId)
+                .IsRequired(false);
         }
     }
 }

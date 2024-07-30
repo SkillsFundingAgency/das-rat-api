@@ -28,7 +28,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
             services.AddScoped<IRegionEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
             services.AddScoped<IProviderResponseEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
             services.AddScoped<IProviderResponseEmployerRequestEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
-            services.AddScoped<IProviderResponseEmployerRequestStatusEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
         }
     }
 }
