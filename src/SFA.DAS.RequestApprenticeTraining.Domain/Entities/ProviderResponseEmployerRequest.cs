@@ -9,7 +9,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
     {
         public Guid EmployerRequestId { get; set; }
         public long Ukprn { get; set; }
-        public Guid ProviderResponseId { get; set; }
+        public Guid? ProviderResponseId { get; set; }
 
         public EmployerRequest EmployerRequest { get; set; }
     }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.UpdateProviderResponseStatus;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System;
@@ -10,34 +9,33 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.UpdateProviderResponseStatus
+namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.CreateProviderResponseEmployerRequests
 {
     [TestFixture]
-    public class UpdateProviderResponseStatusCommandHandlerTests
+    public class CreateProviderResponseEmployerRequestsCommandHandlerTests
     {
-        private Mock<IProviderResponseEmployerRequestStatusEntityContext> _providerResponseStatusEntityContextMock;
-        private Mock<ILogger<UpdateProviderResponseStatusCommandHandler>> _loggerMock;
-        private UpdateProviderResponseStatusCommandHandler _sut;
+        private Mock<IProviderResponseEmployerRequestEntityContext> _providerResponseEntityContextMock;
+        private Mock<ILogger<CreateProviderResponseEmployerRequestsCommandHandler>> _loggerMock;
+        private CreateProviderResponseEmployerRequestsCommandHandler _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _providerResponseStatusEntityContextMock = new Mock<IProviderResponseEmployerRequestStatusEntityContext>();
-            _loggerMock = new Mock<ILogger<UpdateProviderResponseStatusCommandHandler>>();
+            _providerResponseEntityContextMock = new Mock<IProviderResponseEmployerRequestEntityContext>();
+            _loggerMock = new Mock<ILogger<CreateProviderResponseEmployerRequestsCommandHandler>>();
 
-            _sut = new UpdateProviderResponseStatusCommandHandler(
-                _providerResponseStatusEntityContextMock.Object,
+            _sut = new CreateProviderResponseEmployerRequestsCommandHandler(
+                _providerResponseEntityContextMock.Object,
                 _loggerMock.Object);
         }
 
         [Test]
-        public async Task Handle_ShouldCreateProviderResponseEmployerRequestStatus()
+        public async Task Handle_ShouldCreateProviderResponseEmployerRequest()
         {
             // Arrange
-            var command = new UpdateProviderResponseStatusCommand
+            var command = new CreateProviderResponseEmployerRequestsCommand
             {
                 Ukprn = 456789456,
-                ProviderResponseStatus = 1,
                 EmployerRequestIds = new List<Guid> { new Guid() }
             };
             
@@ -45,18 +43,17 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Updat
             await _sut.Handle(command, CancellationToken.None);
 
             // Assert
-            _providerResponseStatusEntityContextMock.Verify(x => x.Add(It.IsAny<ProviderResponseEmployerRequestStatus>()), Times.Once);
-            _providerResponseStatusEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            _providerResponseEntityContextMock.Verify(x => x.Add(It.IsAny<ProviderResponseEmployerRequest>()), Times.Once);
+            _providerResponseEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public async Task Handle_ShouldCreateMultipleProviderResponseEmployerRequestStatus()
+        public async Task Handle_ShouldCreateMultipleProviderResponseEmployerRequest()
         {
             // Arrange
-            var command = new UpdateProviderResponseStatusCommand
+            var command = new CreateProviderResponseEmployerRequestsCommand
             {
                 Ukprn = 89745613,
-                ProviderResponseStatus = 1,
                 EmployerRequestIds = new List<Guid> { new Guid(), new Guid(), new Guid() }
             };
 
@@ -64,8 +61,8 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Updat
             await _sut.Handle(command, CancellationToken.None);
 
             // Assert
-            _providerResponseStatusEntityContextMock.Verify(x => x.Add(It.IsAny<ProviderResponseEmployerRequestStatus>()), Times.AtMost(3));
-            _providerResponseStatusEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            _providerResponseEntityContextMock.Verify(x => x.Add(It.IsAny<ProviderResponseEmployerRequest>()), Times.AtMost(3));
+            _providerResponseEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }
