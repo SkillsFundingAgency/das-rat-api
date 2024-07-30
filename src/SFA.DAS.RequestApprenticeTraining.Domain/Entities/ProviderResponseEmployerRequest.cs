@@ -12,5 +12,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public Guid? ProviderResponseId { get; set; }
 
         public EmployerRequest EmployerRequest { get; set; }
+        public ProviderResponse ProviderResponse { get; set; }
     }
 }

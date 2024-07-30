@@ -25,6 +25,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
                 .WithMany()
                 .HasForeignKey(e => e.StandardReference);
 
+            builder.HasMany(e => e.ProviderResponseEmployerRequests)
+                .WithOne()
+                .HasForeignKey(e => e.EmployerRequestId);
+
                
         }
     }

@@ -9,10 +9,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.CreateProviderResponseEmployerRequests
+namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.CreateProviderResponseEmployerRequest
 {
     [TestFixture]
-    public class CreateProviderResponseEmployerRequestsCommandHandlerTests
+    public class CreateProviderResponseEmployerRequestCommandHandlerTests
     {
         private Mock<IProviderResponseEmployerRequestEntityContext> _providerResponseEntityContextMock;
         private Mock<ILogger<CreateProviderResponseEmployerRequestsCommandHandler>> _loggerMock;
@@ -36,10 +36,9 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
             var command = new CreateProviderResponseEmployerRequestsCommand
             {
                 Ukprn = 456789456,
-                ProviderResponseStatus = 1,
                 EmployerRequestIds = new List<Guid> { new Guid() }
             };
-            
+
             // Act
             await _sut.Handle(command, CancellationToken.None);
 
@@ -55,7 +54,6 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
             var command = new CreateProviderResponseEmployerRequestsCommand
             {
                 Ukprn = 89745613,
-                ProviderResponseStatus = 1,
                 EmployerRequestIds = new List<Guid> { new Guid(), new Guid(), new Guid() }
             };
 

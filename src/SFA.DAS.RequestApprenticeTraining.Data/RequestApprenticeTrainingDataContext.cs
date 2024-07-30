@@ -33,8 +33,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
         public virtual DbSet<ProviderResponse> ProviderResponses { get; set; }
         public virtual DbSet<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
 
-        public virtual DbSet<ProviderResponseEmployerRequestStatus> ProviderResponseEmployerRequestsStatus { get; set; }
-
         DbSet<EmployerRequest> IEntityContext<EmployerRequest>.Entities => EmployerRequests;
         DbSet<EmployerRequestRegion> IEntityContext<EmployerRequestRegion>.Entities => EmployerRequestRegions;
         DbSet<RequestType> IEntityContext<RequestType>.Entities => RequestTypes;

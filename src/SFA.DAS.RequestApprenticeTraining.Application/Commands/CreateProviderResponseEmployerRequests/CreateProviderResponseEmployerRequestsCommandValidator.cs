@@ -10,7 +10,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderR
                 .NotEmpty().WithMessage("Employer Requests must not be empty.");
 
             RuleFor(x => x.Ukprn)
-                .GreaterThan(0).WithMessage("Account Id must be greater than zero.");
+                .GreaterThan(0).WithMessage("Ukprn must be greater than zero.");
         }
     }
 }

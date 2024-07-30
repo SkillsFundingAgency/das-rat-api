@@ -107,8 +107,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(new Standard { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1" });
             context.Add(new EmployerRequest { Id = employerRequest1Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 1, StandardReference = standard1Reference, NumberOfApprentices = 2 });
             context.Add(new EmployerRequest { Id = employerRequest2Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 2, StandardReference = standard1Reference, NumberOfApprentices = 1 });
-            context.Add(new ProviderResponseEmployerRequestStatus { EmployerRequestId = employerRequest1Id, Ukprn = 12345 });
-            context.Add(new ProviderResponseEmployerRequestStatus { EmployerRequestId = employerRequest2Id, Ukprn = 12345 });
+            context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequest1Id, Ukprn = 12345 });
+            context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequest2Id, Ukprn = 12345 });
 
             context.SaveChanges();
 

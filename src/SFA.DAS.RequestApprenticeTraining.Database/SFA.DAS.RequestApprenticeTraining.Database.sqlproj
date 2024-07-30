@@ -92,7 +92,6 @@
     <Build Include="Tables\ProviderResponse.sql" />
     <Build Include="Tables\ProviderResponseEmployerRequestHistory.sql" />
     <Build Include="Tables\ProviderResponseHistory.sql" />
-    <Build Include="Tables\ProviderResponseEmployerRequestStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
