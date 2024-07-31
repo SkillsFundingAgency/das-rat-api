@@ -1,8 +1,6 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregeatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
@@ -46,6 +44,22 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             result.Should().NotBeNull();
             result.SelectEmployerRequests.Should().HaveCount(3);
 
+        }
+
+        [Test, AutoMoqData]
+        public async Task And_SelectEmployerRequests_NoneFound_ThenEmptySelectEmployerRequestsAreReturned(
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
+        {
+            // Arrange
+            var query = new GetSelectEmployerRequestsQuery(123456789, "ST0001");
+            var handler = new GetSelectEmployerRequestsQueryHandler(context);
+
+            // Act
+            var result = await handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SelectEmployerRequests.Should().BeEmpty();
         }
     }
 }
