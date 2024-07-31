@@ -35,7 +35,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
                 AtApprenticesWorkplace = source.AtApprenticesWorkplace,
                 IsNew = source.IsNew,
                 IsContacted = source.IsContacted,
-                Locations = source.Locations
+                Locations = source.Locations,
             };
         }
     }
