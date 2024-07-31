@@ -35,7 +35,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             => await Entities
                 .FirstOrDefaultAsync();
 
-        public async Task<List<Models.AggregatedEmployerRequest>> GetAggregatedEmployerRequests(long ukprn)
+        public async Task<List<AggregatedEmployerRequest>> GetAggregatedEmployerRequests(long ukprn)
         {
             var result = await Entities
                 .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active)
@@ -50,7 +50,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     g.Key.StandardSector,
                     IsNew = g.Any(er => !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn))
                 })
-                .Select(x => new Models.AggregatedEmployerRequest
+                .Select(x => new AggregatedEmployerRequest
                 {
                     StandardReference = x.StandardReference,
                     StandardTitle = x.StandardTitle,
