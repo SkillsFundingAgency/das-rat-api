@@ -54,6 +54,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             var standardReference = "ABC123";
 
             context.Add(new RequestType { Id = 1, Description = "Shortlist" });
+            context.Add(new Standard { StandardReference = standardReference });
             context.Add(new EmployerRequest { Id = employerRequestId, AccountId = accountId, StandardReference = standardReference, RequestType = Domain.Models.Enums.RequestType.Shortlist });
             context.SaveChanges();
 

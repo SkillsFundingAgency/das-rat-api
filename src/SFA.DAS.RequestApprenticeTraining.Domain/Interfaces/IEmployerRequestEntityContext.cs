@@ -34,5 +34,36 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<EmployerRequest> GetFirstOrDefault()
             => await Entities
                 .FirstOrDefaultAsync();
+
+        public async Task<List<AggregatedEmployerRequest>> GetAggregatedEmployerRequests(long ukprn)
+        {
+            var result = await Entities
+                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
+                .Select(g => new
+                {
+                    g.Key.StandardReference,
+                    NumberOfApprentices = g.Sum(x => x.NumberOfApprentices),
+                    NumberOfEmployers = g.Count(),
+                    g.Key.StandardTitle,
+                    g.Key.StandardLevel,
+                    g.Key.StandardSector,
+                    IsNew = g.Any(er => !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn))
+                })
+                .OrderBy(x => x.StandardReference)
+                .Select(x => new AggregatedEmployerRequest
+                {
+                    StandardReference = x.StandardReference,
+                    StandardTitle = x.StandardTitle,
+                    StandardLevel = x.StandardLevel,
+                    StandardSector = x.StandardSector,
+                    NumberOfApprentices = x.NumberOfApprentices,
+                    NumberOfEmployers = x.NumberOfEmployers,
+                    IsNew = x.IsNew
+                })
+                .ToListAsync();
+
+            return result;
+        }
     }
 }

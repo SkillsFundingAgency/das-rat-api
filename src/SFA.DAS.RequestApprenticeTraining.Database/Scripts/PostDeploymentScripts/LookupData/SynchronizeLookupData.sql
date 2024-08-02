@@ -5,4 +5,5 @@
 :r .\RequestType.sql
 :r .\RequestStatus.sql
 :r .\Region.sql
+:r .\Standard.sql
 
