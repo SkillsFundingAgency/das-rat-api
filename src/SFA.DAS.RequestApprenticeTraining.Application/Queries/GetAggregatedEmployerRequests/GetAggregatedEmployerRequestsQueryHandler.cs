@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregeatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmp
             return new GetAggregatedEmployerRequestsQueryResult
             {
                 AggregatedEmployerRequests = 
-                    aggregatedRequests.Select(entity => entity).ToList()
+                    aggregatedRequests.Select(entity => (AggregatedEmployerRequest)entity).ToList()
             };
         }
     }
