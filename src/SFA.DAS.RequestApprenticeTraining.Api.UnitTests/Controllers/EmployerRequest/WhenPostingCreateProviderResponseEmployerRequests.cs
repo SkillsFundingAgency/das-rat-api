@@ -25,7 +25,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             var result = await controller.CreateProviderResponses(request);
 
             // Assert
-            result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeOfType<OkResult>();
         }
 
         [Test, MoqAutoData]

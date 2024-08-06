@@ -66,7 +66,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetForStandard(long ukprn, string standardReference)
+        public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference)
         {
             var result = await Entities
                 .Where(er => er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active)
