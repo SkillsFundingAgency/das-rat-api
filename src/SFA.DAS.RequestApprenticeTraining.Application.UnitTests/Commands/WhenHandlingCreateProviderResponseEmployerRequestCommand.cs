@@ -43,7 +43,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
             await _sut.Handle(command, CancellationToken.None);
 
             // Assert
-            _providerResponseEntityContextMock.Verify(x => x.Add(It.IsAny<ProviderResponseEmployerRequest>()), Times.Once);
+            _providerResponseEntityContextMock.Verify(x => x.CreateIfNotExistsAsync(It.IsAny<ProviderResponseEmployerRequest>()), Times.Once);
             _providerResponseEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -61,7 +61,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
             await _sut.Handle(command, CancellationToken.None);
 
             // Assert
-            _providerResponseEntityContextMock.Verify(x => x.Add(It.IsAny<ProviderResponseEmployerRequest>()), Times.AtMost(3));
+            _providerResponseEntityContextMock.Verify(x => x.CreateIfNotExistsAsync(It.IsAny<ProviderResponseEmployerRequest>()), Times.AtMost(3));
             _providerResponseEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }

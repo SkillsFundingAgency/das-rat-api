@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests
 {
-    public class CreateProviderResponseEmployerRequestsCommandHandler : IRequestHandler<CreateProviderResponseEmployerRequestsCommand, CreateProviderResponseEmployerRequestsCommandResponse>
+    public class CreateProviderResponseEmployerRequestsCommandHandler : IRequestHandler<CreateProviderResponseEmployerRequestsCommand>
     {
         private readonly IProviderResponseEmployerRequestEntityContext _providerResponseEmployerRequestEntityContext;
         private readonly ILogger<CreateProviderResponseEmployerRequestsCommandHandler> _logger;
@@ -22,30 +22,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderR
             _logger = logger;
         }
 
-        public async Task<CreateProviderResponseEmployerRequestsCommandResponse> Handle(CreateProviderResponseEmployerRequestsCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateProviderResponseEmployerRequestsCommand request, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"Updating Provider Responses to Employer Requests");
 
-            try
+            foreach (var employerRequestId in request.EmployerRequestIds)
             {
-                foreach (var employerRequestId in request.EmployerRequestIds)
+                var response = new ProviderResponseEmployerRequest
                 {
-                    var response = new ProviderResponseEmployerRequest
-                    {
-                        EmployerRequestId = employerRequestId,
-                        Ukprn = request.Ukprn,
-                    };
-                    _providerResponseEmployerRequestEntityContext.Add(response);
-                }
-
-                await _providerResponseEmployerRequestEntityContext.SaveChangesAsync();
-            }
-            catch(Exception ex) 
-            {
-                var x = ex.InnerException;
+                    EmployerRequestId = employerRequestId,
+                    Ukprn = request.Ukprn,
+                };
+                await _providerResponseEmployerRequestEntityContext.CreateIfNotExistsAsync(response);
             }
 
-            return new CreateProviderResponseEmployerRequestsCommandResponse() { Result = true};
+            await _providerResponseEmployerRequestEntityContext.SaveChangesAsync();
         }
     }
 }

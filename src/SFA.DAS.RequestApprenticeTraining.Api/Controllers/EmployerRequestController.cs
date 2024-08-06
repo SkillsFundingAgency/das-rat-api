@@ -78,7 +78,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, $"Validation error attempting to retrieve employer request for Ukprn: {accountId} and StandardReference: {standardReference.SanitizeLogData()}");
+                _logger.LogError(ex, $"Validation error attempting to retrieve employer request for AccountId: {accountId} and StandardReference: {standardReference.SanitizeLogData()}");
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
@@ -145,8 +145,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         {
             try
             {
-                var result = await _mediator.Send(request);
-                return Ok(result);
+                await _mediator.Send(request);
+                return Ok();
             }
             catch (ValidationException ex)
             {
