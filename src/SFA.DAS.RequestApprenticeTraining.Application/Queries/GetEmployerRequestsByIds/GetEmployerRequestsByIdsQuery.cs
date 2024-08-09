@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds
 {
-    public class GetEmployerRequestsForProviderQuery : IRequest<GetEmployerRequestsByIdsQueryResult>
+    public class GetEmployerRequestsByIdsQuery : IRequest<GetEmployerRequestsByIdsQueryResult>
     {
         public List<Guid> EmployerRequestIds;
 
-        public GetEmployerRequestsForProviderQuery(List<Guid> employerRequestIds) 
+        public GetEmployerRequestsByIdsQuery(List<Guid> employerRequestIds) 
         {
             EmployerRequestIds = employerRequestIds;
         }

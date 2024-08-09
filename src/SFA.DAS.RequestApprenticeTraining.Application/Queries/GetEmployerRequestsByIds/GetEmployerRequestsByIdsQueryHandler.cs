@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds
 {
-    public class GetEmployerRequestsByIdsQueryHandler : IRequestHandler<GetEmployerRequestsForProviderQuery, GetEmployerRequestsByIdsQueryResult>
+    public class GetEmployerRequestsByIdsQueryHandler : IRequestHandler<GetEmployerRequestsByIdsQuery, GetEmployerRequestsByIdsQueryResult>
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
 
@@ -15,7 +15,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
             _employerRequestEntityContext = employerRequestEntityContext;
         }
 
-        public async Task<GetEmployerRequestsByIdsQueryResult> Handle(GetEmployerRequestsForProviderQuery request, CancellationToken cancellationToken)
+        public async Task<GetEmployerRequestsByIdsQueryResult> Handle(GetEmployerRequestsByIdsQuery request, CancellationToken cancellationToken)
         {
             var selectRequests = await _employerRequestEntityContext.GetByIds(request.EmployerRequestIds);
 

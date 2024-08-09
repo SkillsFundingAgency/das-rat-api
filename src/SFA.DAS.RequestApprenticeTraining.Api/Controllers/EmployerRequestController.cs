@@ -168,7 +168,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             try
             {
                 var result = await _mediator.Send(
-                    new GetEmployerRequestsForProviderQuery(employerRequestIds));
+                    new GetEmployerRequestsByIdsQuery(employerRequestIds));
 
                 return Ok(result.EmployerRequests);
             }
