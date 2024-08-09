@@ -8,8 +8,10 @@ using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderRespo
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -156,6 +158,23 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error saving provider response to database.");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetEmployerRequestsByIds([FromQuery]List<Guid> employerRequestIds)
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetEmployerRequestsForProviderQuery(employerRequestIds));
+
+                return Ok(result.EmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve select employer requests");
                 return BadRequest();
             }
         }
