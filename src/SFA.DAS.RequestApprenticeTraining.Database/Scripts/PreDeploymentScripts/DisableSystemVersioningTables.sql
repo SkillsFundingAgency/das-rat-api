@@ -40,6 +40,36 @@ IF EXISTS (
     SELECT 1
     FROM sys.tables t
     JOIN sys.schemas s ON t.schema_id = s.schema_id
+    WHERE t.name = 'ProviderResponse'
+    AND s.name = 'dbo'
+    AND t.temporal_type = 2
+)
+BEGIN
+    ALTER TABLE [dbo].[ProviderResponse]
+    SET (
+        SYSTEM_VERSIONING = OFF
+    );
+END
+
+IF EXISTS (
+    SELECT 1
+    FROM sys.tables t
+    JOIN sys.schemas s ON t.schema_id = s.schema_id
+    WHERE t.name = 'ProviderResponseEmployerRequest'
+    AND s.name = 'dbo'
+    AND t.temporal_type = 2
+)
+BEGIN
+    ALTER TABLE [dbo].[ProviderResponseEmployerRequest]
+    SET (
+        SYSTEM_VERSIONING = OFF
+    );
+END
+
+IF EXISTS (
+    SELECT 1
+    FROM sys.tables t
+    JOIN sys.schemas s ON t.schema_id = s.schema_id
     WHERE t.name = 'Region'
     AND s.name = 'dbo'
     AND t.temporal_type = 2

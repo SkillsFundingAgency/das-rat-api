@@ -20,6 +20,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
             builder.Property(e => e.RequestStatus)
                .HasConversion<int>()
                .HasColumnName("RequestStatusId");
+
+            builder.HasOne(e => e.Standard)
+                .WithMany()
+                .HasForeignKey(e => e.StandardReference);
+
+               
         }
     }
 }

@@ -24,10 +24,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public Guid ModifiedBy { get; set; }
 
         public List<EmployerRequestRegion> EmployerRequestRegions { get; set; }
+        public List<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
 
         public List<Region> GetRegions()
         {
             return EmployerRequestRegions.Select(err => err.Region).ToList();
         }
+        public virtual Standard Standard { get; set; }
     }
 }

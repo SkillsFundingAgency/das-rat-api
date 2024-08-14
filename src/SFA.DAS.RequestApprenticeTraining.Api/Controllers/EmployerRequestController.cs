@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using System;
@@ -44,7 +45,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("{employerRequestId}")]
+        [HttpGet("{employerRequestId:guid}")]
         public async Task<IActionResult> GetEmployerRequest(Guid employerRequestId)
         {
             try
@@ -100,6 +101,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve employer requests for AccountId: {accountId}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("provider/{ukprn}/aggregated")]
+        public async Task<IActionResult> GetAggregatedEmployerRequests(long ukprn)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAggregatedEmployerRequestsQuery { Ukprn = ukprn });
+                return Ok(result.AggregatedEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests for Provider: {ukprn}");
                 return BadRequest();
             }
         }
