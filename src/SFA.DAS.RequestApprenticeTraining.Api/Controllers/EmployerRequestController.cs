@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
@@ -108,13 +108,28 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("provider/{ukprn}/aggregated")]
-        public async Task<IActionResult> GetAggregatedEmployerRequests(long ukprn)
+        [HttpGet("account/{accountId}/aggregated")]
+        public async Task<IActionResult> GetEmployerAggregatedEmployerRequests(long accountId)
         {
             try
             {
-                var result = await _mediator.Send(new GetAggregatedEmployerRequestsQuery { Ukprn = ukprn });
-                return Ok(result.AggregatedEmployerRequests);
+                var result = await _mediator.Send(new GetEmployerAggregatedEmployerRequestsQuery { AccountId = accountId });
+                return Ok(result.EmployerAggregatedEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests for Employer: {accountId}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("provider/{ukprn}/aggregated")]
+        public async Task<IActionResult> GetProviderAggregatedEmployerRequests(long ukprn)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetProviderAggregatedEmployerRequestsQuery { Ukprn = ukprn });
+                return Ok(result.ProviderAggregatedEmployerRequests);
             }
             catch (Exception e)
             {

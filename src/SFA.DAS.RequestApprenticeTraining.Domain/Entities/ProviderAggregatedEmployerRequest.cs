@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
 {
-    public class AggregatedEmployerRequest
+    public class ProviderAggregatedEmployerRequest
     {
         public string StandardReference { get; set; }
         public string StandardTitle { get; set; }

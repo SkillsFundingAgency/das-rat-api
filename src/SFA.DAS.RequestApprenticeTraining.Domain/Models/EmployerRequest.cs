@@ -18,6 +18,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public bool DayRelease { get; set; }
         public bool BlockRelease { get; set; }
         public Guid RequestedBy { get; set; }
+        public DateTime RequestedAt { get; set; }
         public RequestStatus RequestStatus { get; set; }
         public Guid ModifiedBy { get; set; }
 
@@ -43,6 +44,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
                 DayRelease = source.DayRelease,
                 BlockRelease = source.BlockRelease,
                 RequestedBy = source.RequestedBy,
+                RequestedAt = source.RequestedAt,
                 RequestStatus = source.RequestStatus,
                 ModifiedBy = source.ModifiedBy,
                 Regions = source.GetRegions().Select(s => (Region)s).ToList()
