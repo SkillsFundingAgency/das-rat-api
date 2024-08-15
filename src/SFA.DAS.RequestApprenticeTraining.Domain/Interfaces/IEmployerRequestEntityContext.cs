@@ -76,7 +76,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     StandardReference = er.StandardReference,
                     StandardTitle = er.Standard.StandardTitle,
                     StandardLevel = er.Standard.StandardLevel,
-                    DateOfRequest = DateTime.Now,
+                    DateOfRequest = er.RequestedAt,
                     DayRelease = er.DayRelease,
                     BlockRelease = er.BlockRelease,
                     AtApprenticesWorkplace = er.AtApprenticesWorkplace,
