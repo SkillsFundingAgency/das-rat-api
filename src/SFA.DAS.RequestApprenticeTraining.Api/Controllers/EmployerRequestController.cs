@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
@@ -80,7 +83,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve employer request for AccountId: {accountId} and StandardReference: {standardReference.SanitizeLogData}");
+                _logger.LogError(e, $"Error attempting to retrieve employer request for Ukprn: {accountId} and StandardReference: {standardReference.SanitizeLogData}");
                 return BadRequest();
             }
         }
@@ -95,12 +98,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, $"Validation error attempting to retrieve employer requests for AccountId: {accountId}");
+                _logger.LogError(ex, $"Validation error attempting to retrieve employer requests for Ukprn: {accountId}");
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve employer requests for AccountId: {accountId}");
+                _logger.LogError(e, $"Error attempting to retrieve employer requests for Ukprn: {accountId}");
                 return BadRequest();
             }
         }
@@ -116,6 +119,43 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests for Provider: {ukprn}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("provider/{ukprn}/selectrequests/{standardReference}")]
+        public async Task<IActionResult> GetSelectEmployerRequests(long ukprn, string standardReference)
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetSelectEmployerRequestsQuery(ukprn, standardReference));
+
+                return Ok(result.SelectEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve select employer requests");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("provider/responses")]
+        public async Task<IActionResult> CreateProviderResponses(CreateProviderResponseEmployerRequestsCommand request)
+        {
+            try
+            {
+                await _mediator.Send(request);
+                return Ok();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error saving provider response to database.");
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error saving provider response to database.");
                 return BadRequest();
             }
         }

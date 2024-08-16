@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
+﻿using System;
+
+namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
 {
     public class AggregatedEmployerRequest
     {

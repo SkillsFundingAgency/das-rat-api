@@ -50,7 +50,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     g.Key.StandardSector,
                     IsNew = g.Any(er => !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn))
                 })
-                .OrderBy(x => x.StandardReference)
                 .Select(x => new AggregatedEmployerRequest
                 {
                     StandardReference = x.StandardReference,
@@ -59,11 +58,38 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     StandardSector = x.StandardSector,
                     NumberOfApprentices = x.NumberOfApprentices,
                     NumberOfEmployers = x.NumberOfEmployers,
-                    IsNew = x.IsNew
+                    IsNew = x.IsNew,
                 })
+                .OrderBy(x => x.StandardTitle)
                 .ToListAsync();
 
             return result;
         }
+
+        public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference)
+        {
+            var result = await Entities
+                .Where(er => er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Select(er => new SelectEmployerRequest
+                {
+                    EmployerRequestId = er.Id,
+                    StandardReference = er.StandardReference,
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    DateOfRequest = er.RequestedAt,
+                    DayRelease = er.DayRelease,
+                    BlockRelease = er.BlockRelease,
+                    AtApprenticesWorkplace = er.AtApprenticesWorkplace,
+                    SingleLocation = er.SingleLocation,
+                    NumberOfApprentices= er.NumberOfApprentices,
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
+                    IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn),
+                })
+                .OrderBy(x => x.StandardTitle)
+                .ToListAsync();
+
+            return result;
+        }
+
     }
 }
