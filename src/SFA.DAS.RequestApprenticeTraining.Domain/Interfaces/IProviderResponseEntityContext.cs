@@ -14,5 +14,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<ProviderResponse>> Get()
             => await Entities.ToListAsync();
 
+        public async Task<ProviderResponse> Get(Guid providerResponseId)
+            => await Entities
+                .Include(pr => pr.ProviderResponseEmployerRequests)
+                .FirstOrDefaultAsync(pr => pr.Id == providerResponseId);
+
     }
 }

@@ -84,6 +84,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     NumberOfApprentices= er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
                     IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn),
+                    IsContacted = er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
                 })
                 .OrderByDescending(x => x.DateOfRequest)
                 .ToListAsync();
@@ -95,6 +96,32 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         {
             var result = await Entities
                 .Where(er => employerRequestIds.Contains(er.Id) && er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Select(er => new SelectEmployerRequest
+                {
+                    EmployerRequestId = er.Id,
+                    StandardReference = er.StandardReference,
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    DateOfRequest = er.RequestedAt,
+                    DayRelease = er.DayRelease,
+                    BlockRelease = er.BlockRelease,
+                    AtApprenticesWorkplace = er.AtApprenticesWorkplace,
+                    SingleLocation = er.SingleLocation,
+                    NumberOfApprentices = er.NumberOfApprentices,
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
+                })
+                .OrderByDescending(x => x.DateOfRequest)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<SelectEmployerRequest>> GetForProviderResponse(Guid providerResponseId)
+        {
+            var result = await Entities
+                .Include(er => er.ProviderResponseEmployerRequests)
+                .ThenInclude(prer => prer.ProviderResponse)
+                .Where(er => er.ProviderResponseEmployerRequests.Any(x => x.ProviderResponseId == providerResponseId))
                 .Select(er => new SelectEmployerRequest
                 {
                     EmployerRequestId = er.Id,

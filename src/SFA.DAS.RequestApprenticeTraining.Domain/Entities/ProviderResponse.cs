@@ -12,6 +12,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public string PhoneNumber { get; set; }
         public string Website { get; set; }
         public DateTime RespondedAt { get; set; }
-
+        public List<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
     }
 }

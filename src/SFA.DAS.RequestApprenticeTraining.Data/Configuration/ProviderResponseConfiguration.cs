@@ -12,6 +12,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Data.Configuration
         {
             builder.ToTable(nameof(ProviderResponse))
                 .HasKey(nameof(ProviderResponse.Id));
+
+            builder.HasMany(e => e.ProviderResponseEmployerRequests)
+                .WithOne(pre => pre.ProviderResponse)
+                .HasForeignKey(e => e.ProviderResponseId);
         }
     }
 }

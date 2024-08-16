@@ -5,10 +5,12 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
 using System.Collections.Generic;
@@ -175,6 +177,43 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve select employer requests");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("provider/submit-response")]
+        public async Task<IActionResult> SubmitProviderResponse(SubmitProviderResponseCommand request)
+        {
+            try
+            {
+                var response = await _mediator.Send(request);
+                return Ok(response);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error submitting provider response to database.");
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error saving provider response to database.");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("{providerResponseId}/confirmation")]
+        public async Task<IActionResult> GetProviderResponseConfirmation(Guid providerResponseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetProviderResponseConfirmationQuery(providerResponseId));
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve sprovider response confirmation");
                 return BadRequest();
             }
         }
