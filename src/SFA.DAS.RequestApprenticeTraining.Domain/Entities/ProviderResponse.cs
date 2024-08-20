@@ -1,7 +1,5 @@
-﻿using SFA.DAS.RequestApprenticeTraining.Domain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
 {

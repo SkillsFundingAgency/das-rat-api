@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,14 +24,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderRespo
             var requests = await _employerRequestEntityContext.GetForProviderResponse(request.ProviderResponseId);
             var providerResponse = await _providerResponseEntityContext.Get(request.ProviderResponseId);
 
-            return new GetProviderResponseConfirmationQueryResult
-            {
-                Ukprn = providerResponse.ProviderResponseEmployerRequests.FirstOrDefault().Ukprn,
-                Email = providerResponse.Email,
-                Phone = providerResponse.PhoneNumber,
-                Website = providerResponse.Website,
-                EmployerRequests = requests.Select(entity => (Domain.Models.SelectEmployerRequest)entity).ToList()
-            };
+            return providerResponse == null?
+                new GetProviderResponseConfirmationQueryResult()
+                :new GetProviderResponseConfirmationQueryResult
+                {
+                    Ukprn = providerResponse.ProviderResponseEmployerRequests.FirstOrDefault().Ukprn,
+                    Email = providerResponse.Email,
+                    Phone = providerResponse.PhoneNumber,
+                    Website = providerResponse.Website,
+                    EmployerRequests = requests.Any()
+                    ? requests.Select(entity => (Domain.Models.SelectEmployerRequest)entity).ToList()
+                    : new List<Domain.Models.SelectEmployerRequest>()
+                };
         }
     }
 }

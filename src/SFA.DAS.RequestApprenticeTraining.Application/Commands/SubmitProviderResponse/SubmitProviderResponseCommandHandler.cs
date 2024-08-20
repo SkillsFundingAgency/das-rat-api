@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,26 +30,24 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
 
         public async Task<SubmitProviderResponseCommandResponse> Handle(SubmitProviderResponseCommand request, CancellationToken cancellationToken)
         {
-            var providerResponse = _providerResponseEntityContext.Add(
-                new ProviderResponse()
-                {
-                    Email = request.Email,
-                    PhoneNumber = request.Phone,
-                    Website = request.Website,
-                    RespondedAt = DateTime.UtcNow,
-                });
+            var providerResponse = new ProviderResponse()
+            {
+                Email = request.Email,
+                PhoneNumber = request.Phone,
+                Website = request.Website,
+                RespondedAt = DateTime.UtcNow,
+            };
 
+            _providerResponseEntityContext.Add(providerResponse);
             await _providerResponseEntityContext.SaveChangesAsync();
 
-            var entitiesForUpdate = _providerResponseEmployerRequestEntityContext.Entities
-                 .Where(e => e.Ukprn == request.Ukprn && request.EmployerRequestIds.Contains(e.EmployerRequestId))
-                 .ToList();
+            var entitiesForUpdate = await _providerResponseEmployerRequestEntityContext.GetForProviderAndEmployerRequest(request.Ukprn, request.EmployerRequestIds);
 
-            entitiesForUpdate.ForEach(entity => entity.ProviderResponseId = providerResponse.Entity.Id);
+            entitiesForUpdate.ForEach(entity => entity.ProviderResponseId = providerResponse.Id);
 
             await _providerResponseEmployerRequestEntityContext.SaveChangesAsync();
 
-            return new SubmitProviderResponseCommandResponse { ProviderResponseId = providerResponse.Entity.Id };
+            return new SubmitProviderResponseCommandResponse { ProviderResponseId = providerResponse.Id };
 
         }
     }

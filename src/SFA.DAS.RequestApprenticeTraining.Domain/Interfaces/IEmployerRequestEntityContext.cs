@@ -108,7 +108,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     AtApprenticesWorkplace = er.AtApprenticesWorkplace,
                     SingleLocation = er.SingleLocation,
                     NumberOfApprentices = er.NumberOfApprentices,
-                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList()
                 })
                 .OrderByDescending(x => x.DateOfRequest)
                 .ToListAsync();
