@@ -20,8 +20,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public Guid RequestedBy { get; set; }
         public DateTime RequestedAt { get; set; }
         public RequestStatus RequestStatus { get; set; }
-        public DateTime ExpiredAt { get; set; }
-        public DateTime CancelledAt { get; set; }
+        public DateTime? ExpiredAt { get; set; }
+        public DateTime? CancelledAt { get; set; }
         public Guid ModifiedBy { get; set; }
 
         public List<Region> Regions { get; set; }

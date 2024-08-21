@@ -35,7 +35,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public async Task Handle_ShouldAcknowledgeProviderResponses_WhenEmployerRequestExists()
         {
             // Arrange
-            var command = new AcknowledgeProviderResponsesCommand(Guid.NewGuid(), Guid.NewGuid());
+            var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = Guid.NewGuid() };
 
             var employerRequest = new EmployerRequest
             {
@@ -73,7 +73,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public async Task Handle_ShouldNotAcknowledgeProviderResponses_WhenEmployerRequestDoesNotExist()
         {
             // Arrange
-            var command = new AcknowledgeProviderResponsesCommand(Guid.NewGuid(), Guid.NewGuid());
+            var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = Guid.NewGuid() };
 
             _employerRequestEntityContextMock.Setup(x => x.GetWithResponses(command.EmployerRequestId))
                 .ReturnsAsync((EmployerRequest)null);

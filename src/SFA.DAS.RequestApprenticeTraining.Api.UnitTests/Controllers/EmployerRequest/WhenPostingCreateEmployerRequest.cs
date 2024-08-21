@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -19,7 +19,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            (CreateEmployerRequestCommand request,
+            (CreateEmployerRequestRequest request,
             [Greedy] EmployerRequestController controller)
         {
             // Act
@@ -31,7 +31,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_ValidationFails_Then_ReturnBadRequestWithErrors
-            (CreateEmployerRequestCommand request,
+            (CreateEmployerRequestRequest request,
             [Frozen] Mock<IMediator> mediator,
             ValidationException validationException,
             [Greedy] EmployerRequestController controller)
@@ -50,7 +50,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (CreateEmployerRequestCommand request,
+            (CreateEmployerRequestRequest request,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {

@@ -6,6 +6,7 @@ using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
@@ -30,11 +31,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployerRequest([FromBody] CreateEmployerRequestCommand request)
+        public async Task<IActionResult> CreateEmployerRequest([FromBody] CreateEmployerRequestRequest request)
         {
             try
             {
-                var result = await _mediator.Send(request);
+                var result = await _mediator.Send((CreateEmployerRequestCommand)request);
                 return Ok(result);
             }
             catch (ValidationException ex)
@@ -50,11 +51,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpPut("{employerRequestId:guid}/acknowledge-responses")]
-        public async Task<IActionResult> AcknowledgeProviderResponses(Guid employerRequestId, [FromQuery] Guid acknowledgedBy)
+        public async Task<IActionResult> AcknowledgeProviderResponses(Guid employerRequestId, [FromBody] AcknowledgeProviderResponsesRequest request)
         {
             try
             {
-                await _mediator.Send(new AcknowledgeProviderResponsesCommand(employerRequestId, acknowledgedBy));
+                var command = (AcknowledgeProviderResponsesCommand)request;
+                command.EmployerRequestId = employerRequestId;
+                
+                await _mediator.Send(command);
                 return Ok();
             }
             catch (ValidationException ex)

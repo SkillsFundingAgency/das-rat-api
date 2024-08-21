@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
+using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -30,7 +31,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                     It.IsAny<CancellationToken>()));
 
             // Act
-            var result = await controller.AcknowledgeProviderResponses(employerRequestId, acknowledgedBy);
+            var result = await controller.AcknowledgeProviderResponses(employerRequestId, new AcknowledgeProviderResponsesRequest { AcknowledgedBy = acknowledgedBy });
 
             // Assert
             result.Should().BeOfType<OkResult>();
@@ -50,7 +51,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .ThrowsAsync(validationException);
 
             // Act
-            var result = await controller.AcknowledgeProviderResponses(employerRequestId, acknowledgedBy);
+            var result = await controller.AcknowledgeProviderResponses(employerRequestId, new AcknowledgeProviderResponsesRequest { AcknowledgedBy = acknowledgedBy });
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>()
@@ -70,7 +71,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .ThrowsAsync(new Exception());
 
             // Act
-            var result = await controller.AcknowledgeProviderResponses(employerRequestId, acknowledgedBy);
+            var result = await controller.AcknowledgeProviderResponses(employerRequestId, new AcknowledgeProviderResponsesRequest { AcknowledgedBy = acknowledgedBy });
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
