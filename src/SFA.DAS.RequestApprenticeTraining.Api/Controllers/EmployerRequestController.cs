@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
@@ -29,7 +30,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateEmployerRequestCommand request)
+        public async Task<IActionResult> CreateEmployerRequest([FromBody] CreateEmployerRequestCommand request)
         {
             try
             {
@@ -38,12 +39,32 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, "Validation error saving employer request to database.");
+                _logger.LogError(ex, "Validation error creating employer request.");
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error saving employer request to database.");
+                _logger.LogError(e, "Error creating employer request.");
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("{employerRequestId:guid}/acknowledge-responses")]
+        public async Task<IActionResult> AcknowledgeProviderResponses(Guid employerRequestId, [FromQuery] Guid acknowledgedBy)
+        {
+            try
+            {
+                await _mediator.Send(new AcknowledgeProviderResponsesCommand(employerRequestId, acknowledgedBy));
+                return Ok();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error updating employer request to acknowledge responses.");
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error updating employer request to acknowledge responses.");
                 return BadRequest();
             }
         }

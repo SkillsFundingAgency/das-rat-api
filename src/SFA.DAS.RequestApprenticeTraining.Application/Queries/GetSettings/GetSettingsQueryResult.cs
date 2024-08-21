@@ -3,7 +3,9 @@
     public class GetSettingsQueryResult
     {
         public int ExpiryAfterMonths { get; set; }
-        public int RemovedAfterExpiryNotContactedMonths { get; set; }
-        public int RemovedAfterExpiryContactedMonths { get; set; }
+        public int EmployerRemovedAfterExpiryNoResponsesMonths { get; set; }
+        public int EmployerRemovedAfterExpiryResponsesMonths { get; set; }
+        public int ProviderRemovedAfterExpiryNotRespondedMonths { get; set; }
+        public int ProviderRemovedAfterExpiryRespondedMonths { get; set; }
     }
 }

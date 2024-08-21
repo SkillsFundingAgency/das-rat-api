@@ -4,7 +4,7 @@ using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderRespo
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateProviderResponseEmployerRequests
 {
     [TestFixture]
     public class WhenValidatingCreateProviderResponseEmployerRequestsCommand
@@ -20,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
         [Test]
         public void Validate_EmployerRequestIds_ShouldHaveNoValidationError()
         {
-            var model = new CreateProviderResponseEmployerRequestsCommand { EmployerRequestIds = new List<Guid> { new()} };
+            var model = new CreateProviderResponseEmployerRequestsCommand { EmployerRequestIds = new List<Guid> { new() } };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.EmployerRequestIds);
         }

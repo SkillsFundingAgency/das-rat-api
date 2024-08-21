@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.CreateEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateEmployerRequest
 {
     [TestFixture]
     public class CreateEmployerRequestCommandHandlerTests
@@ -57,16 +57,16 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
 
             var region = new Region { Id = 2 };
             _regionEntityContextMock.Setup(x => x.FindClosestRegion(It.IsAny<double>(), It.IsAny<double>())).ReturnsAsync(region);
-            
+
             // Act
             await _sut.Handle(command, CancellationToken.None);
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.Add(It.IsAny<EmployerRequest>()), Times.Once);
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            
+
             _regionEntityContextMock.Verify(x => x.FindClosestRegion(command.SingleLocationLatitude, command.SingleLocationLongitude), Times.Once);
-            
+
             _employerRequestRegionEntityContextMock.Verify(x => x.Add(It.Is<EmployerRequestRegion>(x => x.RegionId == region.Id)), Times.Once);
             _employerRequestRegionEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }

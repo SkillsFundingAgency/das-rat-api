@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.CreateProviderResponseEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateProviderResponseEmployerRequests
 {
     [TestFixture]
     public class CreateProviderResponseEmployerRequestCommandHandlerTests

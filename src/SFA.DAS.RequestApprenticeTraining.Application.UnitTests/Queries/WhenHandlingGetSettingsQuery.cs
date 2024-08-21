@@ -20,7 +20,15 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries.GetSet
             _mockOptions = new Mock<IOptions<ApplicationSettings>>();
             _mockOptions
                 .SetupGet(s => s.Value)
-                .Returns(new ApplicationSettings { ExpiryAfterMonths = 3, RemovedAfterExpiryContactedMonths = 3, RemovedAfterExpiryNotContactedMonths = 9});
+                .Returns(new ApplicationSettings 
+                { 
+                    ExpiryAfterMonths = 3, 
+                    EmployerRemovedAfterExpiryNoResponsesMonths = 3, 
+                    EmployerRemovedAfterExpiryResponsesMonths = 3,
+                    ProviderRemovedAfterExpiryNotRespondedMonths = 3,
+                    ProviderRemovedAfterExpiryRespondedMonths = 9,
+                    
+                });
 
             _handler = new GetSettingsQueryHandler(_mockOptions.Object);
         }
@@ -36,8 +44,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries.GetSet
 
             // Assert
             result.ExpiryAfterMonths.Should().Be(3);
-            result.RemovedAfterExpiryContactedMonths.Should().Be(3);
-            result.RemovedAfterExpiryNotContactedMonths.Should().Be(9);
+            result.EmployerRemovedAfterExpiryNoResponsesMonths.Should().Be(3);
+            result.EmployerRemovedAfterExpiryResponsesMonths.Should().Be(3);
+            result.ProviderRemovedAfterExpiryNotRespondedMonths.Should().Be(3);
+            result.ProviderRemovedAfterExpiryRespondedMonths.Should().Be(9);
         }
     }
 }

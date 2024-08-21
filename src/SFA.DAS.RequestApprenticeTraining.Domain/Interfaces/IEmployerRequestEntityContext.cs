@@ -12,24 +12,30 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        public async Task<EmployerRequest> Get(Guid employerRequestId)
+        public async Task<EmployerRequest> GetWithRegions(Guid employerRequestId)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
                 .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.RequestStatus == Models.Enums.RequestStatus.Active);
 
-        public async Task<EmployerRequest> Get(long accountId, string standardReference)
+        public async Task<EmployerRequest> GetWithRegions(long accountId, string standardReference)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
                 .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active);
 
-        public async Task<List<EmployerRequest>> Get(long accountId)
+        public async Task<List<EmployerRequest>> GetWithRegions(long accountId)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
                 .Where(er => er.AccountId == accountId)
                 .ToListAsync();
+
+        public async Task<EmployerRequest> GetWithResponses(Guid employerRequestId)
+            => await Entities
+                .Include(er => er.ProviderResponseEmployerRequests)
+                .ThenInclude(prer => prer.ProviderResponse)
+                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.RequestStatus == Models.Enums.RequestStatus.Active);
 
         public async Task<EmployerRequest> GetFirstOrDefault()
             => await Entities
@@ -42,6 +48,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                 .Where(er => er.RequestStatus != Models.Enums.RequestStatus.Cancelled && er.AccountId == accountId)
                 .SelectMany(er => er.ProviderResponseEmployerRequests.DefaultIfEmpty(), (er, prer) => new
                 {
+                    er.Id,
                     er.StandardReference,
                     er.Standard.StandardTitle,
                     er.Standard.StandardLevel,
@@ -50,9 +57,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     IsResponseProvided = prer.ProviderResponse != null,
                     IsNewResponse = prer.ProviderResponse != null && prer.ProviderResponse.AcknowledgedAt == null
                 })
-                .GroupBy(er => new { er.StandardReference, er.StandardTitle, er.StandardLevel, er.RequestedAt, er.RequestStatus })
+                .GroupBy(er => new { er.Id, er.StandardReference, er.StandardTitle, er.StandardLevel, er.RequestedAt, er.RequestStatus })
                 .Select(g => new EmployerAggregatedEmployerRequest
                 {
+                    EmployerRequestId = g.Key.Id,
                     StandardReference = g.Key.StandardReference,
                     StandardTitle = g.Key.StandardTitle,
                     StandardLevel = g.Key.StandardLevel,

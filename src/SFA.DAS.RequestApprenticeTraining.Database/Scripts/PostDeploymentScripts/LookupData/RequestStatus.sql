@@ -14,8 +14,8 @@ CREATE TABLE #RequestStatus(
 ) 
 
 INSERT #RequestStatus VALUES (0, N'Active')
-INSERT #RequestStatus VALUES (0, N'Expired')
-INSERT #RequestStatus VALUES (0, N'Cancelled')
+INSERT #RequestStatus VALUES (1, N'Expired')
+INSERT #RequestStatus VALUES (2, N'Cancelled')
 
 MERGE [RequestStatus] [Target] USING #RequestStatus [Source]
 ON ([Source].Id = [Target].Id)

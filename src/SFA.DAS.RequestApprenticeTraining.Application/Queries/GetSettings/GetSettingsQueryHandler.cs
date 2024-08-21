@@ -20,8 +20,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSettings
             return await Task.FromResult(new GetSettingsQueryResult
             {
                 ExpiryAfterMonths = _applicationSettings.ExpiryAfterMonths,
-                RemovedAfterExpiryContactedMonths = _applicationSettings.RemovedAfterExpiryContactedMonths,
-                RemovedAfterExpiryNotContactedMonths = _applicationSettings.RemovedAfterExpiryNotContactedMonths
+                EmployerRemovedAfterExpiryNoResponsesMonths = _applicationSettings.EmployerRemovedAfterExpiryNoResponsesMonths,
+                EmployerRemovedAfterExpiryResponsesMonths = _applicationSettings.EmployerRemovedAfterExpiryResponsesMonths,
+                ProviderRemovedAfterExpiryNotRespondedMonths = _applicationSettings.ProviderRemovedAfterExpiryNotRespondedMonths,
+                ProviderRemovedAfterExpiryRespondedMonths = _applicationSettings.ProviderRemovedAfterExpiryRespondedMonths
             });
         }
     }

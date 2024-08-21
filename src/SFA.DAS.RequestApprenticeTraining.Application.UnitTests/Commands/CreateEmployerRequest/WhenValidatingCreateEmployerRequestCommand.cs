@@ -4,7 +4,7 @@ using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerReque
 using System;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateEmployerRequest
 {
     [TestFixture]
     public class WhenValidatingCreateEmployerRequestCommand

@@ -5,6 +5,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
 {
     public class EmployerAggregatedEmployerRequest
     {
+        public Guid EmployerRequestId { get; set; }
         public string StandardReference { get; set; }
         public string StandardTitle { get; set; }
         public int StandardLevel { get; set; }
@@ -18,6 +19,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         {
             return new EmployerAggregatedEmployerRequest
             {
+                EmployerRequestId = source.EmployerRequestId,
                 StandardReference = source.StandardReference,
                 StandardTitle = source.StandardTitle,
                 StandardLevel = source.StandardLevel,

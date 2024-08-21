@@ -45,7 +45,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 EmployerAggregatedEmployerRequests = new List<Domain.Models.EmployerAggregatedEmployerRequest>
                 {
                     new Domain.Models.EmployerAggregatedEmployerRequest 
-                    { 
+                    {
+                        EmployerRequestId = employerRequestId1,
                         StandardReference = standard1.StandardReference, 
                         StandardTitle = standard1.StandardTitle, 
                         StandardLevel = standard1.StandardLevel,
@@ -96,6 +97,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 {
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId1,
                         StandardReference = standard1.StandardReference,
                         StandardTitle = standard1.StandardTitle,
                         StandardLevel = standard1.StandardLevel,
@@ -107,6 +109,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                     },
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId2,
                         StandardReference = standard2.StandardReference,
                         StandardTitle = standard2.StandardTitle,
                         StandardLevel = standard2.StandardLevel,
@@ -159,6 +162,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 {
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId1,
                         StandardReference = standard1.StandardReference,
                         StandardTitle = standard1.StandardTitle,
                         StandardLevel = standard1.StandardLevel,
@@ -170,6 +174,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                     },
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId2,
                         StandardReference = standard2.StandardReference,
                         StandardTitle = standard2.StandardTitle,
                         StandardLevel = standard2.StandardLevel,
@@ -222,6 +227,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 {
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId1,
                         StandardReference = standard1.StandardReference,
                         StandardTitle = standard1.StandardTitle,
                         StandardLevel = standard1.StandardLevel,
@@ -233,6 +239,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                     },
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId2,
                         StandardReference = standard2.StandardReference,
                         StandardTitle = standard2.StandardTitle,
                         StandardLevel = standard2.StandardLevel,
@@ -300,6 +307,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 {
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId1,
                         StandardReference = standard1.StandardReference,
                         StandardTitle = standard1.StandardTitle,
                         StandardLevel = standard1.StandardLevel,
@@ -311,6 +319,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                     },
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId2,
                         StandardReference = standard2.StandardReference,
                         StandardTitle = standard2.StandardTitle,
                         StandardLevel = standard2.StandardLevel,
@@ -322,6 +331,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                     },
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId3,
                         StandardReference = standard3.StandardReference,
                         StandardTitle = standard3.StandardTitle,
                         StandardLevel = standard3.StandardLevel,
@@ -372,6 +382,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 {
                     new Domain.Models.EmployerAggregatedEmployerRequest
                     {
+                        EmployerRequestId = employerRequestId1,
                         StandardReference = standard1.StandardReference,
                         StandardTitle = standard1.StandardTitle,
                         StandardLevel = standard1.StandardLevel,
