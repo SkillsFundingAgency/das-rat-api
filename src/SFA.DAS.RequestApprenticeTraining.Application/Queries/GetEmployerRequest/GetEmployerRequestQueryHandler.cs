@@ -20,11 +20,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
             EmployerRequest employerRequest = null;
             if (request.EmployerRequestId.HasValue)
             {
-                employerRequest = await _employerRequestEntityContext.Get(request.EmployerRequestId.Value);
+                employerRequest = await _employerRequestEntityContext.GetWithRegions(request.EmployerRequestId.Value);
             }
             else if(request.AccountId.HasValue && !string.IsNullOrEmpty(request.StandardReference))
             {
-                employerRequest = await _employerRequestEntityContext.Get(request.AccountId.Value, request.StandardReference);
+                employerRequest = await _employerRequestEntityContext.GetWithRegions(request.AccountId.Value, request.StandardReference);
             }
 
             return new GetEmployerRequestQueryResult

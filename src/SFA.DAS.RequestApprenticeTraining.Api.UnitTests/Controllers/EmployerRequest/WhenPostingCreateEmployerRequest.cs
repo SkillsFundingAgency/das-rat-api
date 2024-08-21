@@ -23,7 +23,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             [Greedy] EmployerRequestController controller)
         {
             // Act
-            var result = await controller.Post(request);
+            var result = await controller.CreateEmployerRequest(request);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -42,7 +42,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(validationException);
             
             // Act
-            var result = await controller.Post(request);
+            var result = await controller.CreateEmployerRequest(request);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
@@ -60,7 +60,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.Post(request);
+            var result = await controller.CreateEmployerRequest(request);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

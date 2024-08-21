@@ -1,8 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregeatedEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using System;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 {
-    public class WhenRequestingAggregatedEmployerRequests
+    public class WhenHandlingGetProviderAggregatedEmployerRequests
     {
         [Test, AutoMoqData]
         public async Task And_AggregatedEmployerRequest_IsSameStandard_ThenSingleAggregatedEmployerRequestIsReturned(
@@ -32,18 +31,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             
             context.SaveChanges();
 
-            var query = new GetAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetAggregatedEmployerRequestsQueryHandler(context);
+            var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            var expectedResult = new GetAggregatedEmployerRequestsQueryResult 
+            var expectedResult = new GetProviderAggregatedEmployerRequestsQueryResult 
             { 
-                AggregatedEmployerRequests = new List<Domain.Models.AggregatedEmployerRequest>
+                ProviderAggregatedEmployerRequests = new List<Domain.Models.ProviderAggregatedEmployerRequest>
                 {
-                    new Domain.Models.AggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = true }
+                    new Domain.Models.ProviderAggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = true }
                 }
             };
 
@@ -73,19 +72,19 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             
             context.SaveChanges();
 
-            var query = new GetAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetAggregatedEmployerRequestsQueryHandler(context);
+            var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            var expectedResult = new GetAggregatedEmployerRequestsQueryResult
+            var expectedResult = new GetProviderAggregatedEmployerRequestsQueryResult
             {
-                AggregatedEmployerRequests = new List<Domain.Models.AggregatedEmployerRequest>
+                ProviderAggregatedEmployerRequests = new List<Domain.Models.ProviderAggregatedEmployerRequest>
                 {
-                    new Domain.Models.AggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = true },
-                    new Domain.Models.AggregatedEmployerRequest { StandardReference = standard2Reference, StandardTitle = standard2Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 1, NumberOfEmployers = 1, IsNew = true }
+                    new Domain.Models.ProviderAggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = true },
+                    new Domain.Models.ProviderAggregatedEmployerRequest { StandardReference = standard2Reference, StandardTitle = standard2Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 1, NumberOfEmployers = 1, IsNew = true }
                 }
             };
 
@@ -112,18 +111,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             context.SaveChanges();
 
-            var query = new GetAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetAggregatedEmployerRequestsQueryHandler(context);
+            var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            var expectedResult = new GetAggregatedEmployerRequestsQueryResult
+            var expectedResult = new GetProviderAggregatedEmployerRequestsQueryResult
             {
-                AggregatedEmployerRequests = new List<Domain.Models.AggregatedEmployerRequest>
+                ProviderAggregatedEmployerRequests = new List<Domain.Models.ProviderAggregatedEmployerRequest>
                 {
-                    new Domain.Models.AggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = false }
+                    new Domain.Models.ProviderAggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = false }
                 }
             };
 
@@ -149,18 +148,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             context.SaveChanges();
 
-            var query = new GetAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetAggregatedEmployerRequestsQueryHandler(context);
+            var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            var expectedResult = new GetAggregatedEmployerRequestsQueryResult
+            var expectedResult = new GetProviderAggregatedEmployerRequestsQueryResult
             {
-                AggregatedEmployerRequests = new List<Domain.Models.AggregatedEmployerRequest>
+                ProviderAggregatedEmployerRequests = new List<Domain.Models.ProviderAggregatedEmployerRequest>
                 {
-                    new Domain.Models.AggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = true }
+                    new Domain.Models.ProviderAggregatedEmployerRequest { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1", NumberOfApprentices = 3, NumberOfEmployers = 2, IsNew = true }
                 }
             };
 

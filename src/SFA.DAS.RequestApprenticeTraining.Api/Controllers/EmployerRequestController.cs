@@ -3,14 +3,15 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
@@ -29,7 +30,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateEmployerRequestCommand request)
+        public async Task<IActionResult> CreateEmployerRequest([FromBody] CreateEmployerRequestCommand request)
         {
             try
             {
@@ -38,12 +39,32 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, "Validation error saving employer request to database.");
+                _logger.LogError(ex, "Validation error attempting to create employer request.");
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error saving employer request to database.");
+                _logger.LogError(e, "Error attempting to create employer request.");
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("{employerRequestId:guid}/acknowledge-responses")]
+        public async Task<IActionResult> AcknowledgeProviderResponses(Guid employerRequestId, [FromQuery] Guid acknowledgedBy)
+        {
+            try
+            {
+                await _mediator.Send(new AcknowledgeProviderResponsesCommand(employerRequestId, acknowledgedBy));
+                return Ok();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error attempting to acknowledge responses for employer request {EmployerRequestId}", employerRequestId);
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error attempting to acknowledge responses for employer request {EmployerRequestId}", employerRequestId);
                 return BadRequest();
             }
         }
@@ -58,12 +79,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, $"Validation error attempting to retrieve employer request for Id: {employerRequestId}");
+                _logger.LogError(ex, "Validation error attempting to retrieve employer request for {EmployerRequestId}", employerRequestId);
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve employer request for Id: {employerRequestId}");
+                _logger.LogError(e, "Error attempting to retrieve employer request for {EmployerRequestId}", employerRequestId);
                 return BadRequest();
             }
         }
@@ -78,12 +99,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, $"Validation error attempting to retrieve employer request for AccountId: {accountId} and StandardReference: {standardReference.SanitizeLogData()}");
+                _logger.LogError(ex, "Validation error attempting to retrieve employer request for {AccountId} and {StandardReference}", accountId, standardReference.SanitizeLogData());
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve employer request for Ukprn: {accountId} and StandardReference: {standardReference.SanitizeLogData}");
+                _logger.LogError(e, "Error attempting to retrieve employer request for {AccountId} and {StandardReference}", accountId, standardReference.SanitizeLogData());
                 return BadRequest();
             }
         }
@@ -98,27 +119,42 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, $"Validation error attempting to retrieve employer requests for Ukprn: {accountId}");
+                _logger.LogError(ex, "Validation error attempting to retrieve employer requests for {AccountId}", accountId);
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve employer requests for Ukprn: {accountId}");
+                _logger.LogError(e, "Error attempting to retrieve employer requests for {AccountId}", accountId);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("account/{accountId}/aggregated")]
+        public async Task<IActionResult> GetEmployerAggregatedEmployerRequests(long accountId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetEmployerAggregatedEmployerRequestsQuery { AccountId = accountId });
+                return Ok(result.EmployerAggregatedEmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error attempting to retrieve employer aggregated employer requests for {AccountId}", accountId);
                 return BadRequest();
             }
         }
 
         [HttpGet("provider/{ukprn}/aggregated")]
-        public async Task<IActionResult> GetAggregatedEmployerRequests(long ukprn)
+        public async Task<IActionResult> GetProviderAggregatedEmployerRequests(long ukprn)
         {
             try
             {
-                var result = await _mediator.Send(new GetAggregatedEmployerRequestsQuery { Ukprn = ukprn });
-                return Ok(result.AggregatedEmployerRequests);
+                var result = await _mediator.Send(new GetProviderAggregatedEmployerRequestsQuery { Ukprn = ukprn });
+                return Ok(result.ProviderAggregatedEmployerRequests);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve aggregated employer requests for Provider: {ukprn}");
+                _logger.LogError(e, "Error attempting to retrieve provider aggregated employer requests for {Ukprn}", ukprn);
                 return BadRequest();
             }
         }
@@ -135,7 +171,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve select employer requests");
+                _logger.LogError(e, "Error attempting to retrieve select employer requests for {Ukprn} and {StandardReference}", ukprn, standardReference);
                 return BadRequest();
             }
         }
@@ -150,12 +186,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, "Validation error saving provider response to database.");
+                _logger.LogError(ex, "Validation attempting to create provider responses");
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error saving provider response to database.");
+                _logger.LogError(e, "Error attempting to create provider responses");
                 return BadRequest();
             }
         }
