@@ -69,7 +69,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference)
         {
             var result = await Entities
-                .Where(er => er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Where(er => er.StandardReference == standardReference && 
+                    er.RequestStatus == Models.Enums.RequestStatus.Active
+                    && (!er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) ||
+                    (er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) &&
+                    er.RequestedAt.AddMonths(12) > DateTime.Now)))
                 .Select(er => new SelectEmployerRequest
                 {
                     EmployerRequestId = er.Id,
@@ -84,7 +88,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     NumberOfApprentices= er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
                     IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn),
-                    IsContacted = er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
+                    IsContacted = er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue),
+                    DateContacted = er.ProviderResponseEmployerRequests
+                       .Where(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
+                       .Select(pre => (DateTime?)pre.ProviderResponse.RespondedAt)
+                       .FirstOrDefault()
                 })
                 .OrderByDescending(x => x.DateOfRequest)
                 .ToListAsync();

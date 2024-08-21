@@ -17,6 +17,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public bool AtApprenticesWorkplace { get; set; }
         public bool IsNew { get; set; }
         public bool IsContacted { get; set; }
+        public DateTime? DateContacted { get; set; }
         public List<string> Locations { get; set; }
 
         public static implicit operator SelectEmployerRequest(Entities.SelectEmployerRequest source)
@@ -35,6 +36,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
                 AtApprenticesWorkplace = source.AtApprenticesWorkplace,
                 IsNew = source.IsNew,
                 IsContacted = source.IsContacted,
+                DateContacted = source.DateContacted,
                 Locations = source.Locations,
             };
         }
