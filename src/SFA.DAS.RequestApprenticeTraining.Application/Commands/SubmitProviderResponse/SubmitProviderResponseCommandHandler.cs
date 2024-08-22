@@ -36,6 +36,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
                 PhoneNumber = request.Phone,
                 Website = request.Website,
                 RespondedAt = DateTime.UtcNow,
+                RespondedBy = request.RespondedBy,
             };
 
             _providerResponseEntityContext.Add(providerResponse);

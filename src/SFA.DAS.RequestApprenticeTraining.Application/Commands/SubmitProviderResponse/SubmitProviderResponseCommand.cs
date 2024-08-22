@@ -12,5 +12,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
+        public string RespondedBy { get; set; }
     }
 }
