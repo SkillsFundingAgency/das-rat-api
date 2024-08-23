@@ -9,9 +9,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
     {
         public long Ukprn { get; set; }
         public List<Guid> EmployerRequestIds { get; set; }
+        public string ContactName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
-        public string RespondedBy { get; set; }
+        public Guid RespondedBy { get; set; }
     }
 }

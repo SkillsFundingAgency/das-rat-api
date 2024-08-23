@@ -18,8 +18,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
             RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("Phone must not be empty.");
 
-            RuleFor(x => x.RespondedBy)
-                .NotEmpty().WithMessage("Responded By must not be empty.");
+            RuleFor(x => x.ContactName)
+                .NotEmpty().WithMessage("Contact Name must not be empty.");
 
         }
     }

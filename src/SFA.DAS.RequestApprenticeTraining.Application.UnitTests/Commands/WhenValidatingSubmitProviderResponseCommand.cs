@@ -91,19 +91,19 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
         }
 
         [Test]
-        public void Validate_RequestedBy_NotEmpty_ShouldHaveNoValidationError()
+        public void Validate_ContactName_NotEmpty_ShouldHaveNoValidationError()
         {
-            var model = new SubmitProviderResponseCommand { RespondedBy = "Firstname Surame" };
+            var model = new SubmitProviderResponseCommand { ContactName = "Firstname Surame" };
             var result = _sut.TestValidate(model);
-            result.ShouldNotHaveValidationErrorFor(x => x.RespondedBy);
+            result.ShouldNotHaveValidationErrorFor(x => x.ContactName);
         }
 
         [Test]
-        public void Validate_RequestedBy_Empty_ShouldHaveValidationError()
+        public void Validate_ContactName_Empty_ShouldHaveValidationError()
         {
-            var model = new SubmitProviderResponseCommand { RespondedBy = string.Empty };
+            var model = new SubmitProviderResponseCommand { ContactName = string.Empty };
             var result = _sut.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(x => x.RespondedBy);
+            result.ShouldHaveValidationErrorFor(x => x.ContactName);
         }
     }
 }

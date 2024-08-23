@@ -32,6 +32,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
         {
             var providerResponse = new ProviderResponse()
             {
+                ContactName = request.ContactName,
                 Email = request.Email,
                 PhoneNumber = request.Phone,
                 Website = request.Website,
