@@ -55,7 +55,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     er.RequestedAt,
                     er.RequestStatus,
                     IsResponseProvided = prer.ProviderResponse != null,
-                    IsNewResponse = prer.ProviderResponse != null && prer.ProviderResponse.AcknowledgedAt == null
+                    IsNewResponse = prer.ProviderResponse != null && prer.AcknowledgedAt == null
                 })
                 .GroupBy(er => new { er.Id, er.StandardReference, er.StandardTitle, er.StandardLevel, er.RequestedAt, er.RequestStatus })
                 .Select(g => new EmployerAggregatedEmployerRequest

@@ -4,7 +4,6 @@ using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses
 {
@@ -30,11 +29,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProv
             var employerRequest = await _employerRequestEntityContext.GetWithResponses(request.EmployerRequestId);
             if(employerRequest != null)
             {
-                var responses = employerRequest.ProviderResponseEmployerRequests
-                    .Select(prer => prer.ProviderResponse)
-                    .Where(pr => pr != null);
-
-                foreach (var response in responses)
+                foreach (var response in employerRequest.ProviderResponseEmployerRequests)
                 {
                     response.AcknowledgedAt = DateTime.UtcNow;
                     response.AcknowledgedBy = request.AcknowledgedBy;

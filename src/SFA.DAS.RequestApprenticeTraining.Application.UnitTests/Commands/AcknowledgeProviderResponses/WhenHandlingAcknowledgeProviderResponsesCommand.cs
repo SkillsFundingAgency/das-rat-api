@@ -63,10 +63,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            employerRequest.ProviderResponseEmployerRequests[0].ProviderResponse.AcknowledgedAt.Should().NotBeNull();
-            employerRequest.ProviderResponseEmployerRequests[0].ProviderResponse.AcknowledgedBy.Should().Be(command.AcknowledgedBy);
-            employerRequest.ProviderResponseEmployerRequests[1].ProviderResponse.AcknowledgedAt.Should().NotBeNull();
-            employerRequest.ProviderResponseEmployerRequests[1].ProviderResponse.AcknowledgedBy.Should().Be(command.AcknowledgedBy);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().NotBeNull();
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().NotBeNull();
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
         }
 
         [Test]
