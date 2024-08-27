@@ -38,6 +38,23 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         }
 
         [Test, MoqAutoData]
+        public async Task And_MediatorCommand_ReceivesEmployerRequestId(
+            Guid employerRequestId,
+            Guid acknowledgedBy,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] EmployerRequestController controller)
+        {
+            // Act
+            await controller.AcknowledgeProviderResponses(employerRequestId, new AcknowledgeProviderResponsesRequest { AcknowledgedBy = acknowledgedBy });
+
+            // Assert
+            mediator.Verify(m => m.Send(It.Is<AcknowledgeProviderResponsesCommand>(cmd =>
+                cmd.EmployerRequestId == employerRequestId &&
+                cmd.AcknowledgedBy == acknowledgedBy),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test, MoqAutoData]
         public async Task And_MediatorCommandFailsDueToValidation_Then_ReturnBadRequest(
             Guid employerRequestId,
             Guid acknowledgedBy,

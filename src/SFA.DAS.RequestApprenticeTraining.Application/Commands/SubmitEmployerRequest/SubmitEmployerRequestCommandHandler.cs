@@ -8,20 +8,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest
 {
-    public class CreateEmployerRequestCommandHandler : IRequestHandler<CreateEmployerRequestCommand, CreateEmployerRequestCommandResponse>
+    public class SubmitEmployerRequestCommandHandler : IRequestHandler<SubmitEmployerRequestCommand, SubmitEmployerRequestCommandResponse>
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
         private readonly IEmployerRequestRegionEntityContext _employerRequestRegionEntityContext;
         private readonly IRegionEntityContext _regionEntityContext;
-        private readonly ILogger<CreateEmployerRequestCommandHandler> _logger;
+        private readonly ILogger<SubmitEmployerRequestCommandHandler> _logger;
 
-        public CreateEmployerRequestCommandHandler(
+        public SubmitEmployerRequestCommandHandler(
             IEmployerRequestEntityContext employerRequestEntityContext,
             IEmployerRequestRegionEntityContext employerRequestRegionEntityContext,
             IRegionEntityContext regionEntityContext,
-            ILogger<CreateEmployerRequestCommandHandler> logger)
+            ILogger<SubmitEmployerRequestCommandHandler> logger)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
             _employerRequestRegionEntityContext = employerRequestRegionEntityContext;
@@ -29,7 +29,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
             _logger = logger;
         }
 
-        public async Task<CreateEmployerRequestCommandResponse> Handle(CreateEmployerRequestCommand request, CancellationToken cancellationToken)
+        public async Task<SubmitEmployerRequestCommandResponse> Handle(SubmitEmployerRequestCommand request, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"Creating employer request");
 
@@ -40,7 +40,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
                 if (closestRegion != null)
                 {
                     regions.Add(closestRegion);
-                    _logger.LogDebug($"Using matched single location to closest region: {closestRegion.SubregionName}");
+                    _logger.LogDebug("Using matched single location to closest region {SubRegionName}", closestRegion.SubregionName);
                 }
             }
             else
@@ -51,7 +51,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
                     regions.Add(region);
                 }
                 
-                _logger.LogDebug($"Using mutliple selected regions");
+                _logger.LogDebug($"Using multiple selected regions");
             }
 
             var employerRequest = new EmployerRequest()
@@ -87,9 +87,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
 
             await _employerRequestRegionEntityContext.SaveChangesAsync();
 
-            _logger.LogDebug($"Created employer request record with Id: {employerRequest.Id}");
+            _logger.LogDebug("Created employer request record with {EmployerRequestId}", employerRequest.Id);
 
-            return new CreateEmployerRequestCommandResponse() { EmployerRequestId = employerRequest.Id };
+            return new SubmitEmployerRequestCommandResponse() { EmployerRequestId = employerRequest.Id };
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest
 {
-    public class CreateEmployerRequestCommandValidator : AbstractValidator<CreateEmployerRequestCommand>
+    public class SubmitEmployerRequestCommandValidator : AbstractValidator<SubmitEmployerRequestCommand>
     {
-        public CreateEmployerRequestCommandValidator()
+        public SubmitEmployerRequestCommandValidator()
         {
             RuleFor(x => x.RequestType)
                 .IsInEnum().WithMessage("Request Type must be a valid enum value.");

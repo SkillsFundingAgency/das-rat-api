@@ -3,11 +3,10 @@ using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Models
 {
-    public class CreateEmployerRequestRequest
+    public class SubmitEmployerRequestRequest
     {
         public string OriginalLocation { get; set; }
         public RequestType RequestType { get; set; }
-        public long AccountId { get; set; }
         public string StandardReference { get; set; }
         public int NumberOfApprentices { get; set; }
         public string SameLocation { get; set; }

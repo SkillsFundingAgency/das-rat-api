@@ -3,9 +3,9 @@ using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using System;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest
 {
-    public class CreateEmployerRequestCommand : IRequest<CreateEmployerRequestCommandResponse>
+    public class SubmitEmployerRequestCommand : IRequest<SubmitEmployerRequestCommandResponse>
     {
         public string OriginalLocation { get; set; }
         public RequestType RequestType { get; set; }
@@ -23,13 +23,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerR
         public Guid RequestedBy { get; set; }
         public Guid ModifiedBy { get; set; }
 
-        public static implicit operator CreateEmployerRequestCommand(CreateEmployerRequestRequest source)
+        public static implicit operator SubmitEmployerRequestCommand(SubmitEmployerRequestRequest source)
         {
-            return new CreateEmployerRequestCommand
+            return new SubmitEmployerRequestCommand
             {
                 OriginalLocation = source.OriginalLocation,
                 RequestType = source.RequestType,
-                AccountId = source.AccountId,
                 StandardReference = source.StandardReference,
                 NumberOfApprentices = source.NumberOfApprentices,
                 SameLocation = source.SameLocation,

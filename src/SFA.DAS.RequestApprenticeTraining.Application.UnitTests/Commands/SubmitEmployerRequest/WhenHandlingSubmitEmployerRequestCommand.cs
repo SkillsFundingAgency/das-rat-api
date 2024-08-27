@@ -1,23 +1,23 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.SubmitEmployerRequest
 {
     [TestFixture]
-    public class CreateEmployerRequestCommandHandlerTests
+    public class WhenHandlingSubmitEmployerRequestCommand
     {
         private Mock<IEmployerRequestEntityContext> _employerRequestEntityContextMock;
         private Mock<IEmployerRequestRegionEntityContext> _employerRequestRegionEntityContextMock;
         private Mock<IRegionEntityContext> _regionEntityContextMock;
-        private Mock<ILogger<CreateEmployerRequestCommandHandler>> _loggerMock;
-        private CreateEmployerRequestCommandHandler _sut;
+        private Mock<ILogger<SubmitEmployerRequestCommandHandler>> _loggerMock;
+        private SubmitEmployerRequestCommandHandler _sut;
 
         [SetUp]
         public void SetUp()
@@ -25,9 +25,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
             _employerRequestEntityContextMock = new Mock<IEmployerRequestEntityContext>();
             _employerRequestRegionEntityContextMock = new Mock<IEmployerRequestRegionEntityContext>();
             _regionEntityContextMock = new Mock<IRegionEntityContext>();
-            _loggerMock = new Mock<ILogger<CreateEmployerRequestCommandHandler>>();
+            _loggerMock = new Mock<ILogger<SubmitEmployerRequestCommandHandler>>();
 
-            _sut = new CreateEmployerRequestCommandHandler(
+            _sut = new SubmitEmployerRequestCommandHandler(
                 _employerRequestEntityContextMock.Object,
                 _employerRequestRegionEntityContextMock.Object,
                 _regionEntityContextMock.Object,
@@ -38,7 +38,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         public async Task Handle_ShouldCreateEmployerRequestWithMatchingClosestRegion()
         {
             // Arrange
-            var command = new CreateEmployerRequestCommand
+            var command = new SubmitEmployerRequestCommand
             {
                 OriginalLocation = string.Empty,
                 RequestType = Domain.Models.Enums.RequestType.Shortlist,

@@ -1,20 +1,20 @@
 ﻿using FluentValidation.TestHelper;
 using NUnit.Framework;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest;
 using System;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateEmployerRequest
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.SubmitEmployerRequest
 {
     [TestFixture]
-    public class WhenValidatingCreateEmployerRequestCommand
+    public class WhenValidatingSubmitEmployerRequestCommand
     {
-        private CreateEmployerRequestCommandValidator _sut;
+        private SubmitEmployerRequestCommandValidator _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new CreateEmployerRequestCommandValidator();
+            _sut = new SubmitEmployerRequestCommandValidator();
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [TestCase(RequestType.CourseDetail, TestName = "Valid RequestType")]
         public void Validate_RequestType_ShouldHaveNoValidationError(RequestType requestType)
         {
-            var model = new CreateEmployerRequestCommand { RequestType = requestType };
+            var model = new SubmitEmployerRequestCommand { RequestType = requestType };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.RequestType);
         }
@@ -31,7 +31,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_RequestType_Invalid_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { RequestType = (RequestType)999 };
+            var model = new SubmitEmployerRequestCommand { RequestType = (RequestType)999 };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.RequestType);
         }
@@ -39,7 +39,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_AccountId_GreaterThanZero_ShouldHaveNoValidationError()
         {
-            var model = new CreateEmployerRequestCommand { AccountId = 1 };
+            var model = new SubmitEmployerRequestCommand { AccountId = 1 };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.AccountId);
         }
@@ -47,7 +47,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_AccountId_ZeroOrNegative_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { AccountId = 0 };
+            var model = new SubmitEmployerRequestCommand { AccountId = 0 };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.AccountId);
         }
@@ -55,7 +55,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_StandardReference_NotEmpty_ShouldHaveNoValidationError()
         {
-            var model = new CreateEmployerRequestCommand { StandardReference = "ST0010" };
+            var model = new SubmitEmployerRequestCommand { StandardReference = "ST0010" };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.StandardReference);
         }
@@ -63,7 +63,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_StandardReference_Empty_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { StandardReference = "" };
+            var model = new SubmitEmployerRequestCommand { StandardReference = "" };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.StandardReference);
         }
@@ -71,7 +71,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_NumberOfApprentices_GreaterThanZero_ShouldHaveNoValidationError()
         {
-            var model = new CreateEmployerRequestCommand { NumberOfApprentices = 1 };
+            var model = new SubmitEmployerRequestCommand { NumberOfApprentices = 1 };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.NumberOfApprentices);
         }
@@ -79,7 +79,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_NumberOfApprentices_ZeroOrNegative_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { NumberOfApprentices = 0 };
+            var model = new SubmitEmployerRequestCommand { NumberOfApprentices = 0 };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.NumberOfApprentices);
         }
@@ -87,7 +87,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_SingleLocation_WhenSameLocationIsYes_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { SameLocation = "Yes", SingleLocation = "" };
+            var model = new SubmitEmployerRequestCommand { SameLocation = "Yes", SingleLocation = "" };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.SingleLocation);
         }
@@ -95,7 +95,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_SingleLocationLatitude_WhenSameLocationIsYes_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { SameLocation = "Yes", SingleLocationLatitude = 91 };
+            var model = new SubmitEmployerRequestCommand { SameLocation = "Yes", SingleLocationLatitude = 91 };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.SingleLocationLatitude);
         }
@@ -103,7 +103,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_SingleLocationLongitude_WhenSameLocationIsYes_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { SameLocation = "Yes", SingleLocationLongitude = 181 };
+            var model = new SubmitEmployerRequestCommand { SameLocation = "Yes", SingleLocationLongitude = 181 };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.SingleLocationLongitude);
         }
@@ -111,7 +111,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_MultipleLocations_WhenSameLocationIsNo_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { SameLocation = "No", MultipleLocations = new string[0] };
+            var model = new SubmitEmployerRequestCommand { SameLocation = "No", MultipleLocations = new string[0] };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.MultipleLocations);
         }
@@ -119,15 +119,15 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_AtLeastOneOf_AtApprenticesWorkplace_DayRelease_BlockRelease_ShouldHaveNoValidationError_WhenAtLeastOneIsTrue()
         {
-            var model = new CreateEmployerRequestCommand { AtApprenticesWorkplace = true, DayRelease = false, BlockRelease = false };
+            var model = new SubmitEmployerRequestCommand { AtApprenticesWorkplace = true, DayRelease = false, BlockRelease = false };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease });
 
-            model = new CreateEmployerRequestCommand { AtApprenticesWorkplace = false, DayRelease = true, BlockRelease = false };
+            model = new SubmitEmployerRequestCommand { AtApprenticesWorkplace = false, DayRelease = true, BlockRelease = false };
             result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease });
 
-            model = new CreateEmployerRequestCommand { AtApprenticesWorkplace = false, DayRelease = false, BlockRelease = true };
+            model = new SubmitEmployerRequestCommand { AtApprenticesWorkplace = false, DayRelease = false, BlockRelease = true };
             result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease });
         }
@@ -135,7 +135,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_AtLeastOneOf_AtApprenticesWorkplace_DayRelease_BlockRelease_ShouldHaveValidationError_WhenAllAreFalse()
         {
-            var model = new CreateEmployerRequestCommand { AtApprenticesWorkplace = false, DayRelease = false, BlockRelease = false };
+            var model = new SubmitEmployerRequestCommand { AtApprenticesWorkplace = false, DayRelease = false, BlockRelease = false };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease });
         }
@@ -143,7 +143,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_RequestedBy_NotEmpty_ShouldHaveNoValidationError()
         {
-            var model = new CreateEmployerRequestCommand { RequestedBy = Guid.NewGuid() };
+            var model = new SubmitEmployerRequestCommand { RequestedBy = Guid.NewGuid() };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.RequestedBy);
         }
@@ -151,7 +151,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_RequestedBy_Empty_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { RequestedBy = Guid.Empty };
+            var model = new SubmitEmployerRequestCommand { RequestedBy = Guid.Empty };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.RequestedBy);
         }
@@ -159,7 +159,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_ModifiedBy_NotEmpty_ShouldHaveNoValidationError()
         {
-            var model = new CreateEmployerRequestCommand { ModifiedBy = Guid.NewGuid() };
+            var model = new SubmitEmployerRequestCommand { ModifiedBy = Guid.NewGuid() };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.ModifiedBy);
         }
@@ -167,7 +167,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_ModifiedBy_Empty_ShouldHaveValidationError()
         {
-            var model = new CreateEmployerRequestCommand { ModifiedBy = Guid.Empty };
+            var model = new SubmitEmployerRequestCommand { ModifiedBy = Guid.Empty };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ModifiedBy);
         }
