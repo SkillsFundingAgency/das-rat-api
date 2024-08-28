@@ -144,7 +144,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpPost("provider/responses")]
+        [HttpPost("provider/{ukprn}/acknowledge-requests")]
         public async Task<IActionResult> CreateProviderResponses(CreateProviderResponseEmployerRequestsCommand request)
         {
             try
@@ -164,7 +164,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("")]
+        [HttpGet("list")]
         public async Task<IActionResult> GetEmployerRequestsByIds([FromQuery]List<Guid> employerRequestIds)
         {
             try
@@ -181,7 +181,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpPost("provider/submit-response")]
+        [HttpPost("provider/{ukprn}/submit-response")]
         public async Task<IActionResult> SubmitProviderResponse(SubmitProviderResponseCommand request)
         {
             try
@@ -201,7 +201,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("{providerResponseId}/confirmation")]
+        [HttpGet("providerResponse/{providerResponseId}/confirmation")]
         public async Task<IActionResult> GetProviderResponseConfirmation(Guid providerResponseId)
         {
             try
