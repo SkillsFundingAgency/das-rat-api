@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerRequestApprenticeTraining.UnitTests.Application.Comman
             // Assert
             result.IsValid.Should().BeFalse();
             result.ShouldHaveValidationErrorFor(c => c.EmployerRequestId)
-                  .WithErrorMessage("Employer Request Id most not be empty.");
+                  .WithErrorMessage("Employer Request Id must not be empty.");
         }
 
         [Test]
