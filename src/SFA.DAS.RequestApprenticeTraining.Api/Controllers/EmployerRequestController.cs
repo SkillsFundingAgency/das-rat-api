@@ -213,7 +213,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve sprovider response confirmation");
+                _logger.LogError(e, $"Error attempting to retrieve provider response confirmation");
                 return BadRequest();
             }
         }
