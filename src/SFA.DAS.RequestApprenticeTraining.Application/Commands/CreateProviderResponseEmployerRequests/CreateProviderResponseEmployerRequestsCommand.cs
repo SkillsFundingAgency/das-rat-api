@@ -8,6 +8,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderR
     public class CreateProviderResponseEmployerRequestsCommand : IRequest
     {
         public long Ukprn { get; set; }
+
         public List<Guid> EmployerRequestIds { get; set; }
     }
 }

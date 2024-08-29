@@ -125,11 +125,34 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
                     IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn),
                 })
-                .OrderBy(x => x.StandardTitle)
+                .OrderByDescending(x => x.DateOfRequest)
                 .ToListAsync();
 
             return result;
         }
 
+        public async Task<List<SelectEmployerRequest>> GetByIds(List<Guid> employerRequestIds)
+        {
+            var result = await Entities
+                .Where(er => employerRequestIds.Contains(er.Id) && er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Select(er => new SelectEmployerRequest
+                {
+                    EmployerRequestId = er.Id,
+                    StandardReference = er.StandardReference,
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    DateOfRequest = er.RequestedAt,
+                    DayRelease = er.DayRelease,
+                    BlockRelease = er.BlockRelease,
+                    AtApprenticesWorkplace = er.AtApprenticesWorkplace,
+                    SingleLocation = er.SingleLocation,
+                    NumberOfApprentices = er.NumberOfApprentices,
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
+                })
+                .OrderByDescending(x => x.DateOfRequest)
+                .ToListAsync();
+
+            return result;
+        }
     }
 }

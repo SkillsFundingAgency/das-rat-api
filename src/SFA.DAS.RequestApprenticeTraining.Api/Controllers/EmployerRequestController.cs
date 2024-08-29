@@ -11,8 +11,11 @@ using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregate
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
@@ -199,6 +202,23 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error attempting to create provider responses");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetEmployerRequestsByIds([FromQuery]List<Guid> employerRequestIds)
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetEmployerRequestsByIdsQuery(employerRequestIds));
+
+                return Ok(result.EmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve select employer requests");
                 return BadRequest();
             }
         }
