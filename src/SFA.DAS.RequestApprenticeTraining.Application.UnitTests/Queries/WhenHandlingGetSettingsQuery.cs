@@ -23,10 +23,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries.GetSet
                 .Returns(new ApplicationSettings 
                 { 
                     ExpiryAfterMonths = 3, 
-                    EmployerRemovedAfterExpiryNoResponsesMonths = 3, 
-                    EmployerRemovedAfterExpiryResponsesMonths = 3,
-                    ProviderRemovedAfterExpiryNotRespondedMonths = 3,
-                    ProviderRemovedAfterExpiryRespondedMonths = 9,
+                    EmployerRemovedAfterExpiryMonths = 3, 
+                    ProviderRemovedAfterRequestedMonths = 12
                     
                 });
 
@@ -44,10 +42,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries.GetSet
 
             // Assert
             result.ExpiryAfterMonths.Should().Be(3);
-            result.EmployerRemovedAfterExpiryNoResponsesMonths.Should().Be(3);
-            result.EmployerRemovedAfterExpiryResponsesMonths.Should().Be(3);
-            result.ProviderRemovedAfterExpiryNotRespondedMonths.Should().Be(3);
-            result.ProviderRemovedAfterExpiryRespondedMonths.Should().Be(9);
+            result.EmployerRemovedAfterExpiryMonths.Should().Be(3);
+            result.ProviderRemovedAfterRequestedMonths.Should().Be(12);
         }
     }
 }
