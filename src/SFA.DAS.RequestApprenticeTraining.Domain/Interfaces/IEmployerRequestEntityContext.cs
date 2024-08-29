@@ -44,7 +44,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     er.RequestedAt.AddMonths(12) > DateTime.Now)))
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
-                {
+                    {
                     g.Key.StandardReference,
                     NumberOfApprentices = g.Sum(x => x.NumberOfApprentices),
                     NumberOfEmployers = g.Count(),
