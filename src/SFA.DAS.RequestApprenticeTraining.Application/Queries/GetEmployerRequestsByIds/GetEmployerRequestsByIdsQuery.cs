@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregeatedEmployerRequests;
 using System;
 using System.Collections.Generic;
 
