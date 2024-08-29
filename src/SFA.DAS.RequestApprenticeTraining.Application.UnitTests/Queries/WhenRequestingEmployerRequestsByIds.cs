@@ -2,7 +2,6 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using System;

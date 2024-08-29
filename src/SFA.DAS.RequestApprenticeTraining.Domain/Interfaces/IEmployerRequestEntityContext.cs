@@ -49,7 +49,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     )
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
-                {
+                    {
                     g.Key.StandardReference,
                     NumberOfApprentices = g.Sum(x => x.NumberOfApprentices),
                     NumberOfEmployers = g.Count(),
@@ -112,11 +112,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetByIds(List<Guid> employerRequestIds)
+        public async Task<List<EmployerRequestReviewModel>> GetByIds(List<Guid> employerRequestIds)
         {
             var result = await Entities
                 .Where(er => employerRequestIds.Contains(er.Id) && er.RequestStatus == Models.Enums.RequestStatus.Active)
-                .Select(er => new SelectEmployerRequest
+                .Select(er => new EmployerRequestReviewModel
                 {
                     EmployerRequestId = er.Id,
                     StandardReference = er.StandardReference,
@@ -126,7 +126,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     DayRelease = er.DayRelease,
                     BlockRelease = er.BlockRelease,
                     AtApprenticesWorkplace = er.AtApprenticesWorkplace,
-                    SingleLocation = er.SingleLocation,
                     NumberOfApprentices = er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList()
                 })
@@ -136,13 +135,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetForProviderResponse(Guid providerResponseId)
+        public async Task<List<EmployerRequestReviewModel>> GetForProviderResponse(Guid providerResponseId)
         {
             var result = await Entities
                 .Include(er => er.ProviderResponseEmployerRequests)
                 .ThenInclude(prer => prer.ProviderResponse)
                 .Where(er => er.ProviderResponseEmployerRequests.Any(x => x.ProviderResponseId == providerResponseId))
-                .Select(er => new SelectEmployerRequest
+                .Select(er => new EmployerRequestReviewModel
                 {
                     EmployerRequestId = er.Id,
                     StandardReference = er.StandardReference,
@@ -152,7 +151,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     DayRelease = er.DayRelease,
                     BlockRelease = er.BlockRelease,
                     AtApprenticesWorkplace = er.AtApprenticesWorkplace,
-                    SingleLocation = er.SingleLocation,
                     NumberOfApprentices = er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
                 })

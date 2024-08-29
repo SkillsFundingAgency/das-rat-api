@@ -22,7 +22,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
             return new GetEmployerRequestsByIdsQueryResult
             {
                 EmployerRequests =
-                    selectRequests.Select(entity => (Domain.Models.SelectEmployerRequest)entity).ToList()
+                    selectRequests.Select(entity => (Domain.Models.EmployerRequestReviewModel)entity).ToList()
             };
         }
     }
