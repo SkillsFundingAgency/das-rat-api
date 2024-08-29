@@ -38,10 +38,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<AggregatedEmployerRequest>> GetAggregatedEmployerRequests(long ukprn)
         {
             var result = await Entities
-                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active
-                && (!er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) ||
-                    (er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) &&
-                    er.RequestedAt.AddMonths(12) > DateTime.Now)))
+                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active)
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
                 {
