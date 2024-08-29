@@ -3,6 +3,8 @@
     [EmployerRequestId] UNIQUEIDENTIFIER NOT NULL,
     [Ukprn] BIGINT NOT NULL,
     [ProviderResponseId] UNIQUEIDENTIFIER NULL,
+    [AcknowledgedAt] DATETIME2 NULL,
+    [AcknowledgedBy] UNIQUEIDENTIFIER NULL,
     [ValidFrom] DATETIME2 (0) GENERATED ALWAYS AS ROW START,
     [ValidTo] DATETIME2 (0) GENERATED ALWAYS AS ROW END,
     PERIOD FOR SYSTEM_TIME (ValidFrom, ValidTo),
