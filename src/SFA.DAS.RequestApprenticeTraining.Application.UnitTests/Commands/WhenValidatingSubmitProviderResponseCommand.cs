@@ -89,5 +89,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.EmployerRequestIds);
         }
+
+        [Test]
+        public void Validate_ContactName_NotEmpty_ShouldHaveNoValidationError()
+        {
+            var model = new SubmitProviderResponseCommand { ContactName = "Firstname Surname" };
+            var result = _sut.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.ContactName);
+        }
+
+        [Test]
+        public void Validate_ContactName_Empty_ShouldHaveValidationError()
+        {
+            var model = new SubmitProviderResponseCommand { ContactName = string.Empty };
+            var result = _sut.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.ContactName);
+        }
     }
 }
