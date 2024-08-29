@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
-using SFA.DAS.RequestApprenticeTraining.Domain.Models;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -18,18 +17,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            (SubmitProviderResponseParameters param,
-            [Frozen] Mock<IMediator> mediator,
-            SubmitProviderResponseCommandResponse response,
+            ([Frozen] Mock<IMediator> mediator,
+            GetProviderResponseConfirmationQueryResult response,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange 
             mediator
-                .Setup(m => m.Send(It.IsAny<SubmitProviderResponseCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<GetProviderResponseConfirmationQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
-            var result = await controller.SubmitProviderResponse(123456789, param);
+            var result = await controller.GetProviderResponseConfirmation(new Guid());
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(response);
@@ -37,17 +35,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (SubmitProviderResponseParameters param,
-            [Frozen] Mock<IMediator> mediator,
+            ([Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.IsAny<SubmitProviderResponseCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<GetProviderResponseConfirmationQuery>(), It.IsAny<CancellationToken>()))
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.SubmitProviderResponse(789456123, param);
+            var result = await controller.GetProviderResponseConfirmation(new Guid());
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
