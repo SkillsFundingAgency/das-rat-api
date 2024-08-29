@@ -6,12 +6,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +18,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            (SubmitProviderResponseCommand command,
+            (SubmitProviderResponseParameters param,
             [Frozen] Mock<IMediator> mediator,
             SubmitProviderResponseCommandResponse response,
             [Greedy] EmployerRequestController controller)
@@ -32,7 +29,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .ReturnsAsync(response);
 
             // Act
-            var result = await controller.SubmitProviderResponse(command);
+            var result = await controller.SubmitProviderResponse(123456789, param);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(response);
@@ -40,7 +37,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (SubmitProviderResponseCommand command,
+            (SubmitProviderResponseParameters param,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
@@ -50,7 +47,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.SubmitProviderResponse(command);
+            var result = await controller.SubmitProviderResponse(789456123, param);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests
 {
-    public class CreateProviderResponseEmployerRequestsCommandValidator : AbstractValidator<CreateProviderResponseEmployerRequestsCommand>
+    public class AcknowledgeEmployerRequestsCommandValidator : AbstractValidator<AcknowledgeEmployerRequestsCommand>
     {
-        public CreateProviderResponseEmployerRequestsCommandValidator()
+        public AcknowledgeEmployerRequestsCommandValidator()
         {
             RuleFor(x => x.EmployerRequestIds)
                 .NotEmpty().WithMessage("Employer Requests must not be empty.");

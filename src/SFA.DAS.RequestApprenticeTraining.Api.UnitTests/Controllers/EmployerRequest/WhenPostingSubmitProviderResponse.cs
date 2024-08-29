@@ -7,6 +7,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -18,11 +20,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            (SubmitProviderResponseCommand request,
+            (SubmitProviderResponseParameters param,
             [Greedy] EmployerRequestController controller)
         {
             // Act
-            var result = await controller.SubmitProviderResponse(request);
+            var result = await controller.SubmitProviderResponse(123456, param);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -30,7 +32,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_ValidationFails_Then_ReturnBadRequestWithErrors
-            (SubmitProviderResponseCommand request,
+            (SubmitProviderResponseParameters param,
             [Frozen] Mock<IMediator> mediator,
             ValidationException validationException,
             [Greedy] EmployerRequestController controller)
@@ -41,7 +43,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(validationException);
             
             // Act
-            var result = await controller.SubmitProviderResponse(request);
+            var result = await controller.SubmitProviderResponse(789456123, param);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
@@ -49,7 +51,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (SubmitProviderResponseCommand request,
+            (SubmitProviderResponseParameters param,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
@@ -59,7 +61,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.SubmitProviderResponse(request);
+            var result = await controller.SubmitProviderResponse(123456789, param);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

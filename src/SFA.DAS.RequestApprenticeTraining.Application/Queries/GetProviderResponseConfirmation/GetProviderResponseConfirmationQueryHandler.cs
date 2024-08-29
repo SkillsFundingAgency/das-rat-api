@@ -33,8 +33,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderRespo
                     Phone = providerResponse.PhoneNumber,
                     Website = providerResponse.Website,
                     EmployerRequests = requests.Any()
-                    ? requests.Select(entity => (Domain.Models.SelectEmployerRequest)entity).ToList()
-                    : new List<Domain.Models.SelectEmployerRequest>()
+                    ? requests.Select(entity => (Domain.Models.EmployerRequestReviewModel)entity).ToList()
+                    : new List<Domain.Models.EmployerRequestReviewModel>()
                 };
         }
     }
