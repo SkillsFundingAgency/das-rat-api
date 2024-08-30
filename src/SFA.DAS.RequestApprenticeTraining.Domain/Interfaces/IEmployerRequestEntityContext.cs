@@ -149,5 +149,25 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
 
             return result;
         }
+
+        public async Task ExpireEmployerRequests(int expiryAfterMonths) 
+        {
+            var dateTimeNow = DateTime.UtcNow;
+            var expiryRequestsRequestedBeforeDate = dateTimeNow.AddMonths(-expiryAfterMonths);
+
+            var result = await Entities
+                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active
+                    && er.RequestedAt < expiryRequestsRequestedBeforeDate)
+                .ToListAsync();
+
+            result.ForEach(er => 
+            {
+                er.RequestStatus = Models.Enums.RequestStatus.Expired;
+                er.ExpiredAt = dateTimeNow;
+                
+            });
+                
+        }
+    
     }
 }

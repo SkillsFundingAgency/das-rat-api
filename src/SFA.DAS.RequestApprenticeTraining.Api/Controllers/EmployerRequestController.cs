@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
@@ -214,6 +215,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve sprovider response confirmation");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("expire-requests")]
+        public async Task<IActionResult> ExpireEmployerRequests()
+        {
+            try
+            {
+                await _mediator.Send(new ExpireEmployerRequestsCommand());
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to expire employer requests");
                 return BadRequest();
             }
         }
