@@ -28,6 +28,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
 
         public EmployerRequestController(IMediator mediator, ILogger<EmployerRequestController> logger)
         {
+            
             _mediator = mediator;
             _logger = logger;
         }

@@ -14,6 +14,8 @@
     [RequestedAt] DATETIME2 NOT NULL CONSTRAINT [DF_EmployerRequestHistory_RequestedAt] DEFAULT GETUTCDATE(),
     [RequestedBy] UNIQUEIDENTIFIER NOT NULL,
     [RequestStatusId] INT NOT NULL,
+    [ExpiredAt] DATETIME2 NULL,
+    [CancelledAt] DATETIME2 NULL,
     [ModifiedBy] UNIQUEIDENTIFIER NOT NULL,
     [ValidFrom] DATETIME2 (0) NOT NULL,
     [ValidTo] DATETIME2 (0) NOT NULL
