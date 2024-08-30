@@ -1,12 +1,15 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
+using SFA.DAS.RequestApprenticeTraining.Api.TaskQueue;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
+using SFA.DAS.RequestApprenticeTraining.Application.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
@@ -26,11 +29,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<EmployerRequestController> _logger;
+        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
 
-        public EmployerRequestController(IMediator mediator, ILogger<EmployerRequestController> logger)
+        public EmployerRequestController(IMediator mediator, ILogger<EmployerRequestController> logger, IBackgroundTaskQueue taskQueue) 
         {
             _mediator = mediator;
             _logger = logger;
+            _backgroundTaskQueue = taskQueue;
         }
 
         [HttpPost]
@@ -220,17 +225,26 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpPost("expire-requests")]
-        public async Task<IActionResult> ExpireEmployerRequests()
+        public IActionResult ExpireEmployerRequests()
         {
+            var requestName = "expire employer requests";
             try
             {
-                await _mediator.Send(new ExpireEmployerRequestsCommand());
-                return Ok();
+                _backgroundTaskQueue.QueueBackgroundRequest(
+                    new ExpireEmployerRequestsCommand(), requestName, (response, duration, log) =>
+                    {
+                        var result = response as ExpireEmployerRequestsCommand;
+                        log.LogInformation($"Completed request to {requestName}: Request completed in {duration.ToReadableString()}");
+                    });
+
+                _logger.LogInformation($"Queued request to {requestName}");
+
+                return Accepted();
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to expire employer requests");
-                return BadRequest();
+                _logger.LogError(e, $"Error attempting to {requestName}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error {requestName}: {e.Message}");
             }
         }
     }

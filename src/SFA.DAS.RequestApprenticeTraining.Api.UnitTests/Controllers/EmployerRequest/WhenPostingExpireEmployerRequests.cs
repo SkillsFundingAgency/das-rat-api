@@ -1,65 +1,54 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using FluentValidation;
+﻿using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
+using SFA.DAS.RequestApprenticeTraining.Api.TaskQueue;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests;
-using SFA.DAS.Testing.AutoFixture;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Net;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRequest
 {
     public class WhenPostingExpireEmployerRequests
     {
-        [Test, MoqAutoData]
-        public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            ([Greedy] EmployerRequestController controller)
-        {
-            // Act
-            var result = await controller.ExpireEmployerRequests();
+        private Mock<IBackgroundTaskQueue> _backgroundTaskQueue;
+        private Mock<IMediator> _mediatorMock;
+        private EmployerRequestController _sut;
 
-            // Assert
-            result.Should().BeOfType<OkObjectResult>();
+        [SetUp]
+        public void SetupTests()
+        {
+            _backgroundTaskQueue = new Mock<IBackgroundTaskQueue>();
+            _mediatorMock = new Mock<IMediator>();
+            _sut = new EmployerRequestController(_mediatorMock.Object, Mock.Of<ILogger<EmployerRequestController>>(), _backgroundTaskQueue.Object);
         }
 
-        [Test, MoqAutoData]
-        public async Task And_ValidationFails_Then_ReturnBadRequestWithErrors
-            ([Frozen] Mock<IMediator> mediator,
-            ValidationException validationException,
-            [Greedy] EmployerRequestController controller)
+        [Test]
+        public void When_PostToExpireEmployerRequests_Then_BackgroundTaskIsQueued()
         {
-            // Arrange
-            mediator
-                .Setup(m => m.Send(It.IsAny<ExpireEmployerRequestsCommand>(), It.IsAny<CancellationToken>()))
-                .Throws(validationException);
-            
             // Act
-            var result = await controller.ExpireEmployerRequests();
+            var result = _sut.ExpireEmployerRequests();
 
             // Assert
-            result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
+            _backgroundTaskQueue.Verify(m => m.QueueBackgroundRequest(
+               It.IsAny<ExpireEmployerRequestsCommand>(),
+               "expire employer requests",
+               It.IsAny<Action<object, TimeSpan, ILogger<TaskQueueHostedService>>>()),
+               Times.Once);
         }
 
-        [Test, MoqAutoData]
-        public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            ([Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+        [Test]
+        public void When_PostToExpireEmployerRequestsHasNoErrors_Then_ReturnsAccepted()
         {
-            // Arrange
-            mediator
-                .Setup(m => m.Send(It.IsAny<ExpireEmployerRequestsCommand>(), It.IsAny<CancellationToken>()))
-                .Throws(new Exception());
-
             // Act
-            var result = await controller.ExpireEmployerRequests();
+            var controllerResult = _sut.ExpireEmployerRequests() as ObjectResult;
 
             // Assert
-            result.Should().BeOfType<BadRequestResult>();
+
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
         }
     }
 }
