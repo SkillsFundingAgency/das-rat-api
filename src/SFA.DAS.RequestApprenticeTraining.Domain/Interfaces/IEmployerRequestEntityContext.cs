@@ -41,11 +41,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             => await Entities
                 .FirstOrDefaultAsync();
 
-        public async Task<List<EmployerAggregatedEmployerRequest>> GetEmployerAggregatedEmployerRequests(long accountId)
+        public async Task<List<EmployerAggregatedEmployerRequest>> GetEmployerAggregatedEmployerRequests(long accountId, int employerRemovedAfterExpiryMonths, DateTime dateTimeNow)
         {
             var result = await Entities
                 .Include(er => er.ProviderResponseEmployerRequests)
-                .Where(er => er.RequestStatus != Models.Enums.RequestStatus.Cancelled && er.AccountId == accountId)
+                .Where(er => 
+                    er.AccountId == accountId && 
+                    (er.RequestStatus == Models.Enums.RequestStatus.Active ||
+                    (er.RequestStatus == Models.Enums.RequestStatus.Expired && (er.ExpiredAt.HasValue && er.ExpiredAt.Value.AddMonths(employerRemovedAfterExpiryMonths) > dateTimeNow))))
                 .SelectMany(er => er.ProviderResponseEmployerRequests.DefaultIfEmpty(), (er, prer) => new
                 {
                     er.Id,
