@@ -4,23 +4,23 @@ using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderRespo
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.CreateProviderResponseEmployerRequests
+namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.AcknowledgeEmployerRequests
 {
     [TestFixture]
-    public class WhenValidatingCreateProviderResponseEmployerRequestsCommand
+    public class WhenValidatingAcknowledgeEmployerRequestsCommand
     {
-        private CreateProviderResponseEmployerRequestsCommandValidator _sut;
+        private AcknowledgeEmployerRequestsCommandValidator _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new CreateProviderResponseEmployerRequestsCommandValidator();
+            _sut = new AcknowledgeEmployerRequestsCommandValidator();
         }
 
         [Test]
         public void Validate_EmployerRequestIds_ShouldHaveNoValidationError()
         {
-            var model = new CreateProviderResponseEmployerRequestsCommand { EmployerRequestIds = new List<Guid> { new() } };
+            var model = new AcknowledgeEmployerRequestsCommand { EmployerRequestIds = new List<Guid> { Guid.NewGuid() } };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.EmployerRequestIds);
         }
@@ -28,7 +28,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_EmployerRequestIds_Empty_ShouldHaveValidationError()
         {
-            var model = new CreateProviderResponseEmployerRequestsCommand { EmployerRequestIds = new List<Guid>() };
+            var model = new AcknowledgeEmployerRequestsCommand { EmployerRequestIds = new List<Guid>() };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.EmployerRequestIds);
         }
@@ -36,7 +36,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_Ukprn_GreaterThanZero_ShouldHaveNoValidationError()
         {
-            var model = new CreateProviderResponseEmployerRequestsCommand { Ukprn = 123456789 };
+            var model = new AcknowledgeEmployerRequestsCommand { Ukprn = 123456789 };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.Ukprn);
         }
@@ -44,7 +44,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Creat
         [Test]
         public void Validate_Ukprn_ZeroOrnegative_ShouldHaveNoValidationError()
         {
-            var model = new CreateProviderResponseEmployerRequestsCommand { Ukprn = 0 };
+            var model = new AcknowledgeEmployerRequestsCommand { Ukprn = 0 };
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.Ukprn);
         }

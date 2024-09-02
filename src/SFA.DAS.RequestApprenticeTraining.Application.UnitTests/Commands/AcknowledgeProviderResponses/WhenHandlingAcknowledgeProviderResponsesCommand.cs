@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
@@ -8,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using FluentAssertions;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.AcknowledgeProviderResponses
 {
