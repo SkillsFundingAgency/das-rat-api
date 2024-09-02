@@ -15,16 +15,16 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
     public class CreateProviderResponseEmployerRequestCommandHandlerTests
     {
         private Mock<IProviderResponseEmployerRequestEntityContext> _providerResponseEntityContextMock;
-        private Mock<ILogger<CreateProviderResponseEmployerRequestsCommandHandler>> _loggerMock;
-        private CreateProviderResponseEmployerRequestsCommandHandler _sut;
+        private Mock<ILogger<AcknowledgeEmployerRequestsCommandHandler>> _loggerMock;
+        private AcknowledgeEmployerRequestsCommandHandler _sut;
 
         [SetUp]
         public void SetUp()
         {
             _providerResponseEntityContextMock = new Mock<IProviderResponseEmployerRequestEntityContext>();
-            _loggerMock = new Mock<ILogger<CreateProviderResponseEmployerRequestsCommandHandler>>();
+            _loggerMock = new Mock<ILogger<AcknowledgeEmployerRequestsCommandHandler>>();
 
-            _sut = new CreateProviderResponseEmployerRequestsCommandHandler(
+            _sut = new AcknowledgeEmployerRequestsCommandHandler(
                 _providerResponseEntityContextMock.Object,
                 _loggerMock.Object);
         }
@@ -33,7 +33,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
         public async Task Handle_ShouldCreateProviderResponseEmployerRequest()
         {
             // Arrange
-            var command = new CreateProviderResponseEmployerRequestsCommand
+            var command = new AcknowledgeEmployerRequestsCommand
             {
                 Ukprn = 456789456,
                 EmployerRequestIds = new List<Guid> { new Guid() }
@@ -51,7 +51,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Creat
         public async Task Handle_ShouldCreateMultipleProviderResponseEmployerRequest()
         {
             // Arrange
-            var command = new CreateProviderResponseEmployerRequestsCommand
+            var command = new AcknowledgeEmployerRequestsCommand
             {
                 Ukprn = 89745613,
                 EmployerRequestIds = new List<Guid> { new Guid(), new Guid(), new Guid() }

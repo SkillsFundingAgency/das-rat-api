@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,18 +25,30 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderRespo
             var requests = await _employerRequestEntityContext.GetForProviderResponse(request.ProviderResponseId);
             var providerResponse = await _providerResponseEntityContext.Get(request.ProviderResponseId);
 
-            return providerResponse == null?
-                new GetProviderResponseConfirmationQueryResult()
-                :new GetProviderResponseConfirmationQueryResult
+            if (providerResponse == null)
+            {
+                return new GetProviderResponseConfirmationQueryResult();
+            }
+            else
+            {
+                return new GetProviderResponseConfirmationQueryResult
                 {
-                    Ukprn = providerResponse.ProviderResponseEmployerRequests.FirstOrDefault().Ukprn,
+                    Ukprn = providerResponse.ProviderResponseEmployerRequests?.FirstOrDefault()?.Ukprn ?? 0,
                     Email = providerResponse.Email,
                     Phone = providerResponse.PhoneNumber,
                     Website = providerResponse.Website,
-                    EmployerRequests = requests.Any()
-                    ? requests.Select(entity => (Domain.Models.SelectEmployerRequest)entity).ToList()
-                    : new List<Domain.Models.SelectEmployerRequest>()
+                    EmployerRequests = GetEmployerRequests(requests)
                 };
+            }
+        }
+
+        private List<Domain.Models.EmployerRequestReviewModel> GetEmployerRequests(List<EmployerRequestReviewModel> requests)
+        { 
+            if(requests.Count > 0) 
+            {
+                return requests.Select(entity => (Domain.Models.EmployerRequestReviewModel)entity).ToList();
+            }
+            return new List<Domain.Models.EmployerRequestReviewModel>();
         }
     }
 }

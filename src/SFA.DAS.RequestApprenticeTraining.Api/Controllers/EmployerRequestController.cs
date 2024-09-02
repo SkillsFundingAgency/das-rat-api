@@ -16,6 +16,7 @@ using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -150,12 +151,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpPost("provider/responses")]
-        public async Task<IActionResult> CreateProviderResponses(CreateProviderResponseEmployerRequestsCommand request)
+        [HttpPost("provider/{ukprn}/acknowledge-requests")]
+        public async Task<IActionResult> AcknowledgeEmployerRequests(long ukprn, AcknowledgeEmployerRequestsParameters parameters)
         {
             try
             {
-                await _mediator.Send(request);
+                await _mediator.Send(new AcknowledgeEmployerRequestsCommand
+                { 
+                    Ukprn = ukprn,
+                    EmployerRequestIds = parameters.EmployerRequestIds,
+                });
                 return Ok();
             }
             catch (ValidationException ex)
@@ -170,7 +175,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("")]
+        [HttpGet("list")]
         public async Task<IActionResult> GetEmployerRequestsByIds([FromQuery]List<Guid> employerRequestIds)
         {
             try
@@ -187,12 +192,19 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpPost("provider/submit-response")]
-        public async Task<IActionResult> SubmitProviderResponse(SubmitProviderResponseCommand request)
+        [HttpPost("provider/{ukprn}/submit-response")]
+        public async Task<IActionResult> SubmitProviderResponse(long ukprn, SubmitProviderResponseParameters parameters)
         {
             try
             {
-                var response = await _mediator.Send(request);
+                var response = await _mediator.Send(new SubmitProviderResponseCommand
+                { 
+                    Ukprn = ukprn,
+                    Email = parameters.Email,
+                    EmployerRequestIds = parameters.EmployerRequestIds, 
+                    Phone = parameters.Phone,
+                    Website = parameters.Website,
+                });
                 return Ok(response);
             }
             catch (ValidationException ex)
@@ -207,7 +219,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("{providerResponseId}/confirmation")]
+        [HttpGet("providerResponse/{providerResponseId}/confirmation")]
         public async Task<IActionResult> GetProviderResponseConfirmation(Guid providerResponseId)
         {
             try
@@ -219,7 +231,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve sprovider response confirmation");
+                _logger.LogError(e, $"Error attempting to retrieve provider response confirmation");
                 return BadRequest();
             }
         }

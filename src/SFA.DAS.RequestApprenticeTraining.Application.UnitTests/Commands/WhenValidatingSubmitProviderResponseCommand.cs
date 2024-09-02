@@ -93,7 +93,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands
         [Test]
         public void Validate_ContactName_NotEmpty_ShouldHaveNoValidationError()
         {
-            var model = new SubmitProviderResponseCommand { ContactName = "Firstname Surame" };
+            var model = new SubmitProviderResponseCommand { ContactName = "Firstname Surname" };
             var result = _sut.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.ContactName);
         }
