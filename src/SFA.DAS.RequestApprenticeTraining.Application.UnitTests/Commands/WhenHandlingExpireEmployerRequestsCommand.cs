@@ -51,7 +51,7 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Expir
         public async Task Handle_ShouldCallExpireEmployerRequests()
         {
             // Act
-            var response = await _sut.Handle(new ExpireEmployerRequestsCommand(), CancellationToken.None);
+            await _sut.Handle(new ExpireEmployerRequestsCommand(), CancellationToken.None);
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.ExpireEmployerRequests(It.IsAny<int>()), Times.Once);
@@ -82,10 +82,9 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Expir
             var handler = new ExpireEmployerRequestsCommandHandler(context, _loggerMock.Object, _optionsMock.Object);
 
             // Act
-            var result = await handler.Handle(new ExpireEmployerRequestsCommand(), CancellationToken.None);
+            await handler.Handle(new ExpireEmployerRequestsCommand(), CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             context.EmployerRequests.Where(x => x.RequestStatus == RequestStatus.Active).Should().HaveCount(0);
             context.EmployerRequests.Where(x => x.RequestStatus == RequestStatus.Expired).Should().HaveCount(3);
 
@@ -117,10 +116,9 @@ namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.Expir
             var handler = new ExpireEmployerRequestsCommandHandler(context, _loggerMock.Object, _optionsMock.Object);
 
             // Act
-            var result = await handler.Handle(new ExpireEmployerRequestsCommand(), CancellationToken.None);
+            await handler.Handle(new ExpireEmployerRequestsCommand(), CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             context.EmployerRequests.Where(x => x.RequestStatus == RequestStatus.Expired).Should().HaveCount(0);
             context.EmployerRequests.Where(x => x.RequestStatus == RequestStatus.Active).Should().HaveCount(3);
             context.EmployerRequests.Where(x => x.RequestStatus == RequestStatus.Cancelled).Should().HaveCount(2);

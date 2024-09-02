@@ -34,6 +34,5 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
             return EmployerRequestRegions.Select(err => err.Region).ToList();
         }
         public Standard Standard { get; set; }
-
     }
 }

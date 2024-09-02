@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests
 {
-    public class ExpireEmployerRequestsCommandHandler : IRequestHandler<ExpireEmployerRequestsCommand, ExpireEmployerRequestsCommandResponse>
+    public class ExpireEmployerRequestsCommandHandler : IRequestHandler<ExpireEmployerRequestsCommand>
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
         private readonly ILogger<ExpireEmployerRequestsCommandHandler> _logger;
@@ -30,12 +30,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerR
             _applicationSettings = options.Value;
         }
 
-        public async Task<ExpireEmployerRequestsCommandResponse> Handle(ExpireEmployerRequestsCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ExpireEmployerRequestsCommand request, CancellationToken cancellationToken)
         {
             await _employerRequestEntityContext.ExpireEmployerRequests(_applicationSettings.ExpiryAfterMonths);
             await _employerRequestEntityContext.SaveChangesAsync();
-
-            return new ExpireEmployerRequestsCommandResponse();
         }
     }
 }

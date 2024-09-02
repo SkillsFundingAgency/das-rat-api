@@ -149,7 +149,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
 
             return result;
         }
-
         public async Task ExpireEmployerRequests(int expiryAfterMonths) 
         {
             var dateTimeNow = DateTime.UtcNow;
@@ -164,10 +163,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             {
                 er.RequestStatus = Models.Enums.RequestStatus.Expired;
                 er.ExpiredAt = dateTimeNow;
-                
-            });
-                
+            });    
         }
-    
     }
 }
