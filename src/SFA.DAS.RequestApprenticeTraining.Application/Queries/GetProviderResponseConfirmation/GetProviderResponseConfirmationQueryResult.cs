@@ -6,7 +6,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderRespo
     public class GetProviderResponseConfirmationQueryResult
     {
         public long Ukprn { get; set; }
-        public List<SelectEmployerRequest> EmployerRequests { get; set; } = new List<SelectEmployerRequest>();
+        public List<EmployerRequestReviewModel> EmployerRequests { get; set; } = new List<EmployerRequestReviewModel>();
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }

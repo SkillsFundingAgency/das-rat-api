@@ -42,13 +42,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderRespo
             }
         }
 
-        private List<Domain.Models.SelectEmployerRequest> GetEmployerRequests(List<SelectEmployerRequest> requests)
+        private List<Domain.Models.EmployerRequestReviewModel> GetEmployerRequests(List<EmployerRequestReviewModel> requests)
         { 
             if(requests.Count > 0) 
             {
-                return requests.Select(entity => (Domain.Models.SelectEmployerRequest)entity).ToList();
+                return requests.Select(entity => (Domain.Models.EmployerRequestReviewModel)entity).ToList();
             }
-            return new List<Domain.Models.SelectEmployerRequest>();
+            return new List<Domain.Models.EmployerRequestReviewModel>();
         }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.Testing.AutoFixture;
 using System;
@@ -36,8 +35,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (SubmitProviderResponseCommand command,
-            [Frozen] Mock<IMediator> mediator,
+            ([Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange
