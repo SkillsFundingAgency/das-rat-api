@@ -1,7 +1,5 @@
-﻿using SFA.DAS.RequestApprenticeTraining.Domain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
 {
@@ -12,6 +10,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public string PhoneNumber { get; set; }
         public string Website { get; set; }
         public DateTime RespondedAt { get; set; }
-
+        public List<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
     }
 }
