@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests
 {
-    public class CreateProviderResponseEmployerRequestsCommandHandler : IRequestHandler<CreateProviderResponseEmployerRequestsCommand>
+    public class AcknowledgeEmployerRequestsCommandHandler : IRequestHandler<AcknowledgeEmployerRequestsCommand>
     {
         private readonly IProviderResponseEmployerRequestEntityContext _providerResponseEmployerRequestEntityContext;
-        private readonly ILogger<CreateProviderResponseEmployerRequestsCommandHandler> _logger;
+        private readonly ILogger<AcknowledgeEmployerRequestsCommandHandler> _logger;
 
-        public CreateProviderResponseEmployerRequestsCommandHandler(
+        public AcknowledgeEmployerRequestsCommandHandler(
             IProviderResponseEmployerRequestEntityContext providerResponseEmployerRequestEntityContext,
-            ILogger<CreateProviderResponseEmployerRequestsCommandHandler> logger)
+            ILogger<AcknowledgeEmployerRequestsCommandHandler> logger)
         {
             _providerResponseEmployerRequestEntityContext = providerResponseEmployerRequestEntityContext;
             _logger = logger;
         }
 
-        public async Task Handle(CreateProviderResponseEmployerRequestsCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AcknowledgeEmployerRequestsCommand request, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"Updating Provider Responses to Employer Requests");
 

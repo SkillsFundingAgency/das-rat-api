@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -14,15 +15,15 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRequest
 {
-    public class WhenPostingCreateProviderResponseEmployerRequests
+    public class WhenPostingAcknowledgeEmployerRequests
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            (CreateProviderResponseEmployerRequestsCommand request,
+            (AcknowledgeEmployerRequestsParameters param,
             [Greedy] EmployerRequestController controller)
         {
             // Act
-            var result = await controller.CreateProviderResponses(request);
+            var result = await controller.AcknowledgeEmployerRequests(456123456, param);
 
             // Assert
             result.Should().BeOfType<OkResult>();
@@ -30,18 +31,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_ValidationFails_Then_ReturnBadRequestWithErrors
-            (CreateProviderResponseEmployerRequestsCommand request,
+            (AcknowledgeEmployerRequestsParameters param,
             [Frozen] Mock<IMediator> mediator,
             ValidationException validationException,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.IsAny<CreateProviderResponseEmployerRequestsCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<AcknowledgeEmployerRequestsCommand>(), It.IsAny<CancellationToken>()))
                 .Throws(validationException);
             
             // Act
-            var result = await controller.CreateProviderResponses(request);
+            var result = await controller.AcknowledgeEmployerRequests(75395142, param);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
@@ -49,17 +50,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (CreateProviderResponseEmployerRequestsCommand request,
+            (AcknowledgeEmployerRequestsParameters param,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.IsAny<CreateProviderResponseEmployerRequestsCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<AcknowledgeEmployerRequestsCommand>(), It.IsAny<CancellationToken>()))
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.CreateProviderResponses(request);
+            var result = await controller.AcknowledgeEmployerRequests(7852365, param);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
