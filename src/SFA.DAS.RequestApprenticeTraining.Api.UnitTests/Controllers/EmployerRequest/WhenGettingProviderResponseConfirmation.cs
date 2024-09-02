@@ -5,49 +5,46 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.Testing.AutoFixture;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRequest
 {
-    public class WhenGettingEmployerRequestsByIds
+    public class WhenGettingProviderResponseConfirmation
     {
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
-            (List<Guid> requestIds,
-            [Frozen] Mock<IMediator> mediator,
-            GetEmployerRequestsByIdsQueryResult erResult,
+            ([Frozen] Mock<IMediator> mediator,
+            GetProviderResponseConfirmationQueryResult response,
             [Greedy] EmployerRequestController controller)
         {
-            // Arrange
+            // Arrange 
             mediator
-                .Setup(m => m.Send(It.IsAny<GetEmployerRequestsByIdsQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(erResult);
+                .Setup(m => m.Send(It.IsAny<GetProviderResponseConfirmationQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
 
             // Act
-            var result = await controller.GetEmployerRequestsByIds(requestIds);
+            var result = await controller.GetProviderResponseConfirmation(Guid.NewGuid());
 
             // Assert
-            result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(erResult.EmployerRequests);
+            result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(response);
         }
 
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
-            (List<Guid> requestIds,
-            [Frozen] Mock<IMediator> mediator,
+            ([Frozen] Mock<IMediator> mediator,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.IsAny<GetEmployerRequestsByIdsQuery>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<GetProviderResponseConfirmationQuery>(), It.IsAny<CancellationToken>()))
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetEmployerRequestsByIds(requestIds);
+            var result = await controller.GetProviderResponseConfirmation(Guid.NewGuid());
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

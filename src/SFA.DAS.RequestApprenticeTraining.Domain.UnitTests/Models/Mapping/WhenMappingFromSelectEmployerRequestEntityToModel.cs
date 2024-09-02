@@ -24,6 +24,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.UnitTests.Models
             result.AtApprenticesWorkplace.Should().Be(source.AtApprenticesWorkplace);
             result.IsNew.Should().Be(source.IsNew);
             result.IsContacted.Should().Be(source.IsContacted);
+            result.DateContacted.Should().Be(source.DateContacted);
             result.Locations.Should().BeEquivalentTo(source.Locations);
         }
     }

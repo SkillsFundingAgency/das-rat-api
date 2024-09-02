@@ -78,13 +78,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<ProviderAggregatedEmployerRequest>> GetProviderAggregatedEmployerRequests(long ukprn)
+        public async Task<List<ProviderAggregatedEmployerRequest>> GetProviderAggregatedEmployerRequests(long ukprn, int providerRemovedAfterExpiryRespondedMonths)
         {
             var result = await Entities
-                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Where(er =>
+                    (
+                        er.RequestStatus == Models.Enums.RequestStatus.Active &&
+                        !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
+                    ) ||
+                    (
+                        er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) &&
+                        er.RequestedAt.AddMonths(providerRemovedAfterExpiryRespondedMonths) > DateTime.Now)
+                    )
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
-                {
+                    {
                     g.Key.StandardReference,
                     NumberOfApprentices = g.Sum(x => x.NumberOfApprentices),
                     NumberOfEmployers = g.Count(),
@@ -109,10 +117,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference)
+        public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference,int providerRemovedAfterRequestedMonths)
         {
             var result = await Entities
-                .Where(er => er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Where(er => er.StandardReference == standardReference &&
+                    (
+                        er.RequestStatus == Models.Enums.RequestStatus.Active && 
+                        !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
+                    ) ||
+                    (
+                        er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && 
+                        pre.ProviderResponseId.HasValue) && er.RequestedAt.AddMonths(providerRemovedAfterRequestedMonths) > DateTime.Now)
+                    )
                 .Select(er => new SelectEmployerRequest
                 {
                     EmployerRequestId = er.Id,
@@ -127,6 +143,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     NumberOfApprentices= er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
                     IsNew = !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn),
+                    IsContacted = er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue),
+                    DateContacted = er.ProviderResponseEmployerRequests
+                       .Where(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
+                       .Select(pre => (DateTime?)pre.ProviderResponse.RespondedAt)
+                       .FirstOrDefault()
                 })
                 .OrderByDescending(x => x.DateOfRequest)
                 .ToListAsync();
@@ -134,11 +155,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetByIds(List<Guid> employerRequestIds)
+        public async Task<List<EmployerRequestReviewModel>> GetByIds(List<Guid> employerRequestIds)
         {
             var result = await Entities
                 .Where(er => employerRequestIds.Contains(er.Id) && er.RequestStatus == Models.Enums.RequestStatus.Active)
-                .Select(er => new SelectEmployerRequest
+                .Select(er => new EmployerRequestReviewModel
                 {
                     EmployerRequestId = er.Id,
                     StandardReference = er.StandardReference,
@@ -148,7 +169,31 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     DayRelease = er.DayRelease,
                     BlockRelease = er.BlockRelease,
                     AtApprenticesWorkplace = er.AtApprenticesWorkplace,
-                    SingleLocation = er.SingleLocation,
+                    NumberOfApprentices = er.NumberOfApprentices,
+                    Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList()
+                })
+                .OrderByDescending(x => x.DateOfRequest)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<EmployerRequestReviewModel>> GetForProviderResponse(Guid providerResponseId)
+        {
+            var result = await Entities
+                .Include(er => er.ProviderResponseEmployerRequests)
+                .ThenInclude(prer => prer.ProviderResponse)
+                .Where(er => er.ProviderResponseEmployerRequests.Any(x => x.ProviderResponseId == providerResponseId))
+                .Select(er => new EmployerRequestReviewModel
+                {
+                    EmployerRequestId = er.Id,
+                    StandardReference = er.StandardReference,
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    DateOfRequest = er.RequestedAt,
+                    DayRelease = er.DayRelease,
+                    BlockRelease = er.BlockRelease,
+                    AtApprenticesWorkplace = er.AtApprenticesWorkplace,
                     NumberOfApprentices = er.NumberOfApprentices,
                     Locations = er.EmployerRequestRegions.Select(requestRegion => requestRegion.Region.SubregionName).ToList(),
                 })

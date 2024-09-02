@@ -5,6 +5,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
 {
     public class GetEmployerRequestsByIdsQueryResult
     {
-        public List<SelectEmployerRequest> EmployerRequests { get; set; }
+        public List<EmployerRequestReviewModel> EmployerRequests { get; set; }
     }
 }
