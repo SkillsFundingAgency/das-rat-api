@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetActiveEmployerRequest;
 using SFA.DAS.Testing.AutoFixture;
 using System;
 using System.Threading;
@@ -21,16 +21,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (long accountId,
             string standardReference,
             [Frozen] Mock<IMediator> mediator,
-            GetEmployerRequestQueryResult employerRequestResult,
+            GetActiveEmployerRequestQueryResult employerRequestResult,
             [Greedy] EmployerRequestController controller)
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.Is<GetEmployerRequestQuery>(t => t.AccountId == accountId && t.StandardReference == standardReference), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.Is<GetActiveEmployerRequestQuery>(t => t.AccountId == accountId && t.StandardReference == standardReference), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(employerRequestResult);
 
             // Act
-            var result = await controller.GetEmployerRequest(accountId, standardReference);
+            var result = await controller.GetActiveEmployerRequest(accountId, standardReference);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(employerRequestResult.EmployerRequest);
@@ -46,11 +46,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.IsAny<GetEmployerRequestQuery>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<GetActiveEmployerRequestQuery>(), It.IsAny<CancellationToken>()))
                 .Throws(validationException);
 
             // Act
-            var result = await controller.GetEmployerRequest(accountId, standardReference);
+            var result = await controller.GetActiveEmployerRequest(accountId, standardReference);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeEquivalentTo(new { errors = validationException.Errors });
@@ -65,11 +65,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         {
             // Arrange
             mediator
-                .Setup(m => m.Send(It.IsAny<GetEmployerRequestQuery>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<GetActiveEmployerRequestQuery>(), It.IsAny<CancellationToken>()))
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetEmployerRequest(accountId, standardReference);
+            var result = await controller.GetActiveEmployerRequest(accountId, standardReference);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

@@ -54,7 +54,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
                 }
             };
 
-            _employerRequestEntityContextMock.Setup(x => x.GetWithResponses(command.EmployerRequestId))
+            _employerRequestEntityContextMock.Setup(x => x.Get(command.EmployerRequestId))
                 .ReturnsAsync(employerRequest);
 
             // Act
@@ -74,7 +74,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
             // Arrange
             var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = Guid.NewGuid() };
 
-            _employerRequestEntityContextMock.Setup(x => x.GetWithResponses(command.EmployerRequestId))
+            _employerRequestEntityContextMock.Setup(x => x.Get(command.EmployerRequestId))
                 .ReturnsAsync((EmployerRequest)null);
 
             // Act

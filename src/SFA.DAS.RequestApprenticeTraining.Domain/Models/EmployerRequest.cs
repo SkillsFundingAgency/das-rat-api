@@ -26,6 +26,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
 
         public List<Region> Regions { get; set; }
 
+        public List<ProviderResponse> ProviderResponses { get; set; }
+
         public static implicit operator EmployerRequest(Entities.EmployerRequest source)
         {
             if (source == null)
@@ -51,7 +53,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
                 ExpiredAt = source.ExpiredAt,
                 CancelledAt = source.CancelledAt,
                 ModifiedBy = source.ModifiedBy,
-                Regions = source.GetRegions().Select(s => (Region)s).ToList()
+                Regions = source.GetRegions().Select(s => (Region)s).ToList(),
+                ProviderResponses = source.GetProviderResponses().Select(s => (ProviderResponse)s).ToList(),
             };
         }
     }

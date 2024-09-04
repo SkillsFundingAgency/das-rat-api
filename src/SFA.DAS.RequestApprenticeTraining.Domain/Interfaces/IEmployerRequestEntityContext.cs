@@ -12,30 +12,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        public async Task<EmployerRequest> GetWithRegions(Guid employerRequestId)
+        public async Task<EmployerRequest> Get(Guid employerRequestId)
             => await Entities
                 .Include(er => er.EmployerRequestRegions)
                 .ThenInclude(err => err.Region)
-                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.RequestStatus == Models.Enums.RequestStatus.Active);
-
-        public async Task<EmployerRequest> GetWithRegions(long accountId, string standardReference)
-            => await Entities
-                .Include(er => er.EmployerRequestRegions)
-                .ThenInclude(err => err.Region)
-                .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active);
-
-        public async Task<List<EmployerRequest>> GetWithRegions(long accountId)
-            => await Entities
-                .Include(er => er.EmployerRequestRegions)
-                .ThenInclude(err => err.Region)
-                .Where(er => er.AccountId == accountId)
-                .ToListAsync();
-
-        public async Task<EmployerRequest> GetWithResponses(Guid employerRequestId)
-            => await Entities
                 .Include(er => er.ProviderResponseEmployerRequests)
                 .ThenInclude(prer => prer.ProviderResponse)
-                .FirstOrDefaultAsync(er => er.Id == employerRequestId && er.RequestStatus == Models.Enums.RequestStatus.Active);
+                .FirstOrDefaultAsync(er => er.Id == employerRequestId);
+
+        public async Task<EmployerRequest> GetActive(long accountId, string standardReference)
+            => await Entities
+                .Include(er => er.EmployerRequestRegions)
+                .ThenInclude(err => err.Region)
+                .Include(er => er.ProviderResponseEmployerRequests)
+                .ThenInclude(prer => prer.ProviderResponse)
+                .SingleOrDefaultAsync(er => er.AccountId == accountId && er.StandardReference == standardReference && er.RequestStatus == Models.Enums.RequestStatus.Active);
 
         public async Task<EmployerRequest> GetFirstOrDefault()
             => await Entities

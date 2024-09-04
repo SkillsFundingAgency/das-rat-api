@@ -8,9 +8,9 @@ using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderRespo
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
 using SFA.DAS.RequestApprenticeTraining.Application.Models;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetActiveEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
@@ -55,42 +55,22 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpGet("account/{accountId}/standard/{standardReference}")]
-        public async Task<IActionResult> GetEmployerRequest(long accountId, string standardReference)
+        [HttpGet("account/{accountId}/standard/{standardReference}/active")]
+        public async Task<IActionResult> GetActiveEmployerRequest(long accountId, string standardReference)
         {
             try
             {
-                var result = await _mediator.Send(new GetEmployerRequestQuery { AccountId = accountId, StandardReference = standardReference });
+                var result = await _mediator.Send(new GetActiveEmployerRequestQuery { AccountId = accountId, StandardReference = standardReference });
                 return Ok(result.EmployerRequest);
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, "Validation error attempting to retrieve employer request for {AccountId} and {StandardReference}", accountId, standardReference.SanitizeLogData());
+                _logger.LogError(ex, "Validation error attempting to retrieve active employer request for {AccountId} and {StandardReference}", accountId, standardReference.SanitizeLogData());
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error attempting to retrieve employer request for {AccountId} and {StandardReference}", accountId, standardReference.SanitizeLogData());
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("account/{accountId}")]
-        public async Task<IActionResult> GetEmployerRequests(long accountId)
-        {
-            try
-            {
-                var result = await _mediator.Send(new GetEmployerRequestsQuery { AccountId = accountId });
-                return Ok(result.EmployerRequests);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogError(ex, "Validation error attempting to retrieve employer requests for {AccountId}", accountId);
-                return BadRequest(new { errors = ex.Errors });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error attempting to retrieve employer requests for {AccountId}", accountId);
+                _logger.LogError(ex, "Error attempting to retrieve active employer request for {AccountId} and {StandardReference}", accountId, standardReference.SanitizeLogData());
                 return BadRequest();
             }
         }
