@@ -236,5 +236,32 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             result.Should().BeEquivalentTo(expectedResult);
         }
 
+        [Test, AutoMoqData]
+        public async Task And_AggregatedEmployerRequest_HasInvalidStandard_ThenRequestIsNotReturned(
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
+        {
+            // Arrange
+            var employerRequest1Id = Guid.NewGuid();
+
+            context.Add(new RequestType { Id = 1, Description = "Shortlist" });
+            context.Add(new EmployerRequest { Id = employerRequest1Id, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 1, NumberOfApprentices = 2 });
+
+            context.SaveChanges();
+
+            var query = new GetAggregatedEmployerRequestsQuery { Ukprn = 12345 };
+            var handler = new GetAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+
+            // Act
+            var result = await handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            var expectedResult = new GetAggregatedEmployerRequestsQueryResult
+            {
+                AggregatedEmployerRequests = new List<Domain.Models.AggregatedEmployerRequest>()
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
     }
 }
