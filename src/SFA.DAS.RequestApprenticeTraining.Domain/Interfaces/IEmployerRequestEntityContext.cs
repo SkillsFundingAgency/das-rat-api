@@ -45,8 +45,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         {
             var result = await Entities
                 .Include(er => er.ProviderResponseEmployerRequests)
-                .Where(er => 
-                    er.AccountId == accountId && 
+                .Where(er =>
+                    (er.Standard != null) &&
+                    (er.AccountId == accountId) && 
                     (er.RequestStatus == Models.Enums.RequestStatus.Active ||
                     (er.RequestStatus == Models.Enums.RequestStatus.Expired && (er.ExpiredAt.HasValue && er.ExpiredAt.Value.AddMonths(employerRemovedAfterExpiryMonths) > dateTimeNow))))
                 .SelectMany(er => er.ProviderResponseEmployerRequests.DefaultIfEmpty(), (er, prer) => new
@@ -82,14 +83,15 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         {
             var result = await Entities
                 .Where(er =>
-                    (
+                    (er.Standard != null) &&
+                    ((
                         er.RequestStatus == Models.Enums.RequestStatus.Active &&
                         !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
                     ) ||
                     (
                         er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) &&
                         er.RequestedAt.AddMonths(providerRemovedAfterExpiryRespondedMonths) > DateTime.Now)
-                    )
+                    ))
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
                     {
@@ -120,7 +122,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference,int providerRemovedAfterRequestedMonths)
         {
             var result = await Entities
-                .Where(er => er.StandardReference == standardReference &&
+                .Where(er => er.Standard != null && er.StandardReference == standardReference &&
                     (
                         er.RequestStatus == Models.Enums.RequestStatus.Active && 
                         !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
@@ -158,7 +160,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         public async Task<List<EmployerRequestReviewModel>> GetByIds(List<Guid> employerRequestIds)
         {
             var result = await Entities
-                .Where(er => employerRequestIds.Contains(er.Id) && er.RequestStatus == Models.Enums.RequestStatus.Active)
+                .Where(er => er.Standard != null && employerRequestIds.Contains(er.Id) && er.RequestStatus == Models.Enums.RequestStatus.Active)
                 .Select(er => new EmployerRequestReviewModel
                 {
                     EmployerRequestId = er.Id,
@@ -183,7 +185,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             var result = await Entities
                 .Include(er => er.ProviderResponseEmployerRequests)
                 .ThenInclude(prer => prer.ProviderResponse)
-                .Where(er => er.ProviderResponseEmployerRequests.Any(x => x.ProviderResponseId == providerResponseId))
+                .Where(er => er.Standard != null && er.ProviderResponseEmployerRequests.Any(x => x.ProviderResponseId == providerResponseId))
                 .Select(er => new EmployerRequestReviewModel
                 {
                     EmployerRequestId = er.Id,
