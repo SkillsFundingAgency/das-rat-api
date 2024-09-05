@@ -9,5 +9,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
+        public string ContactName { get; set; }
+        public Guid RespondedBy { get; set; }
     }
 }
