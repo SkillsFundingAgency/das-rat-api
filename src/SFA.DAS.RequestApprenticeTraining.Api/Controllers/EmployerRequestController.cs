@@ -215,10 +215,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             try
             {
                 var response = await _mediator.Send(new SubmitProviderResponseCommand
-                { 
+                {
                     Ukprn = ukprn,
+                    ContactName = parameters.ContactName,
+                    RespondedBy = parameters.RespondedBy, 
                     Email = parameters.Email,
-                    EmployerRequestIds = parameters.EmployerRequestIds, 
+                    EmployerRequestIds = parameters.EmployerRequestIds,
                     Phone = parameters.Phone,
                     Website = parameters.Website,
                 });
