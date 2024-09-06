@@ -175,5 +175,37 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                 er.ExpiredAt = dateTimeNow;
             });    
         }
+
+        public async Task<List<EmployerRequestForResponseNotification>> GetForResponseNotification()
+        { 
+            var result = await Entities
+                .Include(er => er.ProviderResponseEmployerRequests)
+                .Where(er =>
+                    er.Standard != null &&
+                    er.RequestStatus == Models.Enums.RequestStatus.Active &&
+                    er.ProviderResponseEmployerRequests.Any(pre => pre.ProviderResponseId.HasValue && !pre.AcknowledgedBy.HasValue)
+                ) 
+                .Select(er => new 
+                {
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    AccountId = er.AccountId,
+                    RequestedBy = er.RequestedBy,
+                })
+                .GroupBy(er => new { er.AccountId, er.RequestedBy })
+                .Select(g => new EmployerRequestForResponseNotification
+                {
+                    AccountId = g.Key.AccountId,
+                    RequestedBy = g.Key.RequestedBy,
+                    Standard = g.Select(x => new StandardDetails
+                    {
+                        StandardTitle = x.StandardTitle,
+                        StandardLevel = x.StandardLevel
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return result;
+        }
     }
 }
