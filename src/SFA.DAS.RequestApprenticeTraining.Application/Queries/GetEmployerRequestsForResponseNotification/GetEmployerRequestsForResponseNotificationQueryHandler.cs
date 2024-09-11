@@ -26,10 +26,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
                 EmployerRequests =
                     requests.Select(entity => (EmployerRequestForResponseNotification)entity).ToList()
             };
-
-
-
-
         }
     }
 }
