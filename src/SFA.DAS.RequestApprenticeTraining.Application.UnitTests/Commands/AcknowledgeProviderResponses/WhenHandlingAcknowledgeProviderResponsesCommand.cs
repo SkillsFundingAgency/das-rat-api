@@ -16,6 +16,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
     public class AcknowledgeProviderResponsesCommandHandlerTests
     {
         private Mock<IEmployerRequestEntityContext> _employerRequestEntityContextMock;
+        private Mock<IDateTimeProvider> _dateTimeProviderMock;
         private Mock<ILogger<AcknowledgeProviderResponsesCommandHandler>> _loggerMock;
         private AcknowledgeProviderResponsesCommandHandler _sut;
 
@@ -23,10 +24,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public void SetUp()
         {
             _employerRequestEntityContextMock = new Mock<IEmployerRequestEntityContext>();
+            _dateTimeProviderMock = new Mock<IDateTimeProvider>();
             _loggerMock = new Mock<ILogger<AcknowledgeProviderResponsesCommandHandler>>();
 
             _sut = new AcknowledgeProviderResponsesCommandHandler(
                 _employerRequestEntityContextMock.Object,
+                _dateTimeProviderMock.Object,
                 _loggerMock.Object);
         }
 
@@ -34,6 +37,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public async Task Handle_ShouldAcknowledgeProviderResponses_WhenEmployerRequestExists()
         {
             // Arrange
+            var now = DateTime.UtcNow;
             var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = Guid.NewGuid() };
 
             var employerRequest = new EmployerRequest
@@ -54,7 +58,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
                 }
             };
 
-            _employerRequestEntityContextMock.Setup(x => x.GetWithResponses(command.EmployerRequestId))
+            _dateTimeProviderMock
+                .Setup(p => p.Now)
+                .Returns(now);
+
+            _employerRequestEntityContextMock
+                .Setup(x => x.Get(command.EmployerRequestId))
                 .ReturnsAsync(employerRequest);
 
             // Act
@@ -62,9 +71,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().NotBeNull();
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(now);
             employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
-            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().NotBeNull();
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(now);
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
         }
 
@@ -74,7 +83,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
             // Arrange
             var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = Guid.NewGuid() };
 
-            _employerRequestEntityContextMock.Setup(x => x.GetWithResponses(command.EmployerRequestId))
+            _employerRequestEntityContextMock.Setup(x => x.Get(command.EmployerRequestId))
                 .ReturnsAsync((EmployerRequest)null);
 
             // Act
