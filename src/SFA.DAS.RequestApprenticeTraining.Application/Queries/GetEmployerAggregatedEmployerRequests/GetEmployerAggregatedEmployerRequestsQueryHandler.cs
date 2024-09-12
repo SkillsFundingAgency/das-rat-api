@@ -13,16 +13,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggre
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
         private readonly ApplicationSettings _applicationSettings;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public GetEmployerAggregatedEmployerRequestsQueryHandler(IEmployerRequestEntityContext employerRequestEntityContext, IOptions<ApplicationSettings> options)
+        public GetEmployerAggregatedEmployerRequestsQueryHandler(IEmployerRequestEntityContext employerRequestEntityContext, IOptions<ApplicationSettings> options, IDateTimeProvider dateTimeProvider)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
             _applicationSettings = options.Value;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<GetEmployerAggregatedEmployerRequestsQueryResult> Handle(GetEmployerAggregatedEmployerRequestsQuery request, CancellationToken cancellationToken)
         {
-            var aggregatedRequests = await _employerRequestEntityContext.GetEmployerAggregatedEmployerRequests(request.AccountId);
+            var aggregatedRequests = await _employerRequestEntityContext.GetEmployerAggregatedEmployerRequests(request.AccountId, _applicationSettings.EmployerRemovedAfterExpiryMonths, _dateTimeProvider.Now);
 
             var result = new GetEmployerAggregatedEmployerRequestsQueryResult
             {

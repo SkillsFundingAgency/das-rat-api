@@ -1,11 +1,13 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
+using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -17,13 +19,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
     {
         [Test, AutoMoqData]
         public async Task And_EmployerHasRequestedOneStandard_AndOneProvidersRespondedToMultipeRequests_ThenSingleAggregatedRequestIsReturned(
-            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context,
+            [Frozen] IOptions<ApplicationSettings> applicationSettings,
+            [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
             // Arrange
+            var dateTimeNow = DateTime.Now;
+
+            mockDateTimeProvider
+                .Setup(p => p.Now)
+                .Returns(dateTimeNow);
+
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
             var employerRequestId3 = Guid.NewGuid();
-            var requestedAt = DateTime.UtcNow.Date;
+            var requestedAt = dateTimeNow.Date;
 
             var standard1 = new Standard { StandardReference = "ST0001", StandardTitle = "Standard 1", StandardLevel = 1, StandardSector = "Sector 1" };
             var standard2 = new Standard { StandardReference = "ST0002", StandardTitle = "Standard 2", StandardLevel = 1, StandardSector = "Sector 1" };
@@ -51,10 +61,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             await context.SaveChangesAsync();
 
-            var applicationSettings = Options.Create(new ApplicationSettings { ExpiryAfterMonths = 3 });
-
             var query = new GetEmployerAggregatedEmployerRequestsQuery { AccountId = 11111 };
-            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings);
+            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings, mockDateTimeProvider.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -84,8 +92,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
         [Test, AutoMoqData]
         public async Task And_EmployerHasRequestedTwoStandards_AndTwoProvidersRespondedToMultipleRequests_ThenSingleAggregatedRequestIsReturned(
-            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context,
+            [Frozen] IOptions<ApplicationSettings> applicationSettings,
+            [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
+            // Arrange
+            var dateTimeNow = DateTime.Now;
+
+            mockDateTimeProvider
+                .Setup(p => p.Now)
+                .Returns(dateTimeNow);
+
             // Arrange
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
@@ -118,10 +135,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             await context.SaveChangesAsync();
 
-            var applicationSettings = Options.Create(new ApplicationSettings { ExpiryAfterMonths = 3 });
-
             var query = new GetEmployerAggregatedEmployerRequestsQuery { AccountId = 22222 };
-            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings);
+            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings, mockDateTimeProvider.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -163,8 +178,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
         [Test, AutoMoqData]
         public async Task And_EmployerHasRequestedTwoStandards_AndEmployerHasAcknowledgedOneResponse_ThenAcknowledgedResponsesAreNotNewResponses(
-            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context,
+            [Frozen] IOptions<ApplicationSettings> applicationSettings,
+            [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
+            // Arrange
+            var dateTimeNow = DateTime.Now;
+
+            mockDateTimeProvider
+                .Setup(p => p.Now)
+                .Returns(dateTimeNow);
+
             // Arrange
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
@@ -197,10 +221,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             await context.SaveChangesAsync();
 
-            var applicationSettings = Options.Create(new ApplicationSettings { ExpiryAfterMonths = 3 });
-
             var query = new GetEmployerAggregatedEmployerRequestsQuery { AccountId = 22222 };
-            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings);
+            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings, mockDateTimeProvider.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -242,8 +264,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
         [Test, AutoMoqData]
         public async Task Then_CancelledRequestsAreExcluded_FromAggregatedResults(
-            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context,
+            [Frozen] IOptions<ApplicationSettings> applicationSettings,
+            [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
+            // Arrange
+            var dateTimeNow = DateTime.Now;
+
+            mockDateTimeProvider
+                .Setup(p => p.Now)
+                .Returns(dateTimeNow);
+
             // Arrange
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
@@ -261,10 +292,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             await context.SaveChangesAsync();
 
-            var applicationSettings = Options.Create(new ApplicationSettings { ExpiryAfterMonths = 3 });
-
             var query = new GetEmployerAggregatedEmployerRequestsQuery { AccountId = 11111 };
-            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings);
+            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings, mockDateTimeProvider.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -291,6 +320,46 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             result.EmployerAggregatedEmployerRequests.Should().HaveCount(1);
             result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [AutoMoqInlineAutoData(-1, 1)]
+        [AutoMoqInlineAutoData(0, 0)]
+        [AutoMoqInlineAutoData(1, 0)]
+        public async Task Then_ExpiredRequestsAreExludedAfterRemovedAfterDate_FromAggregatedResults(
+            int daysAfterExpiry, int resultCount,
+            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context,
+            [Frozen] IOptions<ApplicationSettings> applicationSettings,
+            [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
+        {
+            // Arrange
+            var dateTimeNow = DateTime.Now;
+
+            mockDateTimeProvider
+                .Setup(p => p.Now)
+                .Returns(dateTimeNow.AddDays(daysAfterExpiry));
+
+            applicationSettings.Value.EmployerRemovedAfterExpiryMonths = 3;
+
+            var employerRequestId1 = Guid.NewGuid();
+            var requestedAt = DateTime.UtcNow.Date;
+
+            var standard1 = new Standard { StandardReference = "ST0001", StandardTitle = "Standard 1", StandardLevel = 1, StandardSector = "Sector 1" };
+            
+            context.Add(new RequestType { Id = 1, Description = "Shortlist" });
+            context.Add(standard1);
+            
+            context.Add(new EmployerRequest { Id = employerRequestId1, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 11111, RequestedAt = requestedAt, StandardReference = standard1.StandardReference, RequestStatus = Domain.Models.Enums.RequestStatus.Expired, ExpiredAt = dateTimeNow.Date.AddMonths(-3) });
+            
+            await context.SaveChangesAsync();
+
+            var query = new GetEmployerAggregatedEmployerRequestsQuery { AccountId = 11111 };
+            var handler = new GetEmployerAggregatedEmployerRequestsQueryHandler(context, applicationSettings, mockDateTimeProvider.Object);
+
+            // Act
+            var result = await handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.EmployerAggregatedEmployerRequests.Should().HaveCount(resultCount);
         }
     }
 }

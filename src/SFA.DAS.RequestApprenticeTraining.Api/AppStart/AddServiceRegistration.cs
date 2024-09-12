@@ -20,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
             services.AddValidatorsFromAssemblyContaining<SubmitEmployerRequestCommand>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             
-            services.AddScoped<IDateTimeProvider, UtcDateTimeProvider>();
+            services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
             services.AddScoped<IEmployerRequestEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
