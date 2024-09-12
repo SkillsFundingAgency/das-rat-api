@@ -18,6 +18,7 @@ using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregate
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsForResponseNotification;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Domain.Models;
@@ -305,6 +306,23 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             {
                 _logger.LogError(e, "Error attempting to {RequestName}", requestName);
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error {requestName}: {e.Message}");
+            }
+        }
+
+        [HttpGet("requests-for-response-notification")]
+        public async Task<IActionResult> GetEmployerRequestsForResponseNotification()
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetEmployerRequestsForResponseNotificationQuery());
+
+                return Ok(result.EmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve employer requests for response notification");
+                return BadRequest();
             }
         }
     }
