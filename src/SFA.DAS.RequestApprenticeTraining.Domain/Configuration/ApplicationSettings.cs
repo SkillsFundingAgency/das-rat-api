@@ -13,7 +13,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Configuration
         public int ExpiryAfterMonths { get; set; }
         public int EmployerRemovedAfterExpiryMonths { get; set; }
         public int ProviderRemovedAfterRequestedMonths { get; set; }
-
         /// <summary>
         /// The GOV.UK Notify email template configuration
         /// </summary>

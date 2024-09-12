@@ -195,5 +195,53 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
 
             return result;
         }
+        public async Task ExpireEmployerRequests(int expiryAfterMonths) 
+        {
+            var dateTimeNow = DateTime.UtcNow;
+            var expiryRequestsRequestedBeforeDate = dateTimeNow.AddMonths(-expiryAfterMonths);
+
+            var result = await Entities
+                .Where(er => er.RequestStatus == Models.Enums.RequestStatus.Active
+                    && er.RequestedAt < expiryRequestsRequestedBeforeDate)
+                .ToListAsync();
+
+            result.ForEach(er => 
+            {
+                er.RequestStatus = Models.Enums.RequestStatus.Expired;
+                er.ExpiredAt = dateTimeNow;
+            });    
+        }
+
+        public async Task<List<EmployerRequestForResponseNotification>> GetForResponseNotification()
+        { 
+            var result = await Entities
+                .Include(er => er.ProviderResponseEmployerRequests)
+                .Where(er =>
+                    er.Standard != null &&
+                    er.RequestStatus == Models.Enums.RequestStatus.Active &&
+                    er.ProviderResponseEmployerRequests.Any(pre => pre.ProviderResponseId.HasValue && !pre.AcknowledgedBy.HasValue)
+                ) 
+                .Select(er => new 
+                {
+                    StandardTitle = er.Standard.StandardTitle,
+                    StandardLevel = er.Standard.StandardLevel,
+                    AccountId = er.AccountId,
+                    RequestedBy = er.RequestedBy,
+                })
+                .GroupBy(er => new { er.AccountId, er.RequestedBy })
+                .Select(g => new EmployerRequestForResponseNotification
+                {
+                    AccountId = g.Key.AccountId,
+                    RequestedBy = g.Key.RequestedBy,
+                    Standard = g.Select(x => new StandardDetails
+                    {
+                        StandardTitle = x.StandardTitle,
+                        StandardLevel = x.StandardLevel
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return result;
+        }
     }
 }

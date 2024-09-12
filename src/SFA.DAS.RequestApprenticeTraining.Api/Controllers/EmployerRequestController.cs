@@ -1,19 +1,24 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
+using SFA.DAS.RequestApprenticeTraining.Api.TaskQueue;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CancelEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
+using SFA.DAS.RequestApprenticeTraining.Application.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetActiveEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerAggregatedEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregatedEmployerRequests;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsForResponseNotification;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Domain.Models;
@@ -29,11 +34,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<EmployerRequestController> _logger;
+        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
 
-        public EmployerRequestController(IMediator mediator, ILogger<EmployerRequestController> logger)
+        public EmployerRequestController(IMediator mediator, ILogger<EmployerRequestController> logger, IBackgroundTaskQueue taskQueue) 
         {
             _mediator = mediator;
             _logger = logger;
+            _backgroundTaskQueue = taskQueue;
         }
 
         [HttpGet("{employerRequestId}")]
@@ -275,6 +282,46 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to retrieve provider response confirmation");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("expire-requests")]
+        public IActionResult ExpireEmployerRequests()
+        {
+            var requestName = "expire employer requests";
+            try
+            {
+                _backgroundTaskQueue.QueueBackgroundRequest(
+                    new ExpireEmployerRequestsCommand(), requestName, (response, duration, log) =>
+                    {
+                        log.LogInformation("Completed request to {RequestName}: Request completed in {Duration}", requestName, duration.ToReadableString());
+                    });
+
+                _logger.LogInformation("Queued request to {RequestName}", requestName);
+
+                return Accepted();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error attempting to {RequestName}", requestName);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error {requestName}: {e.Message}");
+            }
+        }
+
+        [HttpGet("requests-for-response-notification")]
+        public async Task<IActionResult> GetEmployerRequestsForResponseNotification()
+        {
+            try
+            {
+                var result = await _mediator.Send(
+                    new GetEmployerRequestsForResponseNotificationQuery());
+
+                return Ok(result.EmployerRequests);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to retrieve employer requests for response notification");
                 return BadRequest();
             }
         }
