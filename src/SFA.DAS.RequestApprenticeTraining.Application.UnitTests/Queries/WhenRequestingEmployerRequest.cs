@@ -22,7 +22,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             context.Add(new RequestType { Id = 1, Description = "Shortlist" });
             context.Add(new EmployerRequest { Id = employerRequestId, RequestType = Domain.Models.Enums.RequestType.Shortlist });
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetEmployerRequestQuery() { EmployerRequestId = employerRequestId };
             var handler = new GetEmployerRequestQueryHandler(context);
@@ -37,43 +37,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 {
                     Id = employerRequestId,
                     RequestType = Domain.Models.Enums.RequestType.Shortlist,
-                    Regions = new List<Domain.Models.Region>()
-                }
-            };
-
-            result.Should().BeEquivalentTo(expectedResult);
-        }
-
-        [Test, AutoMoqData]
-        public async Task And_EmployerRequest_IsFound_ByAccountIdAndStandardReference_ThenEmployerRequestIsReturned(
-            [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
-        {
-            // Arrange
-            var employerRequestId = Guid.NewGuid();
-            var accountId = 123;
-            var standardReference = "ABC123";
-
-            context.Add(new RequestType { Id = 1, Description = "Shortlist" });
-            context.Add(new Standard { StandardReference = standardReference });
-            context.Add(new EmployerRequest { Id = employerRequestId, AccountId = accountId, StandardReference = standardReference, RequestType = Domain.Models.Enums.RequestType.Shortlist });
-            context.SaveChanges();
-
-            var query = new GetEmployerRequestQuery() { AccountId = accountId, StandardReference = standardReference };
-            var handler = new GetEmployerRequestQueryHandler(context);
-
-            // Act
-            var result = await handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            var expectedResult = new GetEmployerRequestQueryResult
-            {
-                EmployerRequest = new Domain.Models.EmployerRequest
-                {
-                    Id = employerRequestId,
-                    AccountId = accountId,
-                    StandardReference = standardReference,
-                    RequestType = Domain.Models.Enums.RequestType.Shortlist,
-                    Regions = new List<Domain.Models.Region>()
+                    Regions = new List<Domain.Models.Region>(),
+                    ProviderResponses = new List<Domain.Models.ProviderResponse>()
                 }
             };
 

@@ -39,17 +39,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests
     public class AutoMoqInlineAutoDataAttribute : InlineAutoDataAttribute
     {
         public AutoMoqInlineAutoDataAttribute(params object[] arguments)
-            : base(() => CustomizeFixture(new Fixture()), arguments)
+            : base(() => AutofixtureExtensions.RequestApprenticeTrainingFixture(), arguments)
         {
-        }
-
-        private static IFixture CustomizeFixture(IFixture fixture)
-        {
-            fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
-            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-            fixture.Customize(new RequestApprenticeTrainingCustomization());
-            fixture.Customize(new AutoMoqCustomization { ConfigureMembers = true });
-            return fixture;
         }
     }
 
@@ -63,7 +54,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests
             }
 
             fixture.Customizations.Add(new ApplicationSettingsBuilder());
-            fixture.Customizations.Add(new DateTimeProviderBuilder());
             fixture.Customizations.Add(new RequestApprenticeTrainingDataContextBuilder());
             fixture.Customizations.Add(new DbContextOptionsBuilder());
         }
@@ -134,19 +124,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests
                 };
 
                 return Options.Create(applicationSettings);
-            }
-
-            return new NoSpecimen();
-        }
-    }
-
-    public class DateTimeProviderBuilder : ISpecimenBuilder
-    {
-        public object Create(object request, ISpecimenContext context)
-        {
-            if (request is Type type && type == typeof(IDateTimeProvider))
-            {
-                return new SpecifiedDateTimeProvider(DateTime.UtcNow);
             }
 
             return new NoSpecimen();

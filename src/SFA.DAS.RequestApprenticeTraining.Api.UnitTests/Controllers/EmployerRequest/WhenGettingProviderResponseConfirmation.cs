@@ -27,7 +27,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .ReturnsAsync(response);
 
             // Act
-            var result = await controller.GetProviderResponseConfirmation(new Guid());
+            var result = await controller.GetProviderResponseConfirmation(Guid.NewGuid());
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(response);
@@ -44,7 +44,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetProviderResponseConfirmation(new Guid());
+            var result = await controller.GetProviderResponseConfirmation(Guid.NewGuid());
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

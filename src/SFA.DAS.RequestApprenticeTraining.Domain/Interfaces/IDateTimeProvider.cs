@@ -7,23 +7,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         DateTime Now { get; }
     }
 
-    public class UtcDateTimeProvider : IDateTimeProvider
+    public class DateTimeProvider : IDateTimeProvider
     {
-        public DateTime Now => DateTime.UtcNow;
-    }
-
-    public class SpecifiedDateTimeProvider : IDateTimeProvider
-    {
-        public DateTime Now { get; set; }
-
-        public SpecifiedDateTimeProvider(DateTime time)
-        {
-            Now = time;
-        }
-
-        public void Advance(TimeSpan timeSpan)
-        {
-            Now = Now.Add(timeSpan);
-        }
+        public DateTime Now => DateTime.Now;
     }
 }

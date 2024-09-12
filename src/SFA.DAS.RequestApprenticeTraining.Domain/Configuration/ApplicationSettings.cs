@@ -9,6 +9,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Configuration
         public string DbConnectionString { get; set; }
         public string NServiceBusConnectionString { get; set; }
         public string NServiceBusLicense { get; set; }
+
         public int ExpiryAfterMonths { get; set; }
         public int EmployerRemovedAfterExpiryMonths { get; set; }
         public int ProviderRemovedAfterRequestedMonths { get; set; }
