@@ -56,7 +56,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
             context.SaveChanges();
 
-            var query = new GetSelectEmployerRequestsQuery(123456789, "ST0001");
+            var query = new GetSelectEmployerRequestsQuery(123456789, standard1Reference);
             var handler = new GetSelectEmployerRequestsQueryHandler(context, _mockOptions.Object);
 
             // Act
@@ -65,6 +65,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             // Assert
             result.Should().NotBeNull();
             result.SelectEmployerRequests.Should().HaveCount(3);
+            result.SelectEmployerRequests.Should().OnlyContain(r => r.StandardReference == standard1Reference);
 
         }
 
