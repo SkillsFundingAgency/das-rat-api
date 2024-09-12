@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Api.Extensions;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProviderResponses;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.CancelEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateProviderResponseEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
@@ -94,6 +95,29 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error attempting to acknowledge responses for employer request {EmployerRequestId}", employerRequestId);
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("{employerRequestId}/cancel-request")]
+        public async Task<IActionResult> CancelEmployerRequest([FromRoute] Guid employerRequestId, [FromBody] CancelEmployerRequestRequest request)
+        {
+            try
+            {
+                var command = (CancelEmployerRequestCommand)request;
+                command.EmployerRequestId = employerRequestId;
+
+                await _mediator.Send(command);
+                return Ok();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error attempting to cancel employer request {EmployerRequestId}", employerRequestId);
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error attempting to cancel employer request {EmployerRequestId}", employerRequestId);
                 return BadRequest();
             }
         }
