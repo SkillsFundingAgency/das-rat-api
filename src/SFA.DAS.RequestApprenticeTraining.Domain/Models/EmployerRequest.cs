@@ -18,10 +18,15 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public bool DayRelease { get; set; }
         public bool BlockRelease { get; set; }
         public Guid RequestedBy { get; set; }
+        public DateTime RequestedAt { get; set; }
         public RequestStatus RequestStatus { get; set; }
+        public DateTime? ExpiredAt { get; set; }
+        public DateTime? CancelledAt { get; set; }
         public Guid ModifiedBy { get; set; }
 
         public List<Region> Regions { get; set; }
+
+        public List<ProviderResponse> ProviderResponses { get; set; }
 
         public static implicit operator EmployerRequest(Entities.EmployerRequest source)
         {
@@ -43,9 +48,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
                 DayRelease = source.DayRelease,
                 BlockRelease = source.BlockRelease,
                 RequestedBy = source.RequestedBy,
+                RequestedAt = source.RequestedAt,
                 RequestStatus = source.RequestStatus,
+                ExpiredAt = source.ExpiredAt,
+                CancelledAt = source.CancelledAt,
                 ModifiedBy = source.ModifiedBy,
-                Regions = source.GetRegions().Select(s => (Region)s).ToList()
+                Regions = source.GetRegions().Select(s => (Region)s).ToList(),
+                ProviderResponses = source.GetProviderResponses().Select(s => (ProviderResponse)s).ToList(),
             };
         }
     }

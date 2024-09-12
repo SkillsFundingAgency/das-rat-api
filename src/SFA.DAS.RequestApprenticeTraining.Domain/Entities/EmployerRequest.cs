@@ -33,6 +33,15 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         {
             return EmployerRequestRegions.Select(err => err.Region).ToList();
         }
+
+        public List<ProviderResponse> GetProviderResponses()
+        {
+            return ProviderResponseEmployerRequests
+                .Where(prer => prer.ProviderResponse != null)
+                .Select(prer => prer.ProviderResponse)
+                .ToList();
+        }
+
         public Standard Standard { get; set; }
     }
 }

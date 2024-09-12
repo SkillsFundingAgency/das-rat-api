@@ -47,12 +47,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogError(ex, $"Validation error attempting to retrieve closest region for latitude: {latitude} and longitude {longitude}");
+                _logger.LogError(ex, "Validation error attempting to retrieve closest region for {Latitude} and {Longitude}", latitude, longitude);
                 return BadRequest(new { errors = ex.Errors });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve closest region for latitude: {latitude} and longitude {longitude}");
+                _logger.LogError(e, "Error attempting to retrieve closest region for {Latitude} and {Longitude}", latitude, longitude);
                 return BadRequest();
             }
         }
