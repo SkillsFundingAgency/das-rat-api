@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.Testing.AutoFixture;
+using System.Collections.Generic;
 
 namespace SFA.DAS.RequestApprenticeTraining.Domain.UnitTests.Models
 {
@@ -10,8 +11,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.UnitTests.Models
         [Test, RecursiveMoqAutoData]
         public void ThenTheFieldsAreCorrectlyMapped(EmployerRequest source)
         {
+            // Arrange
+            source.ProviderResponseEmployerRequests.ForEach(p => { p.ProviderResponse.ProviderResponseEmployerRequests = new List<ProviderResponseEmployerRequest>() { p }; });
+            
+            // Act
             var result = (Domain.Models.EmployerRequest)source;
 
+            // Act
             result.Id.Should().Be(source.Id);
             result.AccountId.Should().Be(source.AccountId);
             result.RequestType.Should().Be(source.RequestType);
