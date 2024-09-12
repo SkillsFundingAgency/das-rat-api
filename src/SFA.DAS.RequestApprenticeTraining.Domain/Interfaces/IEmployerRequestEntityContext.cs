@@ -79,14 +79,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
         {
             var result = await Entities
                 .Where(er => er.Standard != null && er.StandardReference == standardReference &&
-                    (
+                    ((
                         er.RequestStatus == Models.Enums.RequestStatus.Active && 
                         !er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue)
                     ) ||
                     (
                         er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && 
                         pre.ProviderResponseId.HasValue) && er.RequestedAt.AddMonths(providerRemovedAfterRequestedMonths) > DateTime.Now)
-                    )
+                    ))
                 .Select(er => new SelectEmployerRequest
                 {
                     EmployerRequestId = er.Id,
