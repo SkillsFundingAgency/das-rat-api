@@ -22,16 +22,26 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Entities
         public DateTime RequestedAt { get; set; }
         public Guid RequestedBy { get; set; }
         public Enums.RequestStatus RequestStatus { get; set; }
+        public DateTime? ExpiredAt { get; set; }
+        public DateTime? CancelledAt { get; set; }
         public Guid ModifiedBy { get; set; }
 
         public List<EmployerRequestRegion> EmployerRequestRegions { get; set; }
         public List<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
-      
+
         public List<Region> GetRegions()
         {
             return EmployerRequestRegions.Select(err => err.Region).ToList();
         }
+
+        public List<ProviderResponse> GetProviderResponses()
+        {
+            return ProviderResponseEmployerRequests
+                .Where(prer => prer.ProviderResponse != null)
+                .Select(prer => prer.ProviderResponse)
+                .ToList();
+        }
+
         public Standard Standard { get; set; }
-        
     }
 }

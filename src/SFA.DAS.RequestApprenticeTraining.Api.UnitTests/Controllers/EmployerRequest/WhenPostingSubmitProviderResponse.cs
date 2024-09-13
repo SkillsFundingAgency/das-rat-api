@@ -7,7 +7,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Api.Controllers;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System;

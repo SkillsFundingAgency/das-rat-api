@@ -11,7 +11,5 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
         public string Website { get; set; }
         public string ContactName { get; set; }
         public Guid RespondedBy { get; set; }
-
-
     }
 }

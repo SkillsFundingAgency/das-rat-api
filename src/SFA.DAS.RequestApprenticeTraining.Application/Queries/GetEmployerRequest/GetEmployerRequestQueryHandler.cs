@@ -17,16 +17,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerReque
 
         public async Task<GetEmployerRequestQueryResult> Handle(GetEmployerRequestQuery request, CancellationToken cancellationToken)
         {
-            EmployerRequest employerRequest = null;
-            if (request.EmployerRequestId.HasValue)
-            {
-                employerRequest = await _employerRequestEntityContext.Get(request.EmployerRequestId.Value);
-            }
-            else if(request.AccountId.HasValue && !string.IsNullOrEmpty(request.StandardReference))
-            {
-                employerRequest = await _employerRequestEntityContext.Get(request.AccountId.Value, request.StandardReference);
-            }
-
+            EmployerRequest employerRequest = await _employerRequestEntityContext.Get(request.EmployerRequestId.Value);
             return new GetEmployerRequestQueryResult
             {
                 EmployerRequest = (Domain.Models.EmployerRequest)employerRequest

@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.RequestApprenticeTraining.Api.TaskQueue;
 using SFA.DAS.RequestApprenticeTraining.Application.Behaviours;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.CreateEmployerRequest;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System.Diagnostics.CodeAnalysis;
@@ -15,12 +15,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.AppStart
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateEmployerRequestCommand).Assembly));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SubmitEmployerRequestCommand).Assembly));
 
-            services.AddValidatorsFromAssemblyContaining<CreateEmployerRequestCommand>();
+            services.AddValidatorsFromAssemblyContaining<SubmitEmployerRequestCommand>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             
-            services.AddScoped<IDateTimeProvider, UtcDateTimeProvider>();
+            services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
             services.AddScoped<IEmployerRequestEntityContext>(s => s.GetRequiredService<RequestApprenticeTrainingDataContext>());
