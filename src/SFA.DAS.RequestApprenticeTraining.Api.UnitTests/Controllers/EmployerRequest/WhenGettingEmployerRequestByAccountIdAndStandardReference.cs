@@ -22,7 +22,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             string standardReference,
             [Frozen] Mock<IMediator> mediator,
             GetActiveEmployerRequestQueryResult employerRequestResult,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Arrange
             mediator
@@ -42,7 +42,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             string standardReference,
             [Frozen] Mock<IMediator> mediator,
             ValidationException validationException,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Arrange
             mediator
@@ -61,7 +61,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (long accountId,
             string standardReference,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Arrange
             mediator

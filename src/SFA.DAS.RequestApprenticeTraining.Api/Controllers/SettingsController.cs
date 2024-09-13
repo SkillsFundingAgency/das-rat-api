@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/settings/")]
     public class SettingsController : ControllerBase
     {
         private readonly IMediator _mediator;

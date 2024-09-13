@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/regions/")]
     public class RegionsController : ControllerBase
     {
         private readonly IMediator _mediator;

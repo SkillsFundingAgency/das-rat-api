@@ -19,7 +19,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
             ([Frozen] Mock<IMediator> mediator,
             GetProviderResponseConfirmationQueryResult response,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProviderResponsesController controller)
         {
             // Arrange 
             mediator
@@ -36,7 +36,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             ([Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProviderResponsesController controller)
         {
             // Arrange
             mediator

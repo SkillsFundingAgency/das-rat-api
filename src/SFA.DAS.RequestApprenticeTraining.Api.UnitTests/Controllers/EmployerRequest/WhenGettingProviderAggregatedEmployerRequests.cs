@@ -20,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
             (long accountId,
             [Frozen] Mock<IMediator> mediator,
             GetProviderAggregatedEmployerRequestsQueryResult aggregatedEmployerRequestResult,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProvidersController controller)
         {
             // Arrange
             mediator
@@ -38,7 +38,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.Aggregated
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             (long accountId,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProvidersController controller)
         {
             // Arrange
             mediator

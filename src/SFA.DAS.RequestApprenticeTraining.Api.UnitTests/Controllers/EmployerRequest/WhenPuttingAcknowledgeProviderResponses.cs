@@ -22,7 +22,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid employerRequestId,
             Guid acknowledgedBy,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -42,7 +42,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid employerRequestId,
             Guid acknowledgedBy,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Act
             await controller.AcknowledgeProviderResponses(employerRequestId, new AcknowledgeProviderResponsesRequest { AcknowledgedBy = acknowledgedBy });
@@ -60,7 +60,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid acknowledgedBy,
             ValidationException validationException,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -80,7 +80,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid employerRequestId,
             Guid acknowledgedBy,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
