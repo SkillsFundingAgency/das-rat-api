@@ -20,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         [Test, MoqAutoData]
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
             (SubmitProviderResponseParameters param,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProvidersController controller)
         {
             // Act
             var result = await controller.SubmitProviderResponse(123456, param);
@@ -34,7 +34,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (SubmitProviderResponseParameters param,
             [Frozen] Mock<IMediator> mediator,
             ValidationException validationException,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProvidersController controller)
         {
             // Arrange
             mediator
@@ -52,7 +52,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             (SubmitProviderResponseParameters param,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] ProvidersController controller)
         {
             // Arrange
             mediator

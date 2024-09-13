@@ -16,21 +16,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
     {
         private Mock<IBackgroundTaskQueue> _backgroundTaskQueue;
         private Mock<IMediator> _mediatorMock;
-        private EmployerRequestController _sut;
+        private EmployerRequestsController _sut;
 
         [SetUp]
         public void SetupTests()
         {
             _backgroundTaskQueue = new Mock<IBackgroundTaskQueue>();
             _mediatorMock = new Mock<IMediator>();
-            _sut = new EmployerRequestController(_mediatorMock.Object, Mock.Of<ILogger<EmployerRequestController>>(), _backgroundTaskQueue.Object);
+            _sut = new EmployerRequestsController(_mediatorMock.Object, Mock.Of<ILogger<EmployerRequestsController>>(), _backgroundTaskQueue.Object);
         }
 
         [Test]
         public void When_PostToExpireEmployerRequests_Then_BackgroundTaskIsQueued()
         {
             // Act
-            var result = _sut.ExpireEmployerRequests();
+            _sut.ExpireEmployerRequests();
 
             // Assert
             _backgroundTaskQueue.Verify(m => m.QueueBackgroundRequest(
@@ -47,7 +47,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             var controllerResult = _sut.ExpireEmployerRequests() as ObjectResult;
 
             // Assert
-
             controllerResult.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
         }
     }

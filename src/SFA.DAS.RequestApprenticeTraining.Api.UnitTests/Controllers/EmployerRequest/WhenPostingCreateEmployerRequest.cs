@@ -22,7 +22,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         public async Task And_MediatorCommandIsSuccessful_Then_ReturnOk
             (long accountId,
             SubmitEmployerRequestRequest request,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Act
             var result = await controller.SubmitEmployerRequest(accountId, request);
@@ -36,7 +36,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (long accountId,
             [Frozen] Mock<IMediator> mediator,
             SubmitEmployerRequestRequest request,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Act
             await controller.SubmitEmployerRequest(accountId, request);
@@ -65,7 +65,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             SubmitEmployerRequestRequest request,
             [Frozen] Mock<IMediator> mediator,
             ValidationException validationException,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Arrange
             mediator
@@ -84,7 +84,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (long accountId, 
             SubmitEmployerRequestRequest request,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] AccountsController controller)
         {
             // Arrange
             mediator

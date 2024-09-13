@@ -22,7 +22,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (List<Guid> requestIds,
             [Frozen] Mock<IMediator> mediator,
             GetEmployerRequestsForResponseNotificationQueryResult erResult,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -30,7 +30,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .ReturnsAsync(erResult);
 
             // Act
-            var result = await controller.GetEmployerRequestsForResponseNotification();
+            var result = await controller.GetEmployerRequestsForResponseNotifications();
 
             // Assert
             result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeEquivalentTo(erResult.EmployerRequests);
@@ -40,7 +40,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             (List<Guid> requestIds,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -48,7 +48,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
                 .Throws(new Exception());
 
             // Act
-            var result = await controller.GetEmployerRequestsForResponseNotification();
+            var result = await controller.GetEmployerRequestsForResponseNotifications();
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();

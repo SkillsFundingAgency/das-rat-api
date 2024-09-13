@@ -23,7 +23,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid employerRequestId,
             Guid cancelledBy,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -43,7 +43,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid employerRequestId,
             Guid cancelledBy,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Act
             await controller.CancelEmployerRequest(employerRequestId, new CancelEmployerRequestRequest { CancelledBy = cancelledBy });
@@ -61,7 +61,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid cancelledBy,
             ValidationException validationException,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -81,7 +81,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             Guid employerRequestId,
             Guid cancelledBy,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator

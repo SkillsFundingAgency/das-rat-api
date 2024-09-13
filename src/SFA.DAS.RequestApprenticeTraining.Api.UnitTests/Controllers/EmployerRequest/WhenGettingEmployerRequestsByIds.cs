@@ -21,7 +21,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
             (List<Guid> requestIds,
             [Frozen] Mock<IMediator> mediator,
             GetEmployerRequestsByIdsQueryResult erResult,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
@@ -39,7 +39,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.Controllers.EmployerRe
         public async Task And_MediatorCommandIsUnsuccessful_Then_ReturnBadRequest
             (List<Guid> requestIds,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] EmployerRequestController controller)
+            [Greedy] EmployerRequestsController controller)
         {
             // Arrange
             mediator
