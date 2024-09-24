@@ -2,10 +2,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.RefreshStandards;
+using SFA.DAS.RequestApprenticeTraining.Application.Models;
+using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetStandard;
 using SFA.DAS.RequestApprenticeTraining.Domain.Models;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
@@ -46,6 +48,44 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
+        [HttpGet("{standardReference}")]
+        public async Task<IActionResult> Get(string standardReference)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetStandardQuery { StandardReference = standardReference });
+                return Ok(result.Standard);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error attempting to retrieve standard for {StandardReference}", standardReference);
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error attempting to retrieve employer standard for {StandardReference}", standardReference);
+                return BadRequest();
+            }
+        }
 
+        [HttpPost("")]
+        public async Task<IActionResult> Post(PostStandardRequest parameters)
+        {
+            try
+            {
+                var response = await _mediator.Send((PostStandardCommand)parameters);
+                return Ok(response.Standard);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation error attempting to post standard");
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error attempting to post standard");
+                return BadRequest();
+            }
+        }
     }
 }

@@ -40,16 +40,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.RefreshStandard
             
             var command = new RefreshStandardsCommand
             {
-                Standards = new List<Domain.Models.RefreshStandardsParameter> 
+                Standards = new List<Domain.Models.StandardsParameter> 
                 {
-                    new Domain.Models.RefreshStandardsParameter
+                    new Domain.Models.StandardsParameter
                     {
                         StandardReference = "ST0004",
                         StandardLevel = 3,
                         StandardTitle = "Actuarial technician",
                         StandardSector= "Legal, finance and accounting"
                     },
-                    new Domain.Models.RefreshStandardsParameter
+                    new Domain.Models.StandardsParameter
                     {
                         StandardReference = newStandardReference,
                         StandardLevel = 5,
@@ -99,16 +99,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.RefreshStandard
 
             var command = new RefreshStandardsCommand
             {
-                Standards = new List<Domain.Models.RefreshStandardsParameter>
+                Standards = new List<Domain.Models.StandardsParameter>
                 {
-                    new Domain.Models.RefreshStandardsParameter
+                    new Domain.Models.StandardsParameter
                     {
                         StandardReference = referenceToUpdate,
                         StandardLevel = updatedLevel,
                         StandardTitle = updatedTitle,
                         StandardSector= updatedSector,
                     },
-                    new Domain.Models.RefreshStandardsParameter
+                    new Domain.Models.StandardsParameter
                     {
                         StandardReference = "ST0004",
                         StandardLevel = 3,
@@ -155,7 +155,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.RefreshStandard
             //Arrange
             var command = new RefreshStandardsCommand
             {
-                Standards = new List<Domain.Models.RefreshStandardsParameter>()
+                Standards = new List<Domain.Models.StandardsParameter>()
             };
 
             var entitiesInDb = new List<Standard>();

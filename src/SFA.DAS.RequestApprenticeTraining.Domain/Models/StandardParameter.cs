@@ -4,10 +4,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Models
 {
     public class RefreshStandardsParameters
     {
-        public  List<RefreshStandardsParameter> Standards { get; set; }
+        public  List<StandardsParameter> Standards { get; set; }
     }
     
-    public class RefreshStandardsParameter
+    public class StandardsParameter
     {
         public string StandardReference { get; set; }
         public string StandardTitle { get; set; }

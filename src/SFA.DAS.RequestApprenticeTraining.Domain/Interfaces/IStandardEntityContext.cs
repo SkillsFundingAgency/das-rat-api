@@ -11,6 +11,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
     public interface IStandardEntityContext : IEntityContext<Standard>
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        public async Task<Standard> Get(string standardReference)
+            => await Entities
+                .FirstOrDefaultAsync(er => er.StandardReference == standardReference);
 
         public async Task<List<Standard>> GetAll()
             => await Entities.ToListAsync();

@@ -4,7 +4,7 @@
     [OriginalLocation] NVARCHAR(100) NULL,
     [RequestTypeId] INT NOT NULL,
     [AccountId] BIGINT NOT NULL,
-    [StandardReference] VARCHAR(6) NOT NULL,
+    [StandardReference] NVARCHAR(6) NOT NULL,
     [NumberOfApprentices] INT NOT NULL,
     [SameLocation] NVARCHAR(5) NULL,
     [SingleLocation] NVARCHAR(100) NULL,
@@ -21,7 +21,8 @@
     [ValidTo] DATETIME2 (0) GENERATED ALWAYS AS ROW END,
     PERIOD FOR SYSTEM_TIME (ValidFrom, ValidTo),
     CONSTRAINT [FK_EmployerRequest_RequestType] FOREIGN KEY ([RequestTypeId]) REFERENCES [RequestType]([Id]),
-    CONSTRAINT [FK_EmployerRequest_RequestStatus] FOREIGN KEY ([RequestStatusId]) REFERENCES [RequestStatus]([Id])
+    CONSTRAINT [FK_EmployerRequest_RequestStatus] FOREIGN KEY ([RequestStatusId]) REFERENCES [RequestStatus]([Id]),
+    CONSTRAINT [FK_EmployerRequest_Standard] FOREIGN KEY ([StandardReference]) REFERENCES [Standard]([StandardReference])
 )
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = [dbo].[EmployerRequestHistory]));
 GO
