@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard
 {
-    public class PostStandardCommandValidator : AbstractValidator<PostStandardCommand>
+    public class CacheStandardCommandValidator : AbstractValidator<CacheStandardCommand>
     {
-        public PostStandardCommandValidator()
+        public CacheStandardCommandValidator()
         {
             RuleFor(x => x.StandardReference)
                 .NotEmpty().WithMessage("Standard Reference must not be empty.");

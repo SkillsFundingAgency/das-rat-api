@@ -6,25 +6,25 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard
 {
-    public class PostStandardCommandHandler : IRequestHandler<PostStandardCommand, PostStandardCommandResponse>
+    public class CacheStandardCommandHandler : IRequestHandler<CacheStandardCommand, CacheStandardCommandResponse>
     {
         private readonly IStandardEntityContext _standardEntityContext;
-        private readonly ILogger<PostStandardCommandHandler> _logger;
+        private readonly ILogger<CacheStandardCommandHandler> _logger;
 
-        public PostStandardCommandHandler(
+        public CacheStandardCommandHandler(
             IStandardEntityContext standardEntityContext,
 
-            ILogger<PostStandardCommandHandler> logger)
+            ILogger<CacheStandardCommandHandler> logger)
         {
             _standardEntityContext = standardEntityContext;
             _logger = logger;
         }
 
-        public async Task<PostStandardCommandResponse> Handle(PostStandardCommand request, CancellationToken cancellationToken)
+        public async Task<CacheStandardCommandResponse> Handle(CacheStandardCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Posting standard {StandardReference}", request.StandardReference);
+            _logger.LogDebug("Caching standard {StandardReference}", request.StandardReference);
 
             var standard = await _standardEntityContext.Get(request.StandardReference);
             if (standard == null)
@@ -36,13 +36,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard
                 standard = await UpdateStandard(standard, request);
             }
 
-            return new PostStandardCommandResponse
+            return new CacheStandardCommandResponse
             {
                 Standard = (Domain.Models.Standard)standard,
             };
         }
 
-        private async Task<Standard> AddStandard(PostStandardCommand request)
+        private async Task<Standard> AddStandard(CacheStandardCommand request)
         {
             var standard = new Standard
             {
@@ -59,7 +59,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard
             return standard;
         }
 
-        private async Task<Standard> UpdateStandard(Standard standard, PostStandardCommand request)
+        private async Task<Standard> UpdateStandard(Standard standard, CacheStandardCommand request)
         {
             if (standard.StandardTitle != request.StandardTitle ||
                 standard.StandardLevel != request.StandardLevel ||

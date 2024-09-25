@@ -3,18 +3,18 @@ using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using System;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
 
-namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard
 {
-    public class PostStandardCommand : IRequest<PostStandardCommandResponse>
+    public class CacheStandardCommand : IRequest<CacheStandardCommandResponse>
     {
         public string StandardReference { get; set; }
         public string StandardTitle { get; set; }
         public int StandardLevel { get; set; }
         public string StandardSector { get; set; }
 
-        public static implicit operator PostStandardCommand(PostStandardRequest source)
+        public static implicit operator CacheStandardCommand(CacheStandardRequest source)
         {
-            return new PostStandardCommand
+            return new CacheStandardCommand
             {
                 StandardReference = source.StandardReference,
                 StandardTitle = source.StandardTitle,

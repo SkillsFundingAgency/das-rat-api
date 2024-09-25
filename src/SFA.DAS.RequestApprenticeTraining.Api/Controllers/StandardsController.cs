@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.PostStandard;
+using SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.RefreshStandards;
 using SFA.DAS.RequestApprenticeTraining.Application.Models;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetStandard;
@@ -69,11 +69,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Post(PostStandardRequest parameters)
+        public async Task<IActionResult> Cache(CacheStandardRequest parameters)
         {
             try
             {
-                var response = await _mediator.Send((PostStandardCommand)parameters);
+                var response = await _mediator.Send((CacheStandardCommand)parameters);
                 return Ok(response.Standard);
             }
             catch (ValidationException ex)

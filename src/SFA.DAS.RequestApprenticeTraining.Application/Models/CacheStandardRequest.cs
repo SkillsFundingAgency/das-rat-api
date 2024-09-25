@@ -1,7 +1,7 @@
 ﻿using System;
 namespace SFA.DAS.RequestApprenticeTraining.Application.Models
 {
-    public class PostStandardRequest
+    public class CacheStandardRequest
     {
         public string StandardReference { get; set; }
         public string StandardTitle { get; set; }
