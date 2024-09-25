@@ -4,7 +4,7 @@
     [OriginalLocation] NVARCHAR(100) NULL,
     [RequestTypeId] INT NOT NULL,
     [AccountId] BIGINT NOT NULL,
-    [StandardReference] NVARCHAR(6) NOT NULL,
+    [StandardReference] VARCHAR(6) NOT NULL,
     [NumberOfApprentices] INT NOT NULL,
     [SameLocation] NVARCHAR(5) NULL,
     [SingleLocation] NVARCHAR(100) NULL,
