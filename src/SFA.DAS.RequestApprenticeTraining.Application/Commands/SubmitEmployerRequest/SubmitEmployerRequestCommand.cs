@@ -33,7 +33,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 NumberOfApprentices = source.NumberOfApprentices,
                 SameLocation = source.SameLocation,
                 SingleLocation = source.SingleLocation,
-                SingleLocationLatitude = source.SingleLocationLongitude,
+                SingleLocationLatitude = source.SingleLocationLatitude,
                 SingleLocationLongitude = source.SingleLocationLongitude,
                 MultipleLocations = source.MultipleLocations,
                 AtApprenticesWorkplace = source.AtApprenticesWorkplace,
