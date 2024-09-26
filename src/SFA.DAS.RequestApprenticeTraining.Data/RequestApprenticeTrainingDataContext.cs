@@ -20,7 +20,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
         IRegionEntityContext,
         IRequestTypeEntityContext,
         IProviderResponseEntityContext,
-        IProviderResponseEmployerRequestEntityContext
+        IProviderResponseEmployerRequestEntityContext,
+        IStandardEntityContext
     {
         private const string AzureResource = "https://database.windows.net/";
         private readonly ApplicationSettings _configuration;
@@ -32,6 +33,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
         public virtual DbSet<RequestType> RequestTypes { get; set; }
         public virtual DbSet<ProviderResponse> ProviderResponses { get; set; }
         public virtual DbSet<ProviderResponseEmployerRequest> ProviderResponseEmployerRequests { get; set; }
+        public virtual DbSet<Standard> Standards { get; set; }
 
         DbSet<EmployerRequest> IEntityContext<EmployerRequest>.Entities => EmployerRequests;
         DbSet<EmployerRequestRegion> IEntityContext<EmployerRequestRegion>.Entities => EmployerRequestRegions;
@@ -39,7 +41,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
         DbSet<ProviderResponse> IEntityContext<ProviderResponse>.Entities => ProviderResponses;
         DbSet<ProviderResponseEmployerRequest> IEntityContext<ProviderResponseEmployerRequest>.Entities => ProviderResponseEmployerRequests;
-        
+        DbSet<Standard> IEntityContext<Standard>.Entities => Standards;
+
         public RequestApprenticeTrainingDataContext(IOptions<ApplicationSettings> config,
             DbContextOptions<RequestApprenticeTrainingDataContext> options)
             : base(options)
@@ -80,6 +83,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
             modelBuilder.ApplyConfiguration(new StandardConfiguration());
             modelBuilder.ApplyConfiguration(new ProviderResponseConfiguration());
+            modelBuilder.ApplyConfiguration(new StandardConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
