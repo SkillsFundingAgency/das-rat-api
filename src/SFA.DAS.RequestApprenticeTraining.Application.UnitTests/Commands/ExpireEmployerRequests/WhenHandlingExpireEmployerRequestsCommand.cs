@@ -1,12 +1,9 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetEmployerRequestsByIds;
 using SFA.DAS.RequestApprenticeTraining.Application.UnitTests;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
@@ -19,7 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using RequestStatus = SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums.RequestStatus;
 
-namespace SFA.DAS.RequestApprenticeTraining.UnitTests.Application.Commands.ExpireEmployerRequests
+namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerRequests.UnitTests
 {
     [TestFixture]
     public class ExpireEmployerRequestsCommandHandlerTests

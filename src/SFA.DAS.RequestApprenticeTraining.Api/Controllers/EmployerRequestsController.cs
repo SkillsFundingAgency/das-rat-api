@@ -116,7 +116,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             }
         }
 
-        [HttpPost("expire")]
+        [HttpPut("expire")]
         public IActionResult ExpireEmployerRequests()
         {
             var requestName = "expire employer requests";
