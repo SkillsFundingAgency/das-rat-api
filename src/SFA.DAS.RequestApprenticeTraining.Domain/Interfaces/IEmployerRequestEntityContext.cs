@@ -47,11 +47,12 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     er.Standard.StandardTitle,
                     er.Standard.StandardLevel,
                     er.RequestedAt,
+                    er.ExpiredAt,
                     er.RequestStatus,
                     IsResponseProvided = prer.ProviderResponse != null,
                     IsNewResponse = prer.ProviderResponse != null && prer.AcknowledgedAt == null
                 })
-                .GroupBy(er => new { er.Id, er.StandardReference, er.StandardTitle, er.StandardLevel, er.RequestedAt, er.RequestStatus })
+                .GroupBy(er => new { er.Id, er.StandardReference, er.StandardTitle, er.StandardLevel, er.RequestedAt, er.RequestStatus, er.ExpiredAt })
                 .Select(g => new EmployerAggregatedEmployerRequest
                 {
                     EmployerRequestId = g.Key.Id,
@@ -59,6 +60,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     StandardTitle = g.Key.StandardTitle,
                     StandardLevel = g.Key.StandardLevel,
                     RequestedAt = g.Key.RequestedAt,
+                    ExpiredAt = g.Key.ExpiredAt,
                     RequestStatus = g.Key.RequestStatus,
                     NumberOfResponses = g.Count(x => x.IsResponseProvided),
                     NewNumberOfResponses = g.Count(x => x.IsNewResponse)
