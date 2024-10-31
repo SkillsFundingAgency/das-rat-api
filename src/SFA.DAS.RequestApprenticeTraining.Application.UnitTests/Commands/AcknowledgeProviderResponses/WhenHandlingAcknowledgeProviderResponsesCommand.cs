@@ -54,6 +54,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
                     {
                         Ukprn = 22222,
                         ProviderResponse = new ProviderResponse()
+                    },
+                    new ProviderResponseEmployerRequest
+                    {
+                        Ukprn = 33333,
+                        ProviderResponse = null // The provider has seen the request but has not responded to it
                     }
                 }
             };
@@ -75,6 +80,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
             employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(now);
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
+            employerRequest.ProviderResponseEmployerRequests[2].AcknowledgedAt.Should().BeNull();
+            employerRequest.ProviderResponseEmployerRequests[2].AcknowledgedBy.Should().BeNull();
         }
 
         [Test]

@@ -71,6 +71,7 @@
     <Folder Include="Programmability" />
     <Folder Include="Programmability\Functions" />
     <Folder Include="Programmability\StoredProcedures" />
+    <Folder Include="Scripts\PostDeploymentScripts\Patches" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EmployerRequest.sql" />
@@ -111,5 +112,6 @@
   <ItemGroup>
     <None Include="Scripts\PreDeploymentScripts\DisableSystemVersioningTables.sql" />
     <None Include="Scripts\PostDeploymentScripts\EnableSystemVersioningTables.sql" />
+    <None Include="Scripts\PostDeploymentScripts\Patches\P2-2270_Remove_acknowledged_when_no_response.sql" />
   </ItemGroup>
 </Project>
