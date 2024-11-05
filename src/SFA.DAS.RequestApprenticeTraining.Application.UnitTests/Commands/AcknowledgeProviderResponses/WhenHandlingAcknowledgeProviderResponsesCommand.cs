@@ -37,8 +37,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public async Task Handle_ShouldAcknowledgeProviderResponses_WhenEmployerRequestExists()
         {
             // Arrange
-            var now = DateTime.UtcNow;
-            var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = Guid.NewGuid() };
+            var today = DateTime.UtcNow;
+            var userOne = Guid.NewGuid();
+
+            var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = userOne };
 
             var employerRequest = new EmployerRequest
             {
@@ -54,18 +56,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
                     {
                         Ukprn = 22222,
                         ProviderResponse = new ProviderResponse()
-                    },
-                    new ProviderResponseEmployerRequest
-                    {
-                        Ukprn = 33333,
-                        ProviderResponse = null // The provider has seen the request but has not responded to it
                     }
                 }
             };
 
             _dateTimeProviderMock
                 .Setup(p => p.Now)
-                .Returns(now);
+                .Returns(today);
 
             _employerRequestEntityContextMock
                 .Setup(x => x.Get(command.EmployerRequestId))
@@ -76,12 +73,109 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(now);
-            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
-            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(now);
-            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(command.AcknowledgedBy);
-            employerRequest.ProviderResponseEmployerRequests[2].AcknowledgedAt.Should().BeNull();
-            employerRequest.ProviderResponseEmployerRequests[2].AcknowledgedBy.Should().BeNull();
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(userOne);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(userOne);
+        }
+
+        [Test]
+        public async Task Handle_ShouldNotAcknowledgeProviderResponses_WhenProviderHasNotResponded()
+        {
+            // Arrange
+            var today = DateTime.UtcNow;
+            var userOne = Guid.NewGuid();
+
+            var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = userOne };
+
+            var employerRequest = new EmployerRequest
+            {
+                Id = command.EmployerRequestId,
+                ProviderResponseEmployerRequests = new List<ProviderResponseEmployerRequest>
+                {
+                    new ProviderResponseEmployerRequest
+                    {
+                        Ukprn = 11111,
+                        ProviderResponse = new ProviderResponse()
+                    },
+                    new ProviderResponseEmployerRequest
+                    {
+                        Ukprn = 22222,
+                        ProviderResponse = null // The provider has seen the request but has not responded to it
+                    }
+                }
+            };
+
+            _dateTimeProviderMock
+                .Setup(p => p.Now)
+                .Returns(today);
+
+            _employerRequestEntityContextMock
+                .Setup(x => x.Get(command.EmployerRequestId))
+                .ReturnsAsync(employerRequest);
+
+            // Act
+            await _sut.Handle(command, CancellationToken.None);
+
+            // Assert
+            _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(userOne);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().BeNull();
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().BeNull();
+        }
+
+        [Test]
+        public async Task Handle_ShouldNotAcknowledgeProviderResponses_WhenProviderResponseHasAlreadyBeenAcknowledged()
+        {
+            // Arrange
+            var yesterday = DateTime.UtcNow.AddDays(-1);
+            var userOne = Guid.NewGuid();
+            
+            var today = DateTime.UtcNow;
+            var userTwo = Guid.NewGuid();
+
+            var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = userTwo };
+
+            var employerRequest = new EmployerRequest
+            {
+                Id = command.EmployerRequestId,
+                ProviderResponseEmployerRequests = new List<ProviderResponseEmployerRequest>
+                {
+                    new ProviderResponseEmployerRequest
+                    {
+                        Ukprn = 11111,
+                        ProviderResponse = new ProviderResponse(),
+                        AcknowledgedAt = yesterday,
+                        AcknowledgedBy = userOne
+                    },
+                    new ProviderResponseEmployerRequest
+                    {
+                        Ukprn = 22222,
+                        ProviderResponse = new ProviderResponse(),
+                        AcknowledgedAt = null,
+                        AcknowledgedBy = null
+                    }
+                }
+            };
+
+            _dateTimeProviderMock
+                .Setup(p => p.Now)
+                .Returns(today);
+
+            _employerRequestEntityContextMock
+                .Setup(x => x.Get(command.EmployerRequestId))
+                .ReturnsAsync(employerRequest);
+
+            // Act
+            await _sut.Handle(command, CancellationToken.None);
+
+            // Assert
+            _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(yesterday);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(userOne);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(userTwo);
         }
 
         [Test]

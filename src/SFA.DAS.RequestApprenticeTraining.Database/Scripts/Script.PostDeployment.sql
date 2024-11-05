@@ -13,5 +13,3 @@ Post-Deployment Script Template
 :r .\PostDeploymentScripts\LookupData\SynchronizeLookupData.sql
 
 :r .\PostDeploymentScripts\EnableSystemVersioningTables.sql
-
-:r .\PostDeploymentScripts\Patches\P2-2270_Remove_acknowledged_when_no_response.sql

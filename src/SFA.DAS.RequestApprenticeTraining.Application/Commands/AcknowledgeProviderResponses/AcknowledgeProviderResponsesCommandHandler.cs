@@ -33,7 +33,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProv
             {
                 foreach (var response in employerRequest.ProviderResponseEmployerRequests)
                 {
-                    if (response.ProviderResponse != null)
+                    if (response.ProviderResponse != null && response.AcknowledgedAt == null && response.AcknowledgedBy == null)
                     {
                         response.AcknowledgedAt = _dateTimeProvider.Now;
                         response.AcknowledgedBy = request.AcknowledgedBy;
