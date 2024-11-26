@@ -71,6 +71,7 @@
     <Folder Include="Programmability" />
     <Folder Include="Programmability\Functions" />
     <Folder Include="Programmability\StoredProcedures" />
+    <Folder Include="Scripts\PostDeploymentScripts\Patches" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EmployerRequest.sql" />
