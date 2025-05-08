@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
@@ -49,8 +48,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetry();
-            
+            services.AddOpenTelemetryRegistration(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]!);
+
+
             var applicationSettingsSection = Configuration.GetSection(nameof(ApplicationSettings));
             var applicationSettings = applicationSettingsSection.Get<ApplicationSettings>();
 

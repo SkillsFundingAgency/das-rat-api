@@ -24,8 +24,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard
 
         public async Task<CacheStandardCommandResponse> Handle(CacheStandardCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Caching standard {StandardReference}", request.StandardReference);
-
             var standard = await _standardEntityContext.Get(request.StandardReference);
             if (standard == null)
             {
@@ -55,7 +53,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard
             _standardEntityContext.Add(standard);
             await _standardEntityContext.SaveChangesAsync();
 
-            _logger.LogDebug("Created standard {StandardReference}", request.StandardReference);
             return standard;
         }
 
@@ -70,8 +67,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard
                 standard.StandardSector = request.StandardSector;
 
                 await _standardEntityContext.SaveChangesAsync();
-
-                _logger.LogDebug("Updated standard {StandardReference}", request.StandardReference);
             }
             return standard;
         }

@@ -26,7 +26,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         private readonly ILogger<EmployerRequestsController> _logger;
         private readonly IBackgroundTaskQueue _backgroundTaskQueue;
 
-        public EmployerRequestsController(IMediator mediator, ILogger<EmployerRequestsController> logger, IBackgroundTaskQueue taskQueue) 
+        public EmployerRequestsController(IMediator mediator, ILogger<EmployerRequestsController> logger, IBackgroundTaskQueue taskQueue)
         {
             _mediator = mediator;
             _logger = logger;
@@ -60,7 +60,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
             {
                 var command = (AcknowledgeProviderResponsesCommand)request;
                 command.EmployerRequestId = employerRequestId;
-                
+
                 await _mediator.Send(command);
                 return Ok();
             }
@@ -100,10 +100,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetEmployerRequestsByIds([FromQuery]List<Guid> employerRequestIds)
+        public async Task<IActionResult> GetEmployerRequestsByIds([FromQuery] List<Guid> employerRequestIds)
         {
             try
             {
+                _logger.LogInformation("GetEmployerRequestsByIds call initiated");
                 var result = await _mediator.Send(
                     new GetEmployerRequestsByIdsQuery(employerRequestIds));
 

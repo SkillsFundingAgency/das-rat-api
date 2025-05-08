@@ -25,18 +25,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.CancelEmployerR
 
         public async Task Handle(CancelEmployerRequestCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Cancelling employer request for EmployerRequestId: {EmployerRequestId}", request.EmployerRequestId);
-
             var employerRequest = await _employerRequestEntityContext.Get(request.EmployerRequestId);
-            if(employerRequest != null && employerRequest.RequestStatus == RequestStatus.Active)
+            if (employerRequest != null && employerRequest.RequestStatus == RequestStatus.Active)
             {
                 employerRequest.RequestStatus = RequestStatus.Cancelled;
                 employerRequest.CancelledAt = _dateTimeProvider.Now;
-                employerRequest.ModifiedBy = request.CancelledBy; 
+                employerRequest.ModifiedBy = request.CancelledBy;
 
                 await _employerRequestEntityContext.SaveChangesAsync();
-
-                _logger.LogDebug("Cancelled employer request for EmployerRequestId: {EmployerRequestId}", request.EmployerRequestId);
             }
         }
     }

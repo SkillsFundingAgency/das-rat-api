@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static SFA.DAS.RequestApprenticeTraining.Domain.Models.Enums;
@@ -26,10 +25,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProv
 
         public async Task Handle(AcknowledgeProviderResponsesCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Acknowledging provider responses for EmployerRequestId: {EmployerRequestId}", request.EmployerRequestId);
-
             var employerRequest = await _employerRequestEntityContext.Get(request.EmployerRequestId);
-            if(employerRequest != null && employerRequest.RequestStatus == RequestStatus.Active)
+            if (employerRequest != null && employerRequest.RequestStatus == RequestStatus.Active)
             {
                 foreach (var response in employerRequest.ProviderResponseEmployerRequests)
                 {
@@ -41,8 +38,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProv
                 }
 
                 await _employerRequestEntityContext.SaveChangesAsync();
-
-                _logger.LogDebug("Acknowledged provider responses for EmployerRequestId: {EmployerRequestId}", request.EmployerRequestId);
             }
         }
     }
