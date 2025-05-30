@@ -31,8 +31,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
 
         public async Task<SubmitEmployerRequestCommandResponse> Handle(SubmitEmployerRequestCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Creating employer request");
-
             var regions = new List<Region>();
             if (string.IsNullOrEmpty(request.SameLocation) || request.SameLocation == "Yes")
             {
@@ -40,7 +38,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 if (closestRegion != null)
                 {
                     regions.Add(closestRegion);
-                    _logger.LogDebug("Using matched single location to closest region {SubRegionName}", closestRegion.SubregionName);
                 }
             }
             else
@@ -50,8 +47,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                     var region = await _regionEntityContext.Get(int.Parse(location));
                     regions.Add(region);
                 }
-                
-                _logger.LogDebug($"Using multiple selected regions");
             }
 
             var employerRequest = new EmployerRequest()
@@ -75,7 +70,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
             _employerRequestEntityContext.Add(employerRequest);
             await _employerRequestEntityContext.SaveChangesAsync();
 
-            foreach(var region in regions)
+            foreach (var region in regions)
             {
                 _employerRequestRegionEntityContext.Add(new EmployerRequestRegion
                 {
@@ -86,8 +81,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
             }
 
             await _employerRequestRegionEntityContext.SaveChangesAsync();
-
-            _logger.LogDebug("Created employer request record with {EmployerRequestId}", employerRequest.Id);
 
             return new SubmitEmployerRequestCommandResponse() { EmployerRequestId = employerRequest.Id };
         }
