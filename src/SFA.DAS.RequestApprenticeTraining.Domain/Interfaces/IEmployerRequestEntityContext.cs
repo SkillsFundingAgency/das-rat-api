@@ -71,7 +71,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<ProviderAggregatedEmployerRequest>> GetProviderAggregatedEmployerRequests(long ukprn, int providerRemovedAfterExpiryRespondedMonths)
+        public async Task<List<ProviderAggregatedEmployerRequest>> GetProviderAggregatedEmployerRequests(long ukprn, int providerRemovedAfterExpiryRespondedMonths, DateTime dateTimeNow)
         {
             var result = await Entities
                 .Where(er =>
@@ -81,7 +81,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     ) ||
                     (
                         er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && pre.ProviderResponseId.HasValue) &&
-                        er.RequestedAt.AddMonths(providerRemovedAfterExpiryRespondedMonths) > DateTime.Now)
+                        er.RequestedAt.AddMonths(providerRemovedAfterExpiryRespondedMonths) > dateTimeNow)
                     )
                 .GroupBy(er => new { er.StandardReference, er.Standard.StandardTitle, er.Standard.StandardLevel, er.Standard.StandardSector })
                 .Select(g => new
@@ -110,7 +110,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             return result;
         }
 
-        public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference,int providerRemovedAfterRequestedMonths)
+        public async Task<List<SelectEmployerRequest>> GetForProviderStandard(long ukprn, string standardReference, int providerRemovedAfterRequestedMonths, DateTime dateTimeNow)
         {
             var result = await Entities
                 .Where(er => er.StandardReference == standardReference &&
@@ -120,7 +120,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
                     ) ||
                     (
                         er.ProviderResponseEmployerRequests.Any(pre => pre.Ukprn == ukprn && 
-                        pre.ProviderResponseId.HasValue) && er.RequestedAt.AddMonths(providerRemovedAfterRequestedMonths) > DateTime.Now)
+                        pre.ProviderResponseId.HasValue) && er.RequestedAt.AddMonths(providerRemovedAfterRequestedMonths) > dateTimeNow)
                     ))
                 .Select(er => new SelectEmployerRequest
                 {
@@ -195,9 +195,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
 
             return result;
         }
-        public async Task ExpireEmployerRequests(int expiryAfterMonths) 
+
+        public async Task ExpireEmployerRequests(int expiryAfterMonths, DateTime dateTimeNow) 
         {
-            var dateTimeNow = DateTime.UtcNow;
             var expiryRequestsRequestedBeforeDate = dateTimeNow.AddMonths(-expiryAfterMonths);
 
             var result = await Entities
@@ -209,7 +209,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Domain.Interfaces
             {
                 er.RequestStatus = Models.Enums.RequestStatus.Expired;
                 er.ExpiredAt = dateTimeNow;
-            });    
+            });
         }
 
         public async Task<List<EmployerRequestForResponseNotification>> GetForResponseNotification()

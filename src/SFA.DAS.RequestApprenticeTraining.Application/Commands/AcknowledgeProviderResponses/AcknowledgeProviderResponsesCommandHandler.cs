@@ -11,16 +11,13 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.AcknowledgeProv
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly ILogger<AcknowledgeProviderResponsesCommandHandler> _logger;
 
         public AcknowledgeProviderResponsesCommandHandler(
             IEmployerRequestEntityContext employerRequestEntityContext,
-            IDateTimeProvider dateTimeProvider,
-            ILogger<AcknowledgeProviderResponsesCommandHandler> logger)
+            IDateTimeProvider dateTimeProvider)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
             _dateTimeProvider = dateTimeProvider;
-            _logger = logger;
         }
 
         public async Task Handle(AcknowledgeProviderResponsesCommand request, CancellationToken cancellationToken)

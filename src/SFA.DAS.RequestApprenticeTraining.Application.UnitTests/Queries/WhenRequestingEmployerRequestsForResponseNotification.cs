@@ -19,6 +19,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
         {
             // Arrange
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+
             var standard1Reference = "ST0010";
             var standard1Title = "Standard 1";
 
@@ -33,10 +35,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(new Standard { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1" });
             context.Add(new Standard { StandardReference = standard2Reference, StandardTitle = standard2Title, StandardLevel = 2, StandardSector = "Sector 2" });
 
-            AddEmployerRequest(context, employer1AccountId, standard1Reference, requestedBy1, true, false);
-            AddEmployerRequest(context, employer1AccountId, standard2Reference, requestedBy1, true, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard1Reference, requestedBy1, true, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard2Reference, requestedBy1, true, false);
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetEmployerRequestsForResponseNotificationQuery();
             var handler = new GetEmployerRequestsForResponseNotificationQueryHandler(context);
@@ -56,6 +58,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
         {
             // Arrange
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+
             var standard1Reference = "ST0010";
             var standard1Title = "Standard 1";
 
@@ -70,10 +74,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(new Standard { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1" });
             context.Add(new Standard { StandardReference = standard2Reference, StandardTitle = standard2Title, StandardLevel = 2, StandardSector = "Sector 2" });
 
-            AddEmployerRequest(context, employer1AccountId, standard1Reference, requestedBy1, true, true);
-            AddEmployerRequest(context, employer1AccountId, standard2Reference, requestedBy1, true, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard1Reference, requestedBy1, true, true);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard2Reference, requestedBy1, true, false);
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetEmployerRequestsForResponseNotificationQuery();
             var handler = new GetEmployerRequestsForResponseNotificationQueryHandler(context);
@@ -93,6 +97,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
         {
             // Arrange
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+
             var standard1Reference = "ST0010";
             var standard1Title = "Standard 1";
 
@@ -108,10 +114,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(new Standard { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1" });
             context.Add(new Standard { StandardReference = standard2Reference, StandardTitle = standard2Title, StandardLevel = 2, StandardSector = "Sector 2" });
 
-            AddEmployerRequest(context, employer1AccountId, standard1Reference, requestedBy1, true, false);
-            AddEmployerRequest(context, employer1AccountId, standard2Reference, requestedBy2, true, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard1Reference, requestedBy1, true, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard2Reference, requestedBy2, true, false);
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetEmployerRequestsForResponseNotificationQuery();
             var handler = new GetEmployerRequestsForResponseNotificationQueryHandler(context);
@@ -148,8 +154,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
         public async Task And_GetEmployerRequestsForResponseNotification_NoRespondedRequests_NoResultsReturned(
             [Frozen(Matching.ImplementedInterfaces)] RequestApprenticeTrainingDataContext context)
         {
-            //Arrange
             // Arrange
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+
             var standard1Reference = "ST0010";
             var standard1Title = "Standard 1";
 
@@ -165,10 +172,10 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(new Standard { StandardReference = standard1Reference, StandardTitle = standard1Title, StandardLevel = 1, StandardSector = "Sector 1" });
             context.Add(new Standard { StandardReference = standard2Reference, StandardTitle = standard2Title, StandardLevel = 2, StandardSector = "Sector 2" });
 
-            AddEmployerRequest(context, employer1AccountId, standard1Reference, requestedBy1, false, false);
-            AddEmployerRequest(context, employer1AccountId, standard2Reference, requestedBy2, false, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard1Reference, requestedBy1, false, false);
+            AddEmployerRequest(context, dateTimeNow, employer1AccountId, standard2Reference, requestedBy2, false, false);
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetEmployerRequestsForResponseNotificationQuery();
             var handler = new GetEmployerRequestsForResponseNotificationQueryHandler(context);
@@ -182,7 +189,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
         }
 
-        private void AddEmployerRequest(RequestApprenticeTrainingDataContext context,
+        private void AddEmployerRequest(RequestApprenticeTrainingDataContext context, DateTime dateTimeNow,
             long accountId, string standardReference, Guid requestedBy, bool providerResponded, bool employerAcknowledged)
         {
             var employerRequest = new EmployerRequest 
@@ -193,7 +200,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                 BlockRelease = true,
                 Id = Guid.NewGuid(),    
                 NumberOfApprentices = new Random().Next(1,10),
-                RequestedAt = DateTime.Now,
+                RequestedAt = dateTimeNow,
                 RequestedBy = requestedBy,
                 RequestType = Domain.Models.Enums.RequestType.Shortlist,
             };
@@ -216,7 +223,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
                     Email = "email@email.com",
                     PhoneNumber = "1234",
                     Website = "www.here.com",
-                    RespondedAt = DateTime.Now,
+                    RespondedAt = dateTimeNow,
                     RespondedBy = Guid.NewGuid(),
                     Id = Guid.NewGuid(),
                 };
@@ -227,7 +234,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 
                 if (employerAcknowledged)
                 {
-                    providerResponseEmployerRequest.AcknowledgedAt = DateTime.Now;
+                    providerResponseEmployerRequest.AcknowledgedAt = dateTimeNow;
                     providerResponseEmployerRequest.AcknowledgedBy = Guid.NewGuid();
                 }
             }

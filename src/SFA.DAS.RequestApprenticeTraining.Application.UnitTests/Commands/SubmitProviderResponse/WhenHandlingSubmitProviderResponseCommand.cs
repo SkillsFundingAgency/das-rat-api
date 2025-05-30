@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderResponse;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,20 +17,23 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Submi
     {
         private Mock<IProviderResponseEntityContext> _providerResponseEntityContextMock;
         private Mock<IProviderResponseEmployerRequestEntityContext> _providerResponseEmployerRequestEntityContextMock;
-        private Mock<ILogger<SubmitProviderResponseCommandHandler>> _loggerMock;
+        private Mock<IDateTimeProvider> _dateTimeProviderMock;
         private SubmitProviderResponseCommandHandler _sut;
 
         [SetUp]
         public void SetUp()
         {
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+            _dateTimeProviderMock = new Mock<IDateTimeProvider>();
+            _dateTimeProviderMock.SetupGet(s => s.Now).Returns(dateTimeNow);
+
             _providerResponseEntityContextMock = new Mock<IProviderResponseEntityContext>();
             _providerResponseEmployerRequestEntityContextMock = new Mock<IProviderResponseEmployerRequestEntityContext>();
-            _loggerMock = new Mock<ILogger<SubmitProviderResponseCommandHandler>>();
 
             _sut = new SubmitProviderResponseCommandHandler(
                 _providerResponseEntityContextMock.Object,
                 _providerResponseEmployerRequestEntityContextMock.Object,
-                _loggerMock.Object);
+                _dateTimeProviderMock.Object);
         }
 
         [Test, AutoMoqData]

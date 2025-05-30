@@ -12,17 +12,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggre
     public class GetProviderAggregatedEmployerRequestsQueryHandler : IRequestHandler<GetProviderAggregatedEmployerRequestsQuery, GetProviderAggregatedEmployerRequestsQueryResult>
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ApplicationSettings _applicationSettings;
 
-        public GetProviderAggregatedEmployerRequestsQueryHandler(IEmployerRequestEntityContext employerRequestEntityContext, IOptions<ApplicationSettings> options)
+        public GetProviderAggregatedEmployerRequestsQueryHandler(IEmployerRequestEntityContext employerRequestEntityContext, 
+            IDateTimeProvider dateTimeProvider,
+            IOptions<ApplicationSettings> options)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
+            _dateTimeProvider = dateTimeProvider;
             _applicationSettings = options.Value;
         }
 
         public async Task<GetProviderAggregatedEmployerRequestsQueryResult> Handle(GetProviderAggregatedEmployerRequestsQuery request, CancellationToken cancellationToken)
         {
-            var aggregatedRequests = await _employerRequestEntityContext.GetProviderAggregatedEmployerRequests(request.Ukprn, _applicationSettings.ProviderRemovedAfterRequestedMonths);
+            var aggregatedRequests = await _employerRequestEntityContext.GetProviderAggregatedEmployerRequests(request.Ukprn, _applicationSettings.ProviderRemovedAfterRequestedMonths, _dateTimeProvider.Now);
 
             return new GetProviderAggregatedEmployerRequestsQueryResult
             {

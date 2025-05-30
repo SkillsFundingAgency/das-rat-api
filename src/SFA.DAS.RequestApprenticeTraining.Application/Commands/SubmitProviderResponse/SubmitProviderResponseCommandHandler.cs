@@ -12,16 +12,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
     {
         private readonly IProviderResponseEntityContext _providerResponseEntityContext;
         private readonly IProviderResponseEmployerRequestEntityContext _providerResponseEmployerRequestEntityContext;
-        private readonly ILogger<SubmitProviderResponseCommandHandler> _logger;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public SubmitProviderResponseCommandHandler(
             IProviderResponseEntityContext providerResponseEntityContext,
             IProviderResponseEmployerRequestEntityContext providerResponseEmployerRequestEntityContext,
-            ILogger<SubmitProviderResponseCommandHandler> logger)
+            IDateTimeProvider dateTimeProvider)
         {
             _providerResponseEntityContext = providerResponseEntityContext;
             _providerResponseEmployerRequestEntityContext = providerResponseEmployerRequestEntityContext;
-            _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<SubmitProviderResponseCommandResponse> Handle(SubmitProviderResponseCommand request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitProviderR
                 Email = request.Email,
                 PhoneNumber = request.Phone,
                 Website = request.Website,
-                RespondedAt = DateTime.UtcNow,
+                RespondedAt = _dateTimeProvider.Now,
                 RespondedBy = request.RespondedBy,
             };
 

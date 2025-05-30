@@ -37,7 +37,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Cance
         public async Task Handle_ShouldCancelRequest_WhenEmployerRequestExists()
         {
             // Arrange
-            var now = DateTime.UtcNow;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
             var command = new CancelEmployerRequestCommand { EmployerRequestId = Guid.NewGuid(), CancelledBy = Guid.NewGuid() };
 
             var employerRequest = new EmployerRequest
@@ -48,7 +48,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Cance
 
             _dateTimeProviderMock
                 .Setup(p => p.Now)
-                .Returns(now);
+                .Returns(dateTimeNow);
 
             _employerRequestEntityContextMock.Setup(x => x.Get(command.EmployerRequestId))
                 .ReturnsAsync(employerRequest);
@@ -59,7 +59,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Cance
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             employerRequest.RequestStatus.Should().Be(RequestStatus.Cancelled);
-            employerRequest.CancelledAt.Should().Be(now);
+            employerRequest.CancelledAt.Should().Be(dateTimeNow);
             employerRequest.ModifiedBy.Should().Be(command.CancelledBy);
         }
 

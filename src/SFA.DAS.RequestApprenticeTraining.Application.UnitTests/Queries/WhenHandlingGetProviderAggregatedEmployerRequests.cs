@@ -7,6 +7,7 @@ using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderAggregate
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
+using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 {
     public class WhenHandlingGetProviderAggregatedEmployerRequests
     {
-
+        private Mock<IDateTimeProvider> _dateTimeProviderMock;
         private Mock<IOptions<ApplicationSettings>> _mockOptions;
         private DateTime _insideAllowedDateRangeForContactedRequests;
         private DateTime _outsideAllowedDateRangeForContactedRequests;
@@ -24,16 +25,19 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
         [SetUp]
         public void SetUp()
         {
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+            _dateTimeProviderMock = new Mock<IDateTimeProvider>();
+            _dateTimeProviderMock.SetupGet(s => s.Now).Returns(dateTimeNow);
+            
             _mockOptions = new Mock<IOptions<ApplicationSettings>>();
-
             var config = new ApplicationSettings
             {
                 ProviderRemovedAfterRequestedMonths = 12,
             };
             _mockOptions.Setup(o => o.Value).Returns(config);
 
-            _insideAllowedDateRangeForContactedRequests = DateTime.Now.AddMonths(-config.ProviderRemovedAfterRequestedMonths).AddDays(1);
-            _outsideAllowedDateRangeForContactedRequests = DateTime.Now.AddMonths(-config.ProviderRemovedAfterRequestedMonths).AddDays(-1);
+            _insideAllowedDateRangeForContactedRequests = dateTimeNow.AddMonths(-config.ProviderRemovedAfterRequestedMonths).AddDays(1);
+            _outsideAllowedDateRangeForContactedRequests = dateTimeNow.AddMonths(-config.ProviderRemovedAfterRequestedMonths).AddDays(-1);
         }
 
         [Test, AutoMoqData]
@@ -55,7 +59,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             await context.SaveChangesAsync();
 
             var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _dateTimeProviderMock.Object, _mockOptions.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -96,7 +100,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             await context.SaveChangesAsync();
 
             var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _dateTimeProviderMock.Object, _mockOptions.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -135,7 +139,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             await context.SaveChangesAsync();
 
             var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _dateTimeProviderMock.Object, _mockOptions.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -172,7 +176,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             await context.SaveChangesAsync();
 
             var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _dateTimeProviderMock.Object, _mockOptions.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -215,7 +219,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             await context.SaveChangesAsync();
 
             var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _dateTimeProviderMock.Object, _mockOptions.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -245,7 +249,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             await context.SaveChangesAsync();
 
             var query = new GetProviderAggregatedEmployerRequestsQuery { Ukprn = 12345 };
-            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _mockOptions.Object);
+            var handler = new GetProviderAggregatedEmployerRequestsQueryHandler(context, _dateTimeProviderMock.Object, _mockOptions.Object);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);

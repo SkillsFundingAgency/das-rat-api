@@ -17,7 +17,6 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
     {
         private Mock<IEmployerRequestEntityContext> _employerRequestEntityContextMock;
         private Mock<IDateTimeProvider> _dateTimeProviderMock;
-        private Mock<ILogger<AcknowledgeProviderResponsesCommandHandler>> _loggerMock;
         private AcknowledgeProviderResponsesCommandHandler _sut;
 
         [SetUp]
@@ -25,19 +24,17 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         {
             _employerRequestEntityContextMock = new Mock<IEmployerRequestEntityContext>();
             _dateTimeProviderMock = new Mock<IDateTimeProvider>();
-            _loggerMock = new Mock<ILogger<AcknowledgeProviderResponsesCommandHandler>>();
 
             _sut = new AcknowledgeProviderResponsesCommandHandler(
                 _employerRequestEntityContextMock.Object,
-                _dateTimeProviderMock.Object,
-                _loggerMock.Object);
+                _dateTimeProviderMock.Object);
         }
 
         [Test]
         public async Task Handle_ShouldAcknowledgeProviderResponses_WhenEmployerRequestExists()
         {
             // Arrange
-            var today = DateTime.UtcNow;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
             var userOne = Guid.NewGuid();
 
             var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = userOne };
@@ -62,7 +59,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             _dateTimeProviderMock
                 .Setup(p => p.Now)
-                .Returns(today);
+                .Returns(dateTimeNow);
 
             _employerRequestEntityContextMock
                 .Setup(x => x.Get(command.EmployerRequestId))
@@ -73,9 +70,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(dateTimeNow);
             employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(userOne);
-            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(dateTimeNow);
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(userOne);
         }
 
@@ -83,7 +80,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public async Task Handle_ShouldNotAcknowledgeProviderResponses_WhenProviderHasNotResponded()
         {
             // Arrange
-            var today = DateTime.UtcNow;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
             var userOne = Guid.NewGuid();
 
             var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = userOne };
@@ -108,7 +105,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             _dateTimeProviderMock
                 .Setup(p => p.Now)
-                .Returns(today);
+                .Returns(dateTimeNow);
 
             _employerRequestEntityContextMock
                 .Setup(x => x.Get(command.EmployerRequestId))
@@ -119,7 +116,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(dateTimeNow);
             employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(userOne);
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().BeNull();
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().BeNull();
@@ -129,10 +126,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
         public async Task Handle_ShouldNotAcknowledgeProviderResponses_WhenProviderResponseHasAlreadyBeenAcknowledged()
         {
             // Arrange
-            var yesterday = DateTime.UtcNow.AddDays(-1);
+            var dateTimeToday = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+            var dateTimeYesterday = dateTimeToday.AddDays(-1);
             var userOne = Guid.NewGuid();
-            
-            var today = DateTime.UtcNow;
             var userTwo = Guid.NewGuid();
 
             var command = new AcknowledgeProviderResponsesCommand { EmployerRequestId = Guid.NewGuid(), AcknowledgedBy = userTwo };
@@ -146,7 +142,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
                     {
                         Ukprn = 11111,
                         ProviderResponse = new ProviderResponse(),
-                        AcknowledgedAt = yesterday,
+                        AcknowledgedAt = dateTimeYesterday,
                         AcknowledgedBy = userOne
                     },
                     new ProviderResponseEmployerRequest
@@ -161,7 +157,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             _dateTimeProviderMock
                 .Setup(p => p.Now)
-                .Returns(today);
+                .Returns(dateTimeToday);
 
             _employerRequestEntityContextMock
                 .Setup(x => x.Get(command.EmployerRequestId))
@@ -172,9 +168,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Ackno
 
             // Assert
             _employerRequestEntityContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(yesterday);
+            employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedAt.Should().Be(dateTimeYesterday);
             employerRequest.ProviderResponseEmployerRequests[0].AcknowledgedBy.Should().Be(userOne);
-            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(today);
+            employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedAt.Should().Be(dateTimeToday);
             employerRequest.ProviderResponseEmployerRequests[1].AcknowledgedBy.Should().Be(userTwo);
         }
 

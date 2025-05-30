@@ -16,22 +16,25 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Submi
         private Mock<IEmployerRequestEntityContext> _employerRequestEntityContextMock;
         private Mock<IEmployerRequestRegionEntityContext> _employerRequestRegionEntityContextMock;
         private Mock<IRegionEntityContext> _regionEntityContextMock;
-        private Mock<ILogger<SubmitEmployerRequestCommandHandler>> _loggerMock;
+        private Mock<IDateTimeProvider> _dateTimeProviderMock;
         private SubmitEmployerRequestCommandHandler _sut;
 
         [SetUp]
         public void SetUp()
         {
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+            _dateTimeProviderMock = new Mock<IDateTimeProvider>();
+            _dateTimeProviderMock.SetupGet(s => s.Now).Returns(dateTimeNow);
+
             _employerRequestEntityContextMock = new Mock<IEmployerRequestEntityContext>();
             _employerRequestRegionEntityContextMock = new Mock<IEmployerRequestRegionEntityContext>();
             _regionEntityContextMock = new Mock<IRegionEntityContext>();
-            _loggerMock = new Mock<ILogger<SubmitEmployerRequestCommandHandler>>();
 
             _sut = new SubmitEmployerRequestCommandHandler(
                 _employerRequestEntityContextMock.Object,
                 _employerRequestRegionEntityContextMock.Object,
                 _regionEntityContextMock.Object,
-                _loggerMock.Object);
+                _dateTimeProviderMock.Object);
         }
 
         [Test]
