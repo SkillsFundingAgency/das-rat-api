@@ -34,7 +34,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(new EmployerRequest { Id = guids[2], AccountId = 3, StandardReference = standard1Reference, NumberOfApprentices = 6, AtApprenticesWorkplace = false, BlockRelease = true, DayRelease = true, OriginalLocation = "London (Original)", SingleLocation = "London (Single)", RequestStatus = Domain.Models.Enums.RequestStatus.Active });
             context.Add(new EmployerRequest { Id = guids[3], AccountId = 4, StandardReference = standard2Reference, NumberOfApprentices = 1, AtApprenticesWorkplace = true, BlockRelease = false, DayRelease = true, OriginalLocation = "Coventry (Original)", SingleLocation = "Coventry (Single)", RequestStatus = Domain.Models.Enums.RequestStatus.Active });
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetEmployerRequestsByIdsQuery(guids);
             var handler = new GetEmployerRequestsByIdsQueryHandler(context);

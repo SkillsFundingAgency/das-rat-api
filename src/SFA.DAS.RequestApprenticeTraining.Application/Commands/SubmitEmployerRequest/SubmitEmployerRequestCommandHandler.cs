@@ -15,18 +15,18 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
         private readonly IEmployerRequestRegionEntityContext _employerRequestRegionEntityContext;
         private readonly IRegionEntityContext _regionEntityContext;
-        private readonly ILogger<SubmitEmployerRequestCommandHandler> _logger;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public SubmitEmployerRequestCommandHandler(
             IEmployerRequestEntityContext employerRequestEntityContext,
             IEmployerRequestRegionEntityContext employerRequestRegionEntityContext,
             IRegionEntityContext regionEntityContext,
-            ILogger<SubmitEmployerRequestCommandHandler> logger)
+            IDateTimeProvider dateTimeProvider)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
             _employerRequestRegionEntityContext = employerRequestRegionEntityContext;
             _regionEntityContext = regionEntityContext;
-            _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<SubmitEmployerRequestCommandResponse> Handle(SubmitEmployerRequestCommand request, CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 AtApprenticesWorkplace = request.AtApprenticesWorkplace,
                 DayRelease = request.DayRelease,
                 BlockRelease = request.BlockRelease,
-                RequestedAt = DateTime.UtcNow,
+                RequestedAt = _dateTimeProvider.Now,
                 RequestedBy = request.RequestedBy,
                 RequestStatus = RequestStatus.Active,
                 ModifiedBy = request.ModifiedBy

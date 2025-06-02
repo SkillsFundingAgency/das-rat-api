@@ -1,15 +1,12 @@
-﻿using AutoFixture.NUnit3;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetProviderResponseConfirmation;
-using SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmployerRequests;
 using SFA.DAS.RequestApprenticeTraining.Data;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
-using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
 {
@@ -25,6 +22,8 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             )
         {
             // Arrange
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
+
             var standard1Reference = "ST0001";
             context.Add(new RequestType { Id = 1, Description = "Shortlist" });
             context.Add(new Standard { StandardReference = standard1Reference, StandardTitle = "S1 Title", StandardLevel = 1, StandardSector = "Sector 1" });
@@ -33,16 +32,16 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             var request2 = new EmployerRequest { AccountId = 2, StandardReference = standard1Reference, NumberOfApprentices = 4, AtApprenticesWorkplace = true, BlockRelease = false, DayRelease = true, OriginalLocation = "Hull (Original)", SingleLocation = "Hull (Single)", RequestStatus = Domain.Models.Enums.RequestStatus.Active };
             context.Add(request1);
             context.Add(request2);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
-            var providerResponse = new ProviderResponse { Email = email, PhoneNumber = phone, Website = website, RespondedAt = DateTime.UtcNow, };
+            var providerResponse = new ProviderResponse { Email = email, PhoneNumber = phone, Website = website, RespondedAt = dateTimeNow };
             var providerResponseToRequest1 = new ProviderResponseEmployerRequest { EmployerRequest = request1, ProviderResponse = providerResponse, Ukprn = ukprn };
             var providerResponseToRequest2 = new ProviderResponseEmployerRequest { EmployerRequest = request2, ProviderResponse = providerResponse, Ukprn = ukprn };
 
             context.Add(providerResponse);
             context.Add(providerResponseToRequest1);
             context.Add(providerResponseToRequest2);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var query = new GetProviderResponseConfirmationQuery(providerResponse.Id);
             var handler = new GetProviderResponseConfirmationQueryHandler(context, context);

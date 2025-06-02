@@ -17,22 +17,22 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.ExpireEmployerR
     public class ExpireEmployerRequestsCommandHandler : IRequestHandler<ExpireEmployerRequestsCommand>
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
-        private readonly ILogger<ExpireEmployerRequestsCommandHandler> _logger;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ApplicationSettings _applicationSettings;
 
         public ExpireEmployerRequestsCommandHandler(
             IEmployerRequestEntityContext employerRequestEntityContext,
-            ILogger<ExpireEmployerRequestsCommandHandler> logger,
+            IDateTimeProvider dateTimeProvider,
             IOptions<ApplicationSettings> options)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
-            _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
             _applicationSettings = options.Value;
         }
 
         public async Task Handle(ExpireEmployerRequestsCommand request, CancellationToken cancellationToken)
         {
-            await _employerRequestEntityContext.ExpireEmployerRequests(_applicationSettings.ExpiryAfterMonths);
+            await _employerRequestEntityContext.ExpireEmployerRequests(_applicationSettings.ExpiryAfterMonths, _dateTimeProvider.Now);
             await _employerRequestEntityContext.SaveChangesAsync();
         }
     }

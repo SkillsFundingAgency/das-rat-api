@@ -11,17 +11,21 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Queries.GetSelectEmploye
     public class GetSelectEmployerRequestsQueryHandler : IRequestHandler<GetSelectEmployerRequestsQuery, GetSelectEmployerRequestsQueryResult>
     {
         private readonly IEmployerRequestEntityContext _employerRequestEntityContext;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ApplicationSettings _applicationSettings;
 
-        public GetSelectEmployerRequestsQueryHandler(IEmployerRequestEntityContext employerRequestEntityContext, IOptions<ApplicationSettings> options)
+        public GetSelectEmployerRequestsQueryHandler(IEmployerRequestEntityContext employerRequestEntityContext, 
+            IDateTimeProvider dateTimeProvider,
+            IOptions<ApplicationSettings> options)
         {
             _employerRequestEntityContext = employerRequestEntityContext;
+            _dateTimeProvider = dateTimeProvider;
             _applicationSettings = options.Value;
         }
 
         public async Task<GetSelectEmployerRequestsQueryResult> Handle(GetSelectEmployerRequestsQuery request, CancellationToken cancellationToken)
         {
-            var selectRequests = await _employerRequestEntityContext.GetForProviderStandard(request.Ukprn, request.StandardReference, _applicationSettings.ProviderRemovedAfterRequestedMonths);
+            var selectRequests = await _employerRequestEntityContext.GetForProviderStandard(request.Ukprn, request.StandardReference, _applicationSettings.ProviderRemovedAfterRequestedMonths, _dateTimeProvider.Now);
 
             return new GetSelectEmployerRequestsQueryResult
             {

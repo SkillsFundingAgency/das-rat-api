@@ -24,7 +24,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
             // Arrange
-            var dateTimeNow = DateTime.Now;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
 
             mockDateTimeProvider
                 .Setup(p => p.Now)
@@ -97,7 +97,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
             // Arrange
-            var dateTimeNow = DateTime.Now;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
 
             mockDateTimeProvider
                 .Setup(p => p.Now)
@@ -107,7 +107,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
             var employerRequestId3 = Guid.NewGuid();
-            var requestedAt = DateTime.UtcNow.Date;
+            var requestedAt = dateTimeNow.Date;
 
             var standard1 = new Standard { StandardReference = "ST0001", StandardTitle = "Standard 1", StandardLevel = 1, StandardSector = "Sector 1" };
             var standard2 = new Standard { StandardReference = "ST0002", StandardTitle = "Standard 2", StandardLevel = 1, StandardSector = "Sector 1" };
@@ -183,7 +183,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
             // Arrange
-            var dateTimeNow = DateTime.Now;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
 
             mockDateTimeProvider
                 .Setup(p => p.Now)
@@ -193,7 +193,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
             var employerRequestId3 = Guid.NewGuid();
-            var requestedAt = DateTime.UtcNow.Date;
+            var requestedAt = dateTimeNow.Date;
 
             var standard1 = new Standard { StandardReference = "ST0001", StandardTitle = "Standard 1", StandardLevel = 1, StandardSector = "Sector 1" };
             var standard2 = new Standard { StandardReference = "ST0002", StandardTitle = "Standard 2", StandardLevel = 1, StandardSector = "Sector 1" };
@@ -215,7 +215,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             context.Add(provider22222RespondsToEmployerRequest3);
 
             context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequestId1, Ukprn = 11111, ProviderResponseId = provider11111RespondsToEmployerRequest1And2.Id });
-            context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequestId2, Ukprn = 11111, ProviderResponseId = provider11111RespondsToEmployerRequest1And2.Id, AcknowledgedAt = DateTime.UtcNow });
+            context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequestId2, Ukprn = 11111, ProviderResponseId = provider11111RespondsToEmployerRequest1And2.Id, AcknowledgedAt = dateTimeNow });
             context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequestId2, Ukprn = 22222, ProviderResponseId = provider22222RespondsToEmployerRequest2.Id });
             context.Add(new ProviderResponseEmployerRequest { EmployerRequestId = employerRequestId3, Ukprn = 33333, ProviderResponseId = null });
 
@@ -269,7 +269,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
             // Arrange
-            var dateTimeNow = DateTime.Now;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
 
             mockDateTimeProvider
                 .Setup(p => p.Now)
@@ -278,7 +278,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             // Arrange
             var employerRequestId1 = Guid.NewGuid();
             var employerRequestId2 = Guid.NewGuid();
-            var requestedAt = DateTime.UtcNow.Date;
+            var requestedAt = dateTimeNow.Date;
 
             var standard1 = new Standard { StandardReference = "ST0001", StandardTitle = "Standard 1", StandardLevel = 1, StandardSector = "Sector 1" };
             var standard2 = new Standard { StandardReference = "ST0002", StandardTitle = "Standard 2", StandardLevel = 1, StandardSector = "Sector 1" };
@@ -332,7 +332,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             [Frozen] Mock<IDateTimeProvider> mockDateTimeProvider)
         {
             // Arrange
-            var dateTimeNow = DateTime.Now;
+            var dateTimeNow = new DateTime(2025, 05, 01, 12, 0, 0, DateTimeKind.Utc);
 
             mockDateTimeProvider
                 .Setup(p => p.Now)
@@ -341,14 +341,31 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Queries
             applicationSettings.Value.EmployerRemovedAfterExpiryMonths = 3;
 
             var employerRequestId1 = Guid.NewGuid();
-            var requestedAt = DateTime.UtcNow.Date;
+            var requestedAt = dateTimeNow.Date;
 
-            var standard1 = new Standard { StandardReference = "ST0001", StandardTitle = "Standard 1", StandardLevel = 1, StandardSector = "Sector 1" };
-            
+            var standard = new Standard
+            {
+                StandardReference = "ST0001",
+                StandardTitle = "Standard 1",
+                StandardLevel = 1,
+                StandardSector = "Sector 1"
+            };
+
             context.Add(new RequestType { Id = 1, Description = "Shortlist" });
-            context.Add(standard1);
-            
-            context.Add(new EmployerRequest { Id = employerRequestId1, RequestType = Domain.Models.Enums.RequestType.Shortlist, AccountId = 11111, RequestedAt = requestedAt, StandardReference = standard1.StandardReference, RequestStatus = Domain.Models.Enums.RequestStatus.Expired, ExpiredAt = dateTimeNow.Date.AddMonths(-3) });
+            context.Add(standard);
+
+            var employerRequest = new EmployerRequest
+            {
+                Id = employerRequestId1,
+                RequestType = Domain.Models.Enums.RequestType.Shortlist,
+                AccountId = 11111,
+                RequestedAt = requestedAt,
+                StandardReference = standard.StandardReference,
+                RequestStatus = Domain.Models.Enums.RequestStatus.Expired,
+                ExpiredAt = dateTimeNow.Date.AddMonths(-3)
+            };
+
+            context.Add(employerRequest);
             
             await context.SaveChangesAsync();
 
