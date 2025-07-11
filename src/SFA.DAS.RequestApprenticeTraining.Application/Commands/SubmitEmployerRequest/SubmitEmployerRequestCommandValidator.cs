@@ -13,15 +13,20 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 .GreaterThan(0).WithMessage("Account Id must be greater than zero.");
 
             RuleFor(x => x.StandardReference)
-                .NotEmpty().WithMessage("Standard Reference must not be empty.");
+            .NotEmpty().WithMessage("Standard Reference must not be empty.");
 
             RuleFor(x => x.NumberOfApprentices)
                 .GreaterThan(0).WithMessage("Number Of Apprentices must be greater than zero.");
 
+            RuleFor(x => x.OriginalLocation)
+                .Must(x => string.IsNullOrEmpty(x) || System.Text.RegularExpressions.Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-']+$"))
+                .WithMessage("Original Location contains invalid characters.");
+
             When(x => string.IsNullOrEmpty(x.SameLocation) || x.SameLocation == "Yes", () =>
             {
                 RuleFor(x => x.SingleLocation)
-                    .NotEmpty().WithMessage("Single Location must not be empty.");
+                    .NotEmpty().WithMessage("Single Location must not be empty.")
+                    .Matches("^[a-zA-Z0-9\\s,\\.\\-']+$").WithMessage("Single Location contains invalid characters.");
 
                 RuleFor(x => x.SingleLocationLatitude)
                     .NotEmpty().WithMessage("Single Location Latitude must not be empty.");
@@ -36,10 +41,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
             {
                 RuleFor(x => x.MultipleLocations)
                     .NotEmpty().WithMessage("Multiple Locations must not be empty.");
+
+                RuleForEach(x => x.MultipleLocations)
+                    .NotEmpty().WithMessage("Multiple Location must not be empty.")
+                    .Matches("^[a-zA-Z0-9\\s,\\.\\-']+$").WithMessage("Multiple Location contains invalid characters.");
             });
 
             RuleFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease })
-                .Must(x => x.AtApprenticesWorkplace || x.DayRelease || x.BlockRelease )
+                .Must(x => x.AtApprenticesWorkplace || x.DayRelease || x.BlockRelease)
                 .WithMessage("At least one of AtApprenticesWorkplace, DayRelease, or BlockRelease must be true.");
 
             RuleFor(x => x.RequestedBy)
