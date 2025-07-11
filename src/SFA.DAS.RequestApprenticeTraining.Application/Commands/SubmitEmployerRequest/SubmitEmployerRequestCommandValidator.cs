@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Text.RegularExpressions;
+using FluentValidation;
 
 namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerRequest
 {
@@ -19,7 +20,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 .GreaterThan(0).WithMessage("Number Of Apprentices must be greater than zero.");
 
             RuleFor(x => x.OriginalLocation)
-                .Must(x => string.IsNullOrEmpty(x) || System.Text.RegularExpressions.Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-']+$"))
+                .Must(x => string.IsNullOrEmpty(x) || Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-']+$"))
                 .WithMessage("Original Location contains invalid characters.");
 
             When(x => string.IsNullOrEmpty(x.SameLocation) || x.SameLocation == "Yes", () =>
