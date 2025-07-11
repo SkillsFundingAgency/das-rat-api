@@ -21,7 +21,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 .GreaterThan(0).WithMessage("Number Of Apprentices must be greater than zero.");
 
             RuleFor(x => x.OriginalLocation)
-                .Must(x => string.IsNullOrEmpty(x) || Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-']+$", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
+                .Must(x => string.IsNullOrEmpty(x) || Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-']+$", RegexOptions.None, TimeSpan.FromSeconds(1)))
                 .WithMessage("Original Location contains invalid characters.");
 
             When(x => string.IsNullOrEmpty(x.SameLocation) || x.SameLocation == "Yes", () =>
