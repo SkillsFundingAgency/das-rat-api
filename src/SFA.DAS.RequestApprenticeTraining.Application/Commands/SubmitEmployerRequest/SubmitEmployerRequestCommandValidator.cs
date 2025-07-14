@@ -21,14 +21,14 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
                 .GreaterThan(0).WithMessage("Number Of Apprentices must be greater than zero.");
 
             RuleFor(x => x.OriginalLocation)
-                .Must(x => string.IsNullOrEmpty(x) || Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-']+$", RegexOptions.None, TimeSpan.FromSeconds(1)))
+                .Must(x => string.IsNullOrEmpty(x) || Regex.IsMatch(x, "^[a-zA-Z0-9\\s,\\.\\-'/&()!]+$", RegexOptions.None, TimeSpan.FromSeconds(1)))
                 .WithMessage("Original Location contains invalid characters.");
-
+                                                            
             When(x => string.IsNullOrEmpty(x.SameLocation) || x.SameLocation == "Yes", () =>
             {
                 RuleFor(x => x.SingleLocation)
                     .NotEmpty().WithMessage("Single Location must not be empty.")
-                    .Matches("^[a-zA-Z0-9\\s,\\.\\-']+$").WithMessage("Single Location contains invalid characters.");
+                    .Matches("^[a-zA-Z0-9\\s,\\.\\-'/&()!]+$").WithMessage("Single Location contains invalid characters.");
 
                 RuleFor(x => x.SingleLocationLatitude)
                     .NotEmpty().WithMessage("Single Location Latitude must not be empty.");
@@ -46,7 +46,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.Commands.SubmitEmployerR
 
                 RuleForEach(x => x.MultipleLocations)
                     .NotEmpty().WithMessage("Multiple Location must not be empty.")
-                    .Matches("^[a-zA-Z0-9\\s,\\.\\-']+$").WithMessage("Multiple Location contains invalid characters.");
+                    .Matches("^[a-zA-Z0-9\\s,\\.\\-'/&()!]+$").WithMessage("Multiple Location contains invalid characters.");
             });
 
             RuleFor(x => new { x.AtApprenticesWorkplace, x.DayRelease, x.BlockRelease })
