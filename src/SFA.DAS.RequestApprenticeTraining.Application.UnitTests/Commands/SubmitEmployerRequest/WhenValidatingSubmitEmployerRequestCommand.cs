@@ -171,5 +171,95 @@ namespace SFA.DAS.RequestApprenticeTraining.Application.UnitTests.Commands.Submi
             var result = _sut.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ModifiedBy);
         }
+
+        [Test]
+        public void Validate_OriginalLocation_NullOrEmpty_ShouldHaveNoValidationError()
+        {
+            var model = new SubmitEmployerRequestCommand { OriginalLocation = null };
+            var result = _sut.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.OriginalLocation);
+
+            model = new SubmitEmployerRequestCommand { OriginalLocation = string.Empty };
+            result = _sut.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.OriginalLocation);
+        }
+
+        [Test]
+        [TestCase("King's Cross")]
+        [TestCase("London-Bridge")]
+        [TestCase("St. John's Wood")]
+        [TestCase("Baker St.")]
+        [TestCase("Liverpool, Lime Street")]
+        [TestCase("Main Street 11")]
+        [TestCase("Location!Home")]
+        public void Validate_OriginalLocation_ValidCharacters_ShouldHaveNoValidationError(string location)
+        {
+            var model = new SubmitEmployerRequestCommand { OriginalLocation = location };
+            var result = _sut.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.OriginalLocation);
+        }
+
+        [Test]
+        [TestCase("Location$1$")]
+        [TestCase("Location%^")]
+        [TestCase("Location<kt>")]
+        [TestCase("Location@Home")]
+        [TestCase("Location#1")]
+        [TestCase("Location£Town")]
+        [TestCase("Location+Central")]
+        [TestCase("Location*Star")]
+        public void Validate_OriginalLocation_InvalidCharacters_ShouldHaveValidationError(string location)
+        {
+            var model = new SubmitEmployerRequestCommand { OriginalLocation = location };
+            var result = _sut.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.OriginalLocation);
+        }
+
+        [Test]
+        [TestCase("King's Cross")]
+        [TestCase("London-Bridge")]
+        [TestCase("St. John's Wood")]
+        [TestCase("Baker St.")]
+        [TestCase("Liverpool, Lime Street")]
+        [TestCase("Main Street 11")]
+        [TestCase("Location!Home")]
+        public void Validate_SingleLocation_ValidCharacters_ShouldHaveNoValidationError(string location)
+        {
+            var model = new SubmitEmployerRequestCommand { SameLocation = "Yes", SingleLocation = location };
+            var result = _sut.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.SingleLocation);
+        }
+
+        [Test]
+        [TestCase("Location$1$")]
+        [TestCase("Location%^")]
+        [TestCase("Location<kt>")]
+        [TestCase("Location@Home")]
+        [TestCase("Location#1")]
+        [TestCase("Location£Town")]
+        [TestCase("Location+Central")]
+        [TestCase("Location*Star")]
+        public void Validate_SingleLocation_InvalidCharacters_ShouldHaveValidationError(string location)
+        {
+            var model = new SubmitEmployerRequestCommand { SameLocation = "Yes", SingleLocation = location };
+            var result = _sut.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.SingleLocation);
+        }
+
+        [Test]
+        public void Validate_MultipleLocations_ValidCharacters_ShouldHaveNoValidationError()
+        {
+            var model = new SubmitEmployerRequestCommand { SameLocation = "No", MultipleLocations = new[] { "King's Cross", "London-Bridge", "Main Street 11", "Location!Home" } };
+            var result = _sut.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.MultipleLocations);
+        }
+
+        [Test]
+        public void Validate_MultipleLocations_InvalidCharacters_ShouldHaveValidationError()
+        {
+            var model = new SubmitEmployerRequestCommand { SameLocation = "No", MultipleLocations = new[] { "King's Cross", "Location@Home", "Location<kt>" } };
+            var result = _sut.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.MultipleLocations);
+        }
     }
 }
