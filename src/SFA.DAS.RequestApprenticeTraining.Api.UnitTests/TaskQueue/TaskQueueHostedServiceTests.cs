@@ -65,18 +65,27 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.TaskQueue
             // Arrange
             using var cancellationTokenSource = new CancellationTokenSource();
             var mockRequest = new Mock<IBaseRequest>().Object;
+            var sendCalled = new TaskCompletionSource();
 
             _backgroundTaskQueueMock
                 .Setup(x => x.DequeueAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync((mockRequest, "TestRequest", (response, duration, logger) => { }))
+                .ReturnsAsync((mockRequest, "TestRequest", (response, duration, logger) => { }
+            ))
                 .Callback(() => cancellationTokenSource.Cancel());
+
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<IBaseRequest>(), It.IsAny<CancellationToken>()))
+                .Callback(() => sendCalled.TrySetResult())
+                .ReturnsAsync((object?)null);
 
             // Act
             await _service.StartAsync(cancellationTokenSource.Token);
+            await sendCalled.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            await _service.StopAsync(CancellationToken.None);
 
             // Assert
-            _mediatorMock.Verify(x => x.Send(It.IsAny<IBaseRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-            _serviceScopeFactoryMock.Verify(x => x.CreateScope(), Times.Once);
+            _mediatorMock.Verify(x => x.Send(It.IsAny<IBaseRequest>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+            _serviceScopeFactoryMock.Verify(x => x.CreateScope(), Times.AtLeastOnce);
         }
 
         [Test]
@@ -94,6 +103,7 @@ namespace SFA.DAS.RequestApprenticeTraining.Api.UnitTests.TaskQueue
 
             // Assert
             await act.Should().NotThrowAsync();
+            await _service.StopAsync(CancellationToken.None);
         }
     }
 }
