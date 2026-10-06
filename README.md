@@ -32,9 +32,10 @@ Provider Portal and Jobs, this repo is the Inner API.
 
 ```
 * A clone of this repository
-* A code editor that supports Azure functions and .NetCore 8.0 e.g. Visual Studio 2022
-* A SQL server which is either an Azure DB or is Azure DB compatible e.g. SQL Server 2022 Developer Edition running locally
+* A code editor that supports Azure functions and .NET 10.0 e.g. Visual Studio 2026
+* A SQL server which is either an Azure DB or is Azure DB compatible e.g. SQL Server 2025 Express running locally
 * An Azure Service Bus instance (Only required for the API when sending emails)
+* Azure Table Storage for config (Azurite and Azure Storage Explorer can be used locally)
 ```
 
 ```
@@ -44,15 +45,23 @@ selecting Publish, no additional properties need to be specified.
 
 ### Config
 
-Azure Table Storage config
-
-Row Key: SFA.DAS.RequestApprenticeTraining.Api_1.0
-
-Partition Key: LOCAL
-
+<pre>
+This service uses the standard Apprenticeship Service configuration.
+All configuration can be found in the <a href="https://github.com/SkillsFundingAgency/das-employer-config">das-employer-config repository</a>.
+</pre>
 ```
-This utility uses the standard Apprenticeship Service configuration. All configuration can be found in the [das-employer-config repository]
-(https://github.com/SkillsFundingAgency/das-employer-config).
+Add an entry to Azure Table Storage config
+
+1. Start Azurite and open it in Azure Storage Explorer
+2. Create a table called Configuration (if it does not already exist)
+3. Add a new entry with the following properties
+
+* PartitionKey : LOCAL
+* RowKey : SFA.DAS.RequestApprenticeTraining.Api_1.0
+* Data : the JSON for this service from the das-employer-config repository: https://github.com/SkillsFundingAgency/das-employer-config
+
+In the data JSON, update the database connection string to point to your local database 
+	e.g. Data Source=SERVERNAME\\SQLEXPRESS;Initial Catalog=SFA.DAS.RequestApprenticeTraining.Database
 ```
 
 ## 🔗 External Dependencies
@@ -64,9 +73,8 @@ This utility uses the standard Apprenticeship Service configuration. All configu
 ## Technologies
 
 ```
-* .NetCore 8.0
-* Azure Functions V4
-* Azure Table Storage
+* .NET 10.0
+* Azure Table Storage 
 * NUnit
 * Moq
 * FluentAssertions
