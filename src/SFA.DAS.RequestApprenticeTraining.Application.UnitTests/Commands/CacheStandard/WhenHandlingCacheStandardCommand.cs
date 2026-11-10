@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SFA.DAS.RequestApprenticeTraining.Application.Commands.CacheStandard;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

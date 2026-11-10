@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.RequestApprenticeTraining.Api.AppStart;
@@ -83,19 +83,9 @@ namespace SFA.DAS.RequestApprenticeTraining.Api
                         Scheme = "bearer"
                     });
 
-                    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    opt.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                     {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type=ReferenceType.SecurityScheme,
-                                    Id="Bearer"
-                                }
-                            },
-                            new string[]{}
-                        }
+                        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                     });
                 }
             });
