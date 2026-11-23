@@ -17,6 +17,11 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
   </ItemGroup>
 
+	<ItemGroup>
+		<!--Transient pins for vulnerable packages-->
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.RequestApprenticeTraining.Domain\SFA.DAS.RequestApprenticeTraining.Domain.csproj" />
   </ItemGroup>

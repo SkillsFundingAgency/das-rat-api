@@ -7,6 +7,7 @@ using SFA.DAS.RequestApprenticeTraining.Data.Configuration;
 using SFA.DAS.RequestApprenticeTraining.Domain.Configuration;
 using SFA.DAS.RequestApprenticeTraining.Domain.Entities;
 using SFA.DAS.RequestApprenticeTraining.Domain.Interfaces;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,7 +72,11 @@ namespace SFA.DAS.RequestApprenticeTraining.Data
                         .GetAwaiter().GetResult().Token
                 };
 
-                optionsBuilder.UseSqlServer(connection);
+                optionsBuilder.UseSqlServer(connection, sqlOptions =>
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(20),
+                        errorNumbersToAdd: null));
             }
         }
 
